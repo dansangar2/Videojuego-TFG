@@ -73,15 +73,24 @@ namespace Entities
         /**<summary>The level of the character.</summary>*/
         public int Level
         {
-            get => level; 
-            set => level = level < MaxLevel? value : MaxLevel;
+            get => level;
+            set
+            {
+                level = level < MaxLevel ? value : MaxLevel;
+                level = level > 0 ? value : 1;
+            }
+            
         }
 
         /**<summary>The max level that the character can be.</summary>*/
         public int MaxLevel
         {
             get => maxLevel; 
-            set => maxLevel = value;
+            set 
+            {
+                maxLevel = value > 0 ? value : 1;
+                level = level > maxLevel ? maxLevel : level;
+            }
         }
 
         /**<summary><para>[mbp, mkp, atk, def, spi, men, agi, abp, akp, kg, cha, nxt]</para>
@@ -212,7 +221,7 @@ namespace Entities
         <para>Karmic resistance that you can endure.</para>
         <para>Formula: (base + plus) * rate + flat</para>
         </summary>*/
-        public int GetMentality
+        public int Mentality
         {
             get => Main[5];
             set => Main[5] = value;
@@ -274,8 +283,14 @@ namespace Entities
         }
         
         /**<summary>The element of the object.</summary>*/
-        public Element Element => GameData.ElementDB.FindElementByID(elementID);
+        public Element Element => GameData.ElementDB.FindByID(elementID);
 
+        /**<summary>Set the experience value curve.</summary>*/
+        public void SetExperienceCurveParameters(int[] expValues)
+        {
+            for (int i = 0; i < expValues.Length; i++) { expData[i] = expValues[i]; }
+        }
+        
         #endregion
 
         #region METHODS

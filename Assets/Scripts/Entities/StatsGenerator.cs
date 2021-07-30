@@ -73,16 +73,71 @@ namespace Entities
         #region GETTERS & SETTERS
 
         /**<summary>
-        Set the parameters that decide Max Blood Points value by level
-        </summary>
-        */
+        Get the bases parameters.
+        </summary>*/
+        public float[] Bases => bases;
+        
+        /**<summary>
+        Get the pluses parameters.
+        </summary>*/
+        public int[] Plus => plus;
+
+        /**<summary>
+        Get the rates parameters.
+        </summary>*/
+        public float[] Rate => rate;
+        
+        /**<summary>
+        Get the learning rates parameters.
+        </summary>*/
+        public float[] Learning => learning;
+        
+        /**<summary>
+        Get the flats parameters.
+        </summary>*/
+        public int[] Flat => flat;
+        
+        /**<summary>
+        Get the maximum parameters.
+        </summary>*/
+        public float[] Max => max;
+        
+        /**<summary>
+        Get if the regeneration values is activate.
+        </summary>*/
+        public bool[] Yes => yes;
+
+        /**<summary>
+        Set the parameters that decide Max Blood Points value by level.
+        </summary>*/
         public void SetMaxBloodPoints(float nBase, int nPlus, float nRate, int nFlat)
         {
             MainSet(0, nBase, nPlus, nRate, nFlat);
             UpdateMaxBloodPoints();
         }
         
-        
+        /**<summary>
+        Set all parameters of the item.
+        </summary>*/
+        public void SetAll(float[] nBase, int[] nPlus, float[] nRate, int[] nFlat, float[] nLearning, float[] nMax, bool[] nYes, int[] nExp)
+        {
+            for (int i = 0; i < flat.Length; i++)
+            {
+                MainSet(i, nBase[i], nPlus[i], nRate[i], nFlat[i], nLearning[i]);
+            }
+            for (int i = 0; i < max.Length; i++)
+            {
+                MainSet(i, nBase[i+7], nPlus[i+7], nRate[i+7], nMax[i]);
+            }
+            for (int i = 0; i < yes.Length; i++)
+            {
+                MainSet(i, nBase[i+9], nPlus[i+9], nRate[i+9], nYes[i]);
+            }
+            SetExperienceCurveParameters(nExp);
+            Update();
+            Main[7] = Main[0];
+            Main[8] = Main[1];
+        }
 
         #endregion
 
@@ -152,7 +207,7 @@ namespace Entities
         */
         public void Update()
         {
-            for (int i = 0; i < Main.Length-5; i++)
+            for (int i = 0; i < Main.Length-3; i++)
             {
                 Main[i] = Calculate(i);
             }
@@ -160,7 +215,7 @@ namespace Entities
             for (int i = 0; i < Special.Length/2; i++)
             {
                 Special[i] = MainFormulaForRecoveryStats(i);
-                Special[i+Special.Length/2] = MainFormulaForRegenerateStats(i);
+                Special[i+2] = MainFormulaForRegenerateStats(i);
             }
             UpdateExperience();
         }
@@ -315,7 +370,8 @@ namespace Entities
         private float LearningRate(int index){
             //decimal p = (1 - (decimal)learning[index])/(decimal) Mathf.Pow(Convert.ToSingle(maxLevel/2), 2);
             //return (decimal)learning[index] + p * (decimal) Mathf.Pow(level - Convert.ToSingle(maxLevel/2), 2);
-            return learning[index] + (1 - learning[index]) *
+            if (level <= 2) return 1;
+            return learning[index] + (1 - learning[index]) * 
                 Mathf.Pow((level-1) - Convert.ToSingle((MaxLevel-1) / 2), 2) / 
                 Mathf.Pow(Convert.ToSingle((MaxLevel-1) / 2), 2);
         }
@@ -326,7 +382,7 @@ namespace Entities
         */
         private int Calculate(int index)
         {
-            
+
             int res = Convert.ToInt32(MainFormulaForNormalStats(index)*LearningRate(index));
             
             if (res > 99999 && (index == 0 || index == 1)) res = 99999;
@@ -340,5 +396,6 @@ namespace Entities
         #endregion
 
         #endregion
+        
     }
 }

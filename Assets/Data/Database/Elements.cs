@@ -37,13 +37,13 @@ namespace Data.Database
         #region FINDBY
 
         /**<summary>Find item by ID.</summary>*/
-        public Element FindElementByID(int id)
+        public Element FindByID(int id)
         {
             return elements.FirstOrDefault(element => element.ID == id);
         }
         
         /**<summary>Find item by name.</summary>*/
-        public Element FindElementByName(string nameOf)
+        public Element FindByName(string nameOf)
         {
             return elements.FirstOrDefault(element => element.Name == nameOf);
         }
@@ -62,13 +62,13 @@ namespace Data.Database
         /**<summary>Modify a item of the array. It's modify by item ID.</summary>*/
         public void Modify(Element element)
         {
-            elements[Array.IndexOf(elements, FindElementByID(element.ID))] = element;
+            elements[Array.IndexOf(elements, FindByID(element.ID))] = element;
         }
 
         /**<summary>Remove a item of the array</summary>*/
         public void Remove(int id)
         {
-            for (int i = Array.IndexOf(elements, FindElementByID(id)); i < Count-1; i++)
+            for (int i = Array.IndexOf(elements, FindByID(id)); i < Count-1; i++)
             {
                 elements[i] = elements[i+1];
                 elements[i].ID--;

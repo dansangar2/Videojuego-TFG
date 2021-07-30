@@ -9,17 +9,19 @@ namespace Data.Windows.ManageElements
     public static class Display
     {
         private static readonly GUILayoutOption[] Options = { GUILayout.MaxWidth(150f), GUILayout.MinWidth(20f) };
+        private static readonly GUIStyle TextAreaStyle = new GUIStyle(GUI.skin.textArea) {wordWrap = true};
         private static ElementType _key;
 
-        public static void Displayed(Element item)
+
+        public static void Displayed(Element item, bool readOnly = false)
+        {
+            if(readOnly) DisplayedReadOnly(item);
+            else DisplayedReadWrite(item);        
+        }
+        
+        private static void DisplayedReadWrite(Element item)
         {
 
-            #region Options
-
-            GUIStyle textAreaStyle = new GUIStyle(GUI.skin.textArea) {wordWrap = true};
-            
-            #endregion
-            
             #region ID
 
             EditorGUILayout.BeginHorizontal();
@@ -59,7 +61,7 @@ namespace Data.Windows.ManageElements
             #region Description
 
             GUILayout.Label("Description: ");
-            item.Description = EditorGUILayout.TextArea(item.Description, textAreaStyle, GUILayout.MinHeight(100));
+            item.Description = EditorGUILayout.TextArea(item.Description, TextAreaStyle, GUILayout.MinHeight(100));
 
             #endregion
 
@@ -83,6 +85,80 @@ namespace Data.Windows.ManageElements
                 GUILayout.Label(elem + ": ", Options);
                 item.AddMultiplicityTo(elem, EditorGUILayout.FloatField(item.GetMultiplicityOf(elem), Options));
                 if (GUILayout.Button("-", Options)) item.DeleteMultiplicity(elem);
+                EditorGUILayout.EndHorizontal();
+            }
+
+            #endregion
+            
+        }
+        
+        private static void DisplayedReadOnly(Element item)
+        {
+
+            #region Options
+
+            GUIStyle textAreaStyle = new GUIStyle(GUI.skin.textArea) {wordWrap = true};
+            
+            #endregion
+            
+            #region ID
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("ID: ");
+            GUILayout.Label(item.ID.ToString(), Options);
+            EditorGUILayout.EndHorizontal();
+
+            #endregion
+
+            #region Name
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("*Name: ");
+            GUILayout.Label(item.Name, Options);
+            EditorGUILayout.EndHorizontal();
+
+            #endregion
+
+            #region Type
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Type: ");
+            GUILayout.Label(item.Type.ToString(), Options);
+            EditorGUILayout.EndHorizontal();
+
+            #endregion
+
+            #region Icon
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("*Icon: ");
+            GUILayout.Label(item.Icon.name, Options);
+            EditorGUILayout.EndHorizontal();
+
+            #endregion
+
+            #region Description
+
+            GUILayout.Label("Description: ");
+            GUILayout.Label(item.Description, textAreaStyle, GUILayout.MinHeight(100));
+
+            #endregion
+
+            #region Strengths
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Strengths: " + item.GetMultiplicityCount());
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Strengths: " + item.GetMultiplicityCount());
+            EditorGUILayout.EndHorizontal();
+
+            foreach (ElementType elem in item.GetMultiplicityElements())
+            {
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label(elem + ": ", Options);
+                GUILayout.Label(item.GetMultiplicityOf(elem).ToString(), Options);
                 EditorGUILayout.EndHorizontal();
             }
 

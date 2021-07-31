@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using System.Globalization;
+using Entities;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace Data.Windows.ManageStats
     public static class StatsGeneratorWindow
     {
         private static readonly GUILayoutOption[] Options = { GUILayout.MaxWidth(150f), GUILayout.MinWidth(20f) };
+
+        #region TABLE
 
         public static void Table(string[][] content, GUILayoutOption[] options = null)
         {
@@ -26,11 +29,14 @@ namespace Data.Windows.ManageStats
             EditorGUILayout.EndVertical();
         }
 
-        //=============================================================================
-        
-        public static void CharacterStats(Character chara, GUILayoutOption[] options = null)
+        #endregion
+
+        #region CHARACTER
+
+        #region Set
+
+        public static void GenerateStats(Character chara, GUILayoutOption[] options = null)
         {
-            
             options ??= Options;
 
             float[] bases = chara.Bases;
@@ -177,134 +183,10 @@ namespace Data.Windows.ManageStats
 
             EditorGUILayout.EndVertical();
         }
+
+        #endregion
         
-        //=============================================================================
-        
-        /*public static void AbilityStats(Ability ability, GUILayoutOption[] options = null)
-        {
-            
-            options ??= Options;
-
-            int[] user = ability.GetStatsArray();
-            int[] target = ability.GetStatsArrayTarget();
-            int[] expValues = ability.GetExperienceValues();
-            float[] interval = ability.GetRangeOfAttack();
-
-            EditorGUILayout.BeginVertical("Box");
-            
-            EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label(" | ");
-            GUILayout.Label("Base: ", options);
-            GUILayout.Label(" | ");
-            //ability.SetBaseAttack(EditorGUILayout.IntField(ability.GetBaseAttack(), options));
-            int baseAttack = EditorGUILayout.IntField(ability.GetBaseAttack(), options);
-            GUILayout.Label(" | ");
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label(" | ");
-            GUILayout.Label("User stats in consideration", options);
-            GUILayout.Label(" | ");
-            GUILayout.Label("Target stats in consideration", options);
-            GUILayout.Label(" | ");
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-
-            
-            EditorGUILayout.BeginVertical("Box");
-            for (int i = 0; i < user.Length; i++)
-            { 
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label(" | ");
-                switch (i)
-                {
-                    case 0:
-                        GUILayout.Label("MBP: ", options);
-                        break;
-                    case 1:
-                        GUILayout.Label("MKP: ", options);
-                        break;
-                    case 2:
-                        GUILayout.Label("ATK: ", options);
-                        break;
-                    case 3:
-                        GUILayout.Label("DEF: ", options);
-                        break;
-                    case 4:
-                        GUILayout.Label("SPI: ", options);
-                        break;
-                    case 5:
-                        GUILayout.Label("MEN: ", options);
-                        break;
-                    case 6:
-                        GUILayout.Label("AGI: ", options);
-                        break;
-                    case 7:
-                        GUILayout.Label("ABP: ", options);
-                        break;
-                    case 8:
-                        GUILayout.Label("AKP: ", options);
-                        break;
-                    case 9:
-                        GUILayout.Label("KG : ", options);
-                        break;
-                    case 10:
-                        GUILayout.Label("CHA: ", options);
-                        break;
-                    case 11:
-                        GUILayout.Label("NXT: ", options);
-                        break;
-                }
-                user[i] = EditorGUILayout.IntField(user[i], options);
-                GUILayout.Label(" | ");
-                target[i] = EditorGUILayout.IntField(target[i], options);
-                GUILayout.Label(" | ");
-                EditorGUILayout.EndHorizontal();
-            }
-            EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label(" | ");
-            GUILayout.Label("Exp. Values:", options);
-            GUILayout.Label(" | ");
-            for (int i = 0; i < expValues.Length; i++)
-            { 
-                expValues[i] = EditorGUILayout.IntField(expValues[i], options);
-                GUILayout.Label(" | ");
-            }
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.BeginHorizontal();
-            
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Label("Range of attack Damage: ");
-            EditorGUILayout.BeginHorizontal();
-            
-            GUILayout.Label(" | ");
-            GUILayout.Label("Low:", options);
-            interval[0] = EditorGUILayout.FloatField(interval[0], options);
-            GUILayout.Label(" | ");
-            GUILayout.Label("Up:", options);
-            interval[1] = EditorGUILayout.FloatField(interval[1], options);
-            GUILayout.Label(" | ");
-            
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-
-            
-            ability.SetAttacksStats(baseAttack, user, target, interval[0], interval[1]);
-            ability.SetExperienceCurveParameters(expValues);
-            
-            EditorGUILayout.EndVertical();
-        }*/
-        
-        //=============================================================================
+        #region Validator
 
         public static bool Validator(Character chara)
         {
@@ -361,54 +243,11 @@ namespace Data.Windows.ManageStats
 
             return res;
         }
-        
-        //=============================================================================
 
-        /*public static bool Validator(Ability ability)
-        {
-            int[] user = ability.GetStatsArray();
-            int[] target = ability.GetStatsArrayTarget();
-            int[] expVal = ability.GetExperienceValues();
-            
-            bool res = ability.GetBaseAttack()>1000000 || ability.GetBaseAttack()<-1000000;
-            string message = "";
+        #endregion
 
-            if (res) message += "Base attack most be between 1000000 and -1000000\n";
-            res = false;
+        #region Dispaly Stats
 
-            for (int i = 0; i < user.Length; i++)
-            {
-                res = res || user[i] < -100 || user[i] > 100 || target[i] < -100 || target[i] > 100;
-            }
-
-            if (res)
-                message += "One or more parameter is less than -100 or more than 100.\nThe values most be between 100 and -100";
-            res = false;
-            
-            foreach (int t in expVal)
-            {
-                res = res || t < 0;
-            }
-            
-            if(res) message += "One or more exp parameter is less of 0, check it and change it by a number upper of 0.\n";
-
-            res = ability.GetRangeOfAttack()[0] > ability.GetRangeOfAttack()[1];
-
-            if(res) message += "Low range value must be lower than up value.\n";
-
-            res = ability.GetRangeOfAttack()[0] <= 0 || ability.GetRangeOfAttack()[1] <= 0;
-            
-            if(res) message += "Range values must be upper than 0.\n";
-            
-            if (!message.Equals("")) res = true;
-            
-            GUILayout.Label(message);
-
-            return res;
-        }*/
-        
-        //=============================================================================
-        
         public static void Display(Character character, GUILayoutOption[] options = null)
         {
             
@@ -445,7 +284,7 @@ namespace Data.Windows.ManageStats
                     i = character.MaxLevel;
                     cont = false;
                 }
-                //dummy.SetCharacterLevel(i, character.GetMaxLevel());
+                
                 dummy.Level = i;
                 dummy.MaxLevel = character.MaxLevel;
                 newChar = new Character( dummy);
@@ -474,126 +313,191 @@ namespace Data.Windows.ManageStats
             EditorGUILayout.BeginHorizontal();
             Table(content, options);
             EditorGUILayout.EndHorizontal();
-            
         }
+
+#endregion
+
+        #endregion
         
-        /*public static void AbilityStatsDisplay(Ability ability, GUILayoutOption[] options = null)
+        #region ABILITY
+
+        #region Set
+
+        public static void GenerateStats(Ability item, GUILayoutOption[] options = null)
         {
-            
             options ??= Options;
 
-            int[] user = ability.GetStatsArray();
-            int[] target = ability.GetStatsArrayTarget();
-            int[] expValues = ability.GetExperienceValues();
-            float[] interval = ability.GetRangeOfAttack();
+            float[] bases = item.Bases;
+            float[] rate = item.Rate;
+            float[] learning = item.Learning;
+            int[] expData = item.ExpData;
 
             EditorGUILayout.BeginVertical("Box");
             
             EditorGUILayout.BeginVertical("Box");
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label(" | ");
-            GUILayout.Label("Base: ", options);
+            GUILayout.Label("Stats", options);
             GUILayout.Label(" | ");
-            GUILayout.Label(ability.GetBaseAttack().ToString(), options);
+            GUILayout.Label("Base", options);
             GUILayout.Label(" | ");
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Rate", options);
             GUILayout.Label(" | ");
-            GUILayout.Label("User stats in consideration", options);
-            GUILayout.Label(" | ");
-            GUILayout.Label("Target stats in consideration", options);
+            GUILayout.Label("Learning", options);
             GUILayout.Label(" | ");
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
 
-            
             EditorGUILayout.BeginVertical("Box");
-            for (int i = 0; i < user.Length; i++)
+            for (int i = 0; i < bases.Length; i++)
             { 
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(" | ");
                 switch (i)
                 {
-                    case 0:
-                        GUILayout.Label("MBP: ", options);
+                    case 0: GUILayout.Label("Power increment:", options);
                         break;
-                    case 1:
-                        GUILayout.Label("MKP: ", options);
+                    case 1: GUILayout.Label("Down Interval:", options);
                         break;
-                    case 2:
-                        GUILayout.Label("ATK: ", options);
-                        break;
-                    case 3:
-                        GUILayout.Label("DEF: ", options);
-                        break;
-                    case 4:
-                        GUILayout.Label("SPI: ", options);
-                        break;
-                    case 5:
-                        GUILayout.Label("MEN: ", options);
-                        break;
-                    case 6:
-                        GUILayout.Label("AGI: ", options);
-                        break;
-                    case 7:
-                        GUILayout.Label("ABP: ", options);
-                        break;
-                    case 8:
-                        GUILayout.Label("AKP: ", options);
-                        break;
-                    case 9:
-                        GUILayout.Label("KG : ", options);
-                        break;
-                    case 10:
-                        GUILayout.Label("CHA: ", options);
-                        break;
-                    case 11:
-                        GUILayout.Label("NXT: ", options);
+                    case 2: GUILayout.Label("Up Interval:", options);
                         break;
                 }
-                GUILayout.Label(user[i].ToString(), options);
                 GUILayout.Label(" | ");
-                GUILayout.Label(target[i].ToString(), options);
+                bases[i] = EditorGUILayout.FloatField(bases[i], options);
+                GUILayout.Label(" | ");
+                rate[i] = EditorGUILayout.FloatField(rate[i], options);
+                GUILayout.Label(" | ");
+                learning[i] = EditorGUILayout.FloatField(learning[i], options);
                 GUILayout.Label(" | ");
                 EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.EndVertical();
             
             EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label(" | ");
-            GUILayout.Label("Exp. Values:", options);
-            GUILayout.Label(" | ");
-            foreach (int t in expValues)
+            
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label(" | "); 
+            GUILayout.Label("EXP:", options);
+            for (int i = 0; i < expData.Length; i++)
             {
-                GUILayout.Label(t.ToString(), options);
-                GUILayout.Label(" | ");
+                GUILayout.Label(" | "); 
+                expData[i] = EditorGUILayout.IntField(expData[i], options);
             }
+            GUILayout.Label(" | ");
+            if (GUILayout.Button("Help!", options))
+            {
+                StatsDefinition.Window();
+            }
+            GUILayout.Label(" | ");
             EditorGUILayout.EndHorizontal();
+            
             EditorGUILayout.EndVertical();
 
-            EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.BeginHorizontal();
-            
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Label("Range of attack Damage: ");
-            EditorGUILayout.BeginHorizontal();
-            
-            GUILayout.Label(" | ");
-            GUILayout.Label("Low:", options);
-            GUILayout.Label(interval[0].ToString(CultureInfo.InvariantCulture), options);
-            GUILayout.Label(" | ");
-            GUILayout.Label("Up:", options);
-            GUILayout.Label(interval[1].ToString(CultureInfo.InvariantCulture), options);
-            GUILayout.Label(" | ");
-            
-            EditorGUILayout.EndHorizontal();
+            item.SetAll(bases, rate, learning, expData, 1);
+
             EditorGUILayout.EndVertical();
+        }
+        
+
+        #endregion
+
+        #region Validator
+
+        public static bool Validator(Ability item)
+        {
+            float[] bases = item.Bases;
+            float[] rate = item.Rate;
+            float[] learning = item.Learning;
+            int[] expData = item.ExpData;
             
-            EditorGUILayout.EndVertical();
-        }*/
+            bool res = false;
+            string message = "";
+
+            for (int i = 0; i < bases.Length; i++)
+            {
+                res = res || bases[i] <= 0 || rate[i] <= 0;
+            }
+            if(res) message += "One or more parameter is equals(base/rate) or less(base/rate/plus) of 0, check it and change it by a number upper of 0.\n";
+            res = false;
+            
+            foreach (float t in learning)
+            {
+                res = res || t > 1.2 || t < -0.8;
+            }
+            if (res) message += "One or more learning rates isn´t between -0.8 and 1.2, change it by one number between these values.\n";
+            res = false;
+
+            foreach (int t in expData)
+            {
+                res = res || t < 0;
+            }
+            if(res) message += "One or more exp parameter is less of 0, check it and change it by a number upper of 0.\n";
+
+            if (!message.Equals("")) res = true;
+            
+            GUILayout.Label(message);
+
+            return res;
+        }
+
+        #endregion
+
+        #region Display
+
+        public static void Display(Ability item, GUILayoutOption[] options = null)
+        {
+            
+            Ability dummy = new Ability(item);
+            options ??= Options;
+            Ability[] characters = new Ability[6];
+            int[] levels = new int[6];
+            
+            string[][] content =
+            {
+                new[] {"LV ","","","","","",""},
+                new[] {"PIC","","","","","",""},
+                new[] {"DIV","","","","","",""},
+                new[] {"UIV","","","","","",""},
+                new[] {"EXP","","","","","",""}
+            };
+            
+            int levelInterval = dummy.MaxLevel / 5;
+            Ability item2;
+            int i = 1, j = 0;
+            bool cont = true;
+
+            while (cont)
+            {
+                if (i >= dummy.MaxLevel || j==5)
+                {
+                    i = item.MaxLevel;
+                    cont = false;
+                }
+                dummy.MaxLevel = item.MaxLevel;
+                item2 = new Ability(dummy, i);
+                characters[j] = item2;
+                levels[j] = i;
+                i += levelInterval;
+                j++;
+            }
+
+            for (i = 1; i <=characters.Length; i++)
+            {
+                content[0][i] = levels[i-1].ToString();
+                content[1][i] = characters[i-1].PowerIncrement.ToString(CultureInfo.InvariantCulture);
+                content[2][i] = characters[i-1].DownInterval.ToString(CultureInfo.InvariantCulture);
+                content[3][i] = characters[i-1].UpperInterval.ToString(CultureInfo.InvariantCulture);
+                content[4][i] = characters[i-1].NedExp.ToString();
+            }
+            
+            EditorGUILayout.BeginHorizontal();
+            Table(content, options);
+            EditorGUILayout.EndHorizontal();
+        }
+
+        #endregion
+        
+        #endregion
+        
     }
 }

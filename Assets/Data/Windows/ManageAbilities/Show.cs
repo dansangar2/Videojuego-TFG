@@ -15,8 +15,8 @@ namespace Data.Windows.ManageAbilities
         public static void Window(Ability ability)
         {
             _window = GetWindow<Show>();
-            _window.maxSize = new Vector2(350, 500);
-            _window.minSize = new Vector2(300, 300);
+            _window.maxSize = new Vector2(450, 700);
+            _window.minSize = new Vector2(450, 600);
             _ability = new Ability(ability);
         }
 
@@ -26,7 +26,7 @@ namespace Data.Windows.ManageAbilities
             _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.MinHeight(5), GUILayout.MinHeight(position.height));
             EditorGUILayout.BeginVertical("Box");
             
-            Display.Displayed(_ability);
+            Display.Displayed(_ability, true);
             if (GUILayout.Button("Close")) { _window.Close(); }
             
             EditorGUILayout.EndVertical();

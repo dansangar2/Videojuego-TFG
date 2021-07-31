@@ -110,15 +110,6 @@ namespace Data.Windows.ManageAbilities
 
             #endregion
 
-            #region Name
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Name: ");
-            //GUILayout.Label(ability, valuesStyle);
-            EditorGUILayout.EndHorizontal();
-
-            #endregion
-            
             #region Show
 
             EditorGUILayout.BeginHorizontal();

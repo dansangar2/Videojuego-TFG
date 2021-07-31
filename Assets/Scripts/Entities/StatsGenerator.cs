@@ -21,13 +21,13 @@ namespace Entities
         </summary>*/
         [SerializeField] protected float[] rate = {1, 1, 1, 1, 1, 1, 1, 6, 4, 15, 15};
         /**<summary>
-        learning for = {mbp, mkp, atk, def, spi, men, agi, rec, rek, rxb, rxk}
-        </summary>*/
-        [SerializeField] protected float[] learning = {1, 1, 1, 1, 1, 1, 1};
-        /**<summary>
         flats for = {mbp, mkp, atk, def, spi, men, agi}
         </summary>*/
         [SerializeField] protected int[] flat = {0, 0, 0, 0, 0, 0, 0};
+        /**<summary>
+        learning for = {mbp, mkp, atk, def, spi, men, agi, rec, rek, rxb, rxk}
+        </summary>*/
+        [SerializeField] protected float[] learning = {1, 1, 1, 1, 1, 1, 1};
         /**<summary>
         max for = {rec, rek}
         </summary>*/

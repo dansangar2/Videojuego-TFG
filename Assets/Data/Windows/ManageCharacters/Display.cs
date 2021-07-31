@@ -119,8 +119,8 @@ namespace Data.Windows.ManageCharacters
 
             #region Stats
 
-            StatsGeneratorWindow.CharacterStats(item, Options);
-            if (GUILayout.Button("See Stats by Level")) StatsByLevelHelp.Window(item);
+            StatsGeneratorWindow.GenerateStats(item, Options);
+            if (GUILayout.Button("See Stats by Level")) CharacterByLevelHelp.Window(item);
 
             #endregion
             
@@ -302,7 +302,7 @@ namespace Data.Windows.ManageCharacters
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Art: ", Options);
-            GUILayout.Label(item.Art.name, Options);
+            GUILayout.Label(item.Art == null ? "NULL" : item.Art.name, Options);
             EditorGUILayout.EndHorizontal();        
 
             #endregion
@@ -320,7 +320,6 @@ namespace Data.Windows.ManageCharacters
             #region Stats
 
             StatsGeneratorWindow.Display(item, Options);
-            if (GUILayout.Button("See Stats by Level")) StatsByLevelHelp.Window(item);
 
             #endregion
             

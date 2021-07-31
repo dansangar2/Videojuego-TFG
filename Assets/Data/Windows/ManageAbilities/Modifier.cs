@@ -19,8 +19,8 @@ namespace Data.Windows.ManageAbilities
             _abilityDB = elementDB;
             
             _window = GetWindow<Modifier>();
-            _window.maxSize = new Vector2(350, 500);
-            _window.minSize = new Vector2(300, 300);
+            _window.maxSize = new Vector2(450, 700);
+            _window.minSize = new Vector2(450, 600);
             _ability = new Ability(element);
             
         }

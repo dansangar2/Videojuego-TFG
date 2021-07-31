@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using Data.Windows.ManageStats;
 using Entities;
-using Enums;
 using UnityEngine;
 
 namespace Data.Windows.ManageAbilities
@@ -13,7 +13,7 @@ namespace Data.Windows.ManageAbilities
         public static bool Validate(Ability item)
         {
             _res = false;
-        /*    string advice = "";
+            string advice = "";
 
             #region Name
 
@@ -35,34 +35,23 @@ namespace Data.Windows.ManageAbilities
 
             #endregion
 
-            #region Type
+            #region Formula
 
-            if (item.Type.Equals(AbilityType.None))
+            try
             {
-                advice += "It is recommendable that Ability won´t be \"None\".\n";
+                item.Damage(GameData.CharacterDB.FindByID(0), GameData.CharacterDB.FindByID(0));
             }
-
-            if (item.Type.Equals(null))
+            catch (Exception e)
             {
-                advice += "Ability represent the type of element, can´t be null.\n";
+                advice += "The formula has a error.";
                 _res = true;
             }
+
+            #endregion
             
-            #endregion
-
-            #region Strengths
-
-            foreach (AbilityType elem in item.GetMultiplicityAbilitys().
-                Where(content => item.GetMultiplicityOf(content) > 10 || 
-                                 item.GetMultiplicityOf(content) < -10))
-            {
-                advice += elem + " has value that are not between 10 && -10.\n";
-                _res = true;
-            }
-
-            #endregion
-
-            GUILayout.Label(advice);*/
+            _res = _res || StatsGeneratorWindow.Validator(item);
+            
+            GUILayout.Label(advice);
             return _res;
         }
     }

@@ -4,28 +4,27 @@ using UnityEngine;
 
 namespace Data.Windows.ManageStats
 {
-    public class StatsByLevelHelp: EditorWindow
+    public class AbilityByLevelHelp: EditorWindow
     {
         
         private static EditorWindow _window;
-        private static Character _newChar;
+        private static Ability _newAbi;
         
-        public static void Window(Character chara)
+        
+        public static void Window(Ability item)
         {
-            _window = GetWindow<StatsByLevelHelp>();
+            _window = GetWindow<AbilityByLevelHelp>();
             _window.maxSize = new Vector2(1300, 300);
             _window.minSize = new Vector2(1100, 300);
-            _newChar = chara;
+            _newAbi = item;
         }
 
         public void OnGUI()
         {
-            StatsGeneratorWindow.Display(_newChar);
+            StatsGeneratorWindow.Display(_newAbi);
             if (GUILayout.Button("Close")) _window.Close();
 
         }
-        
-        
 
     }
 }

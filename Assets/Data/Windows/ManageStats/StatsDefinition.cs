@@ -15,8 +15,8 @@ namespace Data.Windows.ManageStats
         public static void Window()
         {
             _window = GetWindow<StatsDefinition>();
-            _window.maxSize = new Vector2(640, 200);
-            _window.minSize = new Vector2(640, 200);
+            _window.maxSize = new Vector2(640, 100);
+            _window.minSize = new Vector2(640, 100);
         }
 
         public void OnGUI()
@@ -25,28 +25,10 @@ namespace Data.Windows.ManageStats
             GUILayout.Label("Stats Formula: \n", _options);
 
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("For MBP-AGI: ", _options);
-            GUILayout.Label("FLOOR(Level*Base + Plus)*Rate + Flat)", _options2);
+            GUILayout.Label("For All except EXP: ", _options);
+            GUILayout.Label("Base * Rate^2", _options2);
             EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("For REB: ", _options);
-            GUILayout.Label("MIN(MEN/((MaxLevel*Base + Plus) * Rate), Max)", _options2);
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("For REK: ", _options);
-            GUILayout.Label("MIN(SPI/((MaxLevel*Base + Plus) * Rate), Max)", _options2);
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("For RXB: ", _options);
-            GUILayout.Label("MEN/((MaxLevel*Base + Plus) * Rate)*Yes", _options2);
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("For RXK: ", _options);
-            GUILayout.Label("SPI/((MaxLevel*Base + Plus) * Rate)*Yes", _options2);
-            EditorGUILayout.EndHorizontal();
-            
+
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("For EXP: ", _options);
             GUILayout.Label("Base*(Level - 1)^(0.9+(Rate/250))*Level*(Level+1)/(6+Level^2)/50/Flat)+(Level-1)*Plus", _options2);

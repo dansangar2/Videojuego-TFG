@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Data.Windows.ManageStats
 {
-    public class StatsDefinition : EditorWindow
+    public class StatsAbilityDefinition : EditorWindow
     {
 
         //Database Controller
@@ -14,7 +14,7 @@ namespace Data.Windows.ManageStats
 
         public static void Window()
         {
-            _window = GetWindow<StatsDefinition>();
+            _window = GetWindow<StatsAbilityDefinition>();
             _window.maxSize = new Vector2(640, 100);
             _window.minSize = new Vector2(640, 100);
         }

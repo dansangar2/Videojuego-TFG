@@ -172,7 +172,7 @@ namespace Data.Windows.ManageStats
             GUILayout.Label(" | ");
             if (GUILayout.Button("Help!", options))
             {
-                StatsDefinition.Window();
+                StatsCharacterDefinition.Window();
             }
             GUILayout.Label(" | ");
             EditorGUILayout.EndHorizontal();
@@ -386,7 +386,7 @@ namespace Data.Windows.ManageStats
             GUILayout.Label(" | ");
             if (GUILayout.Button("Help!", options))
             {
-                StatsDefinition.Window();
+                StatsAbilityDefinition.Window();
             }
             GUILayout.Label(" | ");
             EditorGUILayout.EndHorizontal();

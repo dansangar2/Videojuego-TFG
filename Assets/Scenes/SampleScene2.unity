@@ -375,6 +375,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
         type: 3}
+      propertyPath: messages.Array.data[2].retard
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
+        type: 3}
       propertyPath: messages.Array.data[1].automated
       value: 1
       objectReference: {fileID: 0}

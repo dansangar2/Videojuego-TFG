@@ -205,190 +205,189 @@ namespace Data.Windows.ManageAbilities
             #endregion
             
         }
-
-         private static void DisplayedReadOnly(Ability item)
+        
+        private static void DisplayedReadOnly(Ability item) 
         {
-
-            EditorGUILayout.BeginVertical();
-            EditorGUILayout.BeginHorizontal();
             
+            EditorGUILayout.BeginVertical(); 
+            EditorGUILayout.BeginHorizontal();
+             
             #region ID
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("ID: ", Options);
-            GUILayout.Label(item.ID.ToString(), Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("ID: ", Options); 
+            GUILayout.Label(item.ID.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-
+            
             #region Type
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Type: ", Options);
-            GUILayout.Label(item.Type.ToString(), Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Type: ", Options); 
+            GUILayout.Label(item.Type.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-
-            EditorGUILayout.EndHorizontal();
+             
+            EditorGUILayout.EndHorizontal(); 
             EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.BeginVertical();
+             
+            EditorGUILayout.BeginVertical(); 
             EditorGUILayout.BeginHorizontal();
-            
+             
             #region Name
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Name: ", Options);
-            GUILayout.Label(item.Name, Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Name: ", Options); 
+            GUILayout.Label(item.Name, Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-
+             
             #region Range
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Range: ", Options);
-            GUILayout.Label(item.Range.ToString(), Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Range: ", Options); 
+            GUILayout.Label(item.Range.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-            
-            EditorGUILayout.EndHorizontal();
+             
+            EditorGUILayout.EndHorizontal(); 
             EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.BeginVertical();
+             
+            EditorGUILayout.BeginVertical(); 
             EditorGUILayout.BeginHorizontal();
-            
+             
             #region Max Level
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Max Level: ", Options);
-            GUILayout.Label(item.MaxLevel.ToString(), Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Max Level: ", Options); 
+            GUILayout.Label(item.MaxLevel.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-
+             
             #region Target
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Target: ", Options);
-            GUILayout.Label(item.Target.ToString(), Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Target: ", Options); 
+            GUILayout.Label(item.Target.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-            
-            EditorGUILayout.EndHorizontal();
+             
+            EditorGUILayout.EndHorizontal(); 
             EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.BeginVertical();
+             
+            EditorGUILayout.BeginVertical(); 
             EditorGUILayout.BeginHorizontal();
-            
+             
             #region Icon
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Icon: ", Options);
-            GUILayout.Label(item.Icon.ToString(), Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Icon: ", Options); 
+            GUILayout.Label(item.Icon.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-
+             
             #region Hits
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Hits: ", Options);
-            GUILayout.Label(item.Hits.ToString(), Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Hits: ", Options); 
+            GUILayout.Label(item.Hits.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-            
-            EditorGUILayout.EndHorizontal();
+             
+            EditorGUILayout.EndHorizontal(); 
             EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.BeginVertical();
+             
+            EditorGUILayout.BeginVertical(); 
             EditorGUILayout.BeginHorizontal();
-
+             
             #region Cost
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Cost: ", Options);
-            GUILayout.Label(item.Cost.ToString(), Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Cost: ", Options); 
+            GUILayout.Label(item.Cost.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-
+             
             #region Number Of Target
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Targets number: ", Options);
-            GUILayout.Label(item.NumberOfTarget.ToString(), Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Targets number: ", Options); 
+            GUILayout.Label(item.NumberOfTarget.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-
-            EditorGUILayout.EndHorizontal();
+             
+            EditorGUILayout.EndHorizontal(); 
             EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.BeginVertical();
+             
+            EditorGUILayout.BeginVertical(); 
             EditorGUILayout.BeginHorizontal();
-
+             
             #region Can Repeat Random Target?
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Can repeat random?: ", Options);
-            GUILayout.Label(item.CanRepeatRandomTarget.ToString(), Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Can repeat random?: ", Options); 
+            GUILayout.Label(item.CanRepeatRandomTarget.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-
+             
             #region Have element?
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Have Element?: ", Options);
-            GUILayout.Label(item.Element == null ? "NULL" : item.Element.Name, Options);
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Have Element?: ", Options); 
+            GUILayout.Label(item.Element == null ? "NULL" : item.Element.Name, Options); 
             EditorGUILayout.EndHorizontal();
-
+             
             #endregion
-            
-            EditorGUILayout.EndHorizontal();
+             
+            EditorGUILayout.EndHorizontal(); 
             EditorGUILayout.EndVertical();
-            
+             
             #region Description
-
-            GUILayout.Label("Description: ");
+             
+            GUILayout.Label("Description: "); 
             GUILayout.Label(item.Description, TextAreaStyle, GUILayout.MinHeight(100));
-
+             
             #endregion
-
+             
             #region Stats
-
+             
             StatsGeneratorWindow.Display(item, Options);
-
+             
+            #endregion
+             
+            #region Formula
+             
+            FormulaDescription();
+             
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("Formula: ", Options); 
+            GUILayout.Label(item.Formula, GUILayout.MaxWidth(350f), GUILayout.MinWidth(20f)); 
+            EditorGUILayout.EndHorizontal();
+             
             #endregion
             
-            #region Formula
-
-            FormulaDescription();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Formula: ", Options);
-            GUILayout.Label(item.Formula, GUILayout.MaxWidth(350f), GUILayout.MinWidth(20f));
-            EditorGUILayout.EndHorizontal();
-
-            #endregion
-
         }
 
-        
+         
         #region Formula description
-
-        private static void FormulaDescription()
-        {
+        
+        private static void FormulaDescription() 
+        { 
             GUILayoutOption[] options = {GUILayout.MaxWidth(200f), GUILayout.MinWidth(20f)};
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("The format for to use a stat is {user.stat}. For example {a.atk} (user attack)");
-            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.BeginHorizontal(); 
+            GUILayout.Label("The format for to use a stat is {user.stat}. For example {a.atk} (user attack)"); EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("For use the stat of user you must write a.stat, and the target b.stat");

@@ -48,6 +48,5 @@ namespace Data.Windows.ManageCharacters
             EditorUtility.SetDirty(_characterDB);
             _window.Close();
         }
-
     }
 }

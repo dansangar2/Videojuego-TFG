@@ -49,6 +49,5 @@ namespace Data.Windows.ManageElements
             EditorUtility.SetDirty(_elementDB);
             _window.Close();
         }
-
     }
 }

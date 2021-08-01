@@ -6,7 +6,6 @@ namespace Data.Windows.ManageCharacters
 {
     public static class Validator
     {
-        
         private static bool _res;
         
         public static bool Validate(Character item)

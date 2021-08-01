@@ -50,6 +50,6 @@ namespace Data.Windows.ManageAbilities
             EditorUtility.SetDirty(_abilityDB);
             _window.Close();
         }
-        
+       
     }
 }

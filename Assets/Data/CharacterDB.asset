@@ -1,0 +1,192 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7033179702b14109a43061adf04754b3, type: 3}
+  m_Name: CharacterDB
+  m_EditorClassIdentifier: 
+  characters:
+  - id: 0
+    name: Example 1
+    description: 
+    art: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+    level: 1
+    maxLevel: 99
+    main: c201000064000000370000002d00000028000000230000001e000000c20100006400000000000000
+    special:
+    - 0.011
+    - 0.019
+    - 0
+    - 0
+    expData: 1e000000140000001e00000014000000
+    elementID: 0
+    actExp: 0
+    nedExp: 50
+    bases:
+    - 50
+    - 30
+    - 10
+    - 5.5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    plus: 90010000460000002d00000028000000230000001e000000190000001e00000023000000230000001e000000
+    rate:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 6
+    - 4
+    - 15
+    - 15
+    flat: 00000000000000000000000000000000000000000000000000000000
+    learning:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    max:
+    - 0.5
+    - 0.5
+    yes: 0000
+    face: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+    model: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    meleeAttackID: 0
+    longAttackID: 0
+    abilities: []
+  - id: 1
+    name: Example 2
+    description: 
+    art: {fileID: 7842287477887063830, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    level: 1
+    maxLevel: 99
+    main: c201000064000000330000002d00000028000000230000001e000000c20100006400000000000000
+    special:
+    - 0.011
+    - 0.019
+    - 0
+    - 0
+    expData: 1e000000140000001e00000014000000
+    elementID: 0
+    actExp: 0
+    nedExp: 50
+    bases:
+    - 50
+    - 30
+    - 6
+    - 5.5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    plus: 90010000460000002d00000028000000230000001e000000190000001e00000023000000230000001e000000
+    rate:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 6
+    - 4
+    - 15
+    - 15
+    flat: 00000000000000000000000000000000000000000000000000000000
+    learning:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    max:
+    - 0.5
+    - 0.5
+    yes: 0000
+    face: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+    meleeAttackID: 0
+    longAttackID: 0
+    abilities: []
+  - id: 2
+    name: sas
+    description: 
+    art: {fileID: 21300000, guid: b3a09dd37f1a47e3b7db4de7e654542d, type: 3}
+    level: 1
+    maxLevel: 99
+    main: c201000064000000370000002d00000028000000230000001e000000c20100006400000000000000
+    special:
+    - 0.011
+    - 0.019
+    - 0
+    - 0
+    expData: 1e000000140000001e00000014000000
+    elementID: 0
+    actExp: 0
+    nedExp: 50
+    bases:
+    - 50
+    - 30
+    - 10
+    - 5.5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    plus: 90010000460000002d00000028000000230000001e000000190000001e00000023000000230000001e000000
+    rate:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 6
+    - 4
+    - 15
+    - 15
+    flat: 00000000000000000000000000000000000000000000000000000000
+    learning:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    max:
+    - 0.5
+    - 0.5
+    yes: 0000
+    face: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+    model: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    meleeAttackID: 0
+    longAttackID: 0
+    abilities: []

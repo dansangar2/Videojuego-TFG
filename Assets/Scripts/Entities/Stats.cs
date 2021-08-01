@@ -10,14 +10,14 @@ namespace Entities
     {
         
         #region ATTRIBUTES
-
-        [SerializeField] protected int level  = 1;
-        [SerializeField] protected int maxLevel = 99;
-        [SerializeField] protected int[] main = new int[10];
-        [SerializeField] protected float[] special = new float[4];
-        [SerializeField] protected int[] expData = {30, 20, 30, 20};
-        [SerializeField] protected int elementID;
-        [SerializeField] protected int actExp;
+        
+        [SerializeField] protected int level  = 1; 
+        [SerializeField] protected int maxLevel = 99; 
+        [SerializeField] protected int[] main = new int[10]; 
+        [SerializeField] protected float[] special = new float[4]; 
+        [SerializeField] protected int[] expData = {30, 20, 30, 20}; 
+        [SerializeField] protected int elementID; 
+        [SerializeField] protected int actExp; 
         [SerializeField] protected int nedExp;
         
         /**<summary>
@@ -25,117 +25,115 @@ namespace Entities
         <para>This are incrementing until become a 100, when it´s being 100, the character can move, later return 0</para>
         <para>You can move when it´s 100%</para>
         <para>Formula: (agi*numberOfMembers)/kg, where number of members = enemies + characters</para>
-        </summary>*/
+        </summary>*/ 
         public float Charge { get; private set; }
         
         #endregion
-
+        
         #region CONSTRUCTORS
-
-        /**<summary>
-         * Empty Stats constructor
-        </summary>*/
+        
+        /**<summary>Empty Stats constructor</summary>*/ 
         protected Stats(int id): base(id){ }
         
         /**<summary>
-         * Clone Stats constructor
-        </summary>*/
-        protected Stats(Stats bases): base(bases)
-        {
+        Clone Stats constructor
+        </summary>*/ 
+        protected Stats(Stats bases): base(bases) 
+        { 
             Level = bases.Level; 
-            MaxLevel = bases.MaxLevel;
-            for (int i =0; i<bases.Main.Length; i++)
-            {
+            MaxLevel = bases.MaxLevel; 
+            for (int i =0; i<bases.Main.Length; i++) 
+            { 
                 Main[i] = bases.Main[i];
             }
-
-            for (int i = 0; i < bases.Special.Length; i++)
-            {
+            
+            for (int i = 0; i < bases.Special.Length; i++) 
+            { 
                 Special[i] = bases.Special[0];
             }
+            
             //List<Affinity> afi;
             //element = new Element(bases.element);
             ElementID = bases.elementID;
             
-            for (int i = 0; i < bases.ExpData.Length; i++)
-            {
+            for (int i = 0; i < bases.ExpData.Length; i++) 
+            { 
                 ExpData[i] = bases.ExpData[i];
             }
-
-            actExp = bases.ActExp;
+            
+            actExp = bases.ActExp; 
             nedExp = bases.NedExp;
+            
         }
         
         #endregion
-
+        
         #region GETTERS & SETTERS
-
-        /**<summary>The level of the character.</summary>*/
-        public int Level
-        {
-            get => level;
-            set
-            {
-                level = level < MaxLevel ? value : MaxLevel;
+        
+        /**<summary>The level of the character.</summary>*/ 
+        public int Level 
+        { 
+            get => level; 
+            set 
+            { 
+                level = level < MaxLevel ? value : MaxLevel; 
                 level = level > 0 ? value : 1;
             }
-            
         }
-
-        /**<summary>The max level that the character can be.</summary>*/
-        public int MaxLevel
-        {
+        
+        /**<summary>The max level that the character can be.</summary>*/ 
+        public int MaxLevel 
+        { 
             get => maxLevel; 
             set 
-            {
-                maxLevel = value > 0 ? value : 1;
+            { 
+                maxLevel = value > 0 ? value : 1; 
                 level = level > maxLevel ? maxLevel : level;
             }
         }
-
+        
         /**<summary><para>[mbp, mkp, atk, def, spi, men, agi, abp, akp, kg, cha, nxt]</para>
-         <para>0 -> mbp = Max blood points</para>
-         1 -> mkp = Max karma points
-         <para>2 -> atk = Attack</para>
-         3 -> def = Defense
-         <para>4 -> spi = Spirit</para>
-         5 -> men = Mentality
-         <para>6 -> agi = Agility</para>
-         7 -> cbp = Current blood points
-         <para>8 -> ckp = Current karma points</para>
-         9 -> kg = Weight
-         </summary>*/
+        <para>0 -> mbp = Max blood points</para>
+        1 -> mkp = Max karma points
+        <para>2 -> atk = Attack</para>
+        3 -> def = Defense
+        <para>4 -> spi = Spirit</para>
+        5 -> men = Mentality
+        <para>6 -> agi = Agility</para>
+        7 -> cbp = Current blood points
+        <para>8 -> ckp = Current karma points</para>
+        9 -> kg = Weight
+        </summary>*/ 
         public int[] Main => main;
-
+        
         /**<summary><para>[reb, rek, rxb, rxk]</para>
-         <para>0 -> reb = Recovery blood effect</para>
-         1 -> rek = Recovery karma effect
-         <para>2 -> rxb = Regenerate blood per turn</para>
-         3 -> rxk = Regenerate karma per turn
-         </summary>
-         */
+        <para>0 -> reb = Recovery blood effect</para>
+        1 -> rek = Recovery karma effect
+        <para>2 -> rxb = Regenerate blood per turn</para>
+        3 -> rxk = Regenerate karma per turn
+        </summary>*/ 
         public float[] Special => special;
-
-        /**<summary>The experience curve for level up.</summary>*/
+        
+        /**<summary>The experience curve for level up.</summary>*/ 
         public int[] ExpData => expData;
-
-        /**<summary>The ID of the element of the Character.</summary>*/
+        
+        /**<summary>The ID of the element of the Character.</summary>*/ 
         public int ElementID { set => elementID = value; }
-
-        /**<summary>The exp that you have.</summary>*/
+        
+        /**<summary>The exp that you have.</summary>*/ 
         public int ActExp => actExp;
-
-        /**<summary>The exp that you need.</summary>*/
+        
+        /**<summary>The exp that you need.</summary>*/ 
         public int NedExp => nedExp;
         
         /**<summary>
         Max. Blood point
         <para>Max of Blood points you can get.</para>
         <para>Formula: (base + plus) * rate + flat</para>
-        </summary>*/
-        public int MaxBloodPoints
-        {
-            get => Main[0];
+        </summary>*/ 
+        public int MaxBloodPoints 
+        { 
+            get => Main[0]; 
             set => Main[0] = value;
         }
         
@@ -143,21 +141,21 @@ namespace Entities
         Max. Karma point
         <para>Max of Karma points you can get.</para>
         <para>Formula: (base + plus) * rate + flat</para>
-        </summary>*/
-        public int MaxKarmaPoints
-        {
-            get => Main[1];
+        </summary>*/ 
+        public int MaxKarmaPoints 
+        { 
+            get => Main[1]; 
             set => Main[1] = value;
         }
-
+        
         /**<summary>
         Current Blood point
         <para>When your BP it´s 0 you are going to be unconscious, if it´s max*(-1) you are going to be die.</para>
         <para>less than mhp</para>
-        </summary>*/
-        public int CurrentBloodPoints
-        {
-            get => Main[7];
+        </summary>*/ 
+        public int CurrentBloodPoints 
+        { 
+            get => Main[7]; 
             set => Main[7] = value;
         }
         
@@ -165,33 +163,32 @@ namespace Entities
         Actual Karma Points
         <para>When your KP it´s 0 you cannot use your Karma abilities.</para>
         <para>less than mkp</para>
-        </summary>*/
-        public int CurrentKarmaPoints
-        {
-            get => Main[8];
+        </summary>*/ 
+        public int CurrentKarmaPoints 
+        { 
+            get => Main[8]; 
             set => Main[8] = value;
         }
-
+        
         /**<summary>
         Weight
         <para>This param it´s used for weapons equip limit.</para> 
         <para>(user.mbp + user.def - user.atk - user.agi)/(user.level*100)</para>
-        </summary>*/
-        public int Weight
-        {
-            get => Main[9];
+        </summary>*/ 
+        public int Weight 
+        { 
+            get => Main[9]; 
             set => Main[9] = value;
         }
-
+        
         /**<summary>
         Attack
         <para>Physical damage that you can do.</para>
         <para>Formula: (base + plus) * rate + flat</para>
-        </summary>
-        */
-        public int Attack
-        {
-            get => Main[2];
+        </summary>*/ 
+        public int Attack 
+        { 
+            get => Main[2]; 
             set => Main[2] = value;
         }
         
@@ -199,150 +196,140 @@ namespace Entities
         Defense
         <para>Physical resistance that you can endure.</para>
         <para>Formula: (base + plus) * rate + flat</para>
-        </summary>*/
+        </summary>*/ 
         public int Defense { 
-            get => Main[3];
+            get => Main[3]; 
             set => Main[3] = value; 
         }
-
+        
         /**<summary>
         Spirit
         <para>Karmic damage that you can do.</para>
         <para>Formula: (base + plus) * rate + flat</para>
-        </summary>*/
-        public int Spirit
-        {
-            get => Main[4];
+        </summary>*/ 
+        public int Spirit 
+        { 
+            get => Main[4]; 
             set => Main[4] = value;
         }
-
+        
         /**<summary>
         Mentality
         <para>Karmic resistance that you can endure.</para>
         <para>Formula: (base + plus) * rate + flat</para>
-        </summary>*/
-        public int Mentality
-        {
-            get => Main[5];
+        </summary>*/ 
+        public int Mentality 
+        { 
+            get => Main[5]; 
             set => Main[5] = value;
         }
-
+        
         /**<summary>
         Agility
         <para>Time between turns, evasion, etc...</para>
         <para>Formula: (base + plus) * rate + flat</para>
-        </summary>*/
-        public int Agility
-        {
+        </summary>*/ 
+        public int Agility 
+        { 
             get => Main[6];
             set => Main[6] = value;
         }
-
+        
         /**<summary>
         Blood recovery plus
         <para>The char recover this% of blood more.</para>
         <para>Formula: spi/(base*rate)*yes?</para>
-        </summary>*/
-        public float BloodRecoveryPlus
-        {
-            get => Special[0];
+        </summary>*/ 
+        public float BloodRecoveryPlus 
+        { 
+            get => Special[0]; 
             set => Special[0] = value;
         }
-
+        
         /**<summary>
         Karma recovery plus
         <para>The char recover this% of karma more.</para>
         <para>Formula: men/(base*rate)*yes?</para>
-        </summary>*/
-        public float KarmaRecoveryPlus
-        {
-            get => Special[1];
+        </summary>*/ 
+        public float KarmaRecoveryPlus 
+        { 
+            get => Special[1]; 
             set => Special[1] = value;
         }
-
+        
         /**<summary>
         Blood regeneration per turn
         <para>Each turn you recover this% of blood points.</para>
         <para>Formula: spi/(base*rate)*yes?</para>
-        </summary>*/
-        public float Regeneration
-        {
-            get => Special[2];
+        </summary>*/ 
+        public float Regeneration 
+        { 
+            get => Special[2]; 
             set => Special[2] = value;
         }
-
+        
         /**<summary>
         Karma regeneration per turn
         <para>Time between turns, evasion, etc...</para>
         <para>Formula: kar/(base*rate)*yes?</para>
-        </summary>*/
-        public float KarmaRegeneration
-        {
-            get => Special[3];
+        </summary>*/ 
+        public float KarmaRegeneration 
+        { 
+            get => Special[3]; 
             set => Special[3] = value;
         }
         
-        /**<summary>The element of the object.</summary>*/
+        /**<summary>The element of the object.</summary>*/ 
         public Element Element => GameData.ElementDB.FindByID(elementID);
-
-        /**<summary>Set the experience value curve.</summary>*/
-        public void SetExperienceCurveParameters(int[] expValues)
-        {
+        
+        /**<summary>Set the experience value curve.</summary>*/ 
+        public void SetExperienceCurveParameters(int[] expValues) 
+        { 
             for (int i = 0; i < expValues.Length; i++) { expData[i] = expValues[i]; }
         }
         
         #endregion
-
+        
         #region METHODS
-
+        
         /**<summary>
         Set the values of experience curve
-        </summary>*/
-        private void MainSet(int value1, int value2, int value3, int value4)
-        {
-            ExpData[0] = value1;
-            ExpData[1] = value2;
-            ExpData[2] = value3;
+        </summary>*/ 
+        private void MainSet(int value1, int value2, int value3, int value4) 
+        { 
+            ExpData[0] = value1; 
+            ExpData[1] = value2; 
+            ExpData[2] = value3; 
             ExpData[3] = value4;
         }
-        
-        /*public void SetExperienceCurveParameters(int[] expValues)
-        {
-            for (int i = 0; i < expValues.Length; i++)
-            {
-                ExpData[i] = expValues[i];
-            }
-        }*/
 
         /**<summary>
         Return if the Character can move.
-        </summary>*/
-        public bool AddCharge(int total)
-        {
-            Charge += Convert.ToSingle(Agility)*Random.Range(0.95f, 1.05f) / total;
+        </summary>*/ 
+        public bool AddCharge(int total) 
+        { 
+            Charge += Convert.ToSingle(Agility)*Random.Range(0.95f, 1.05f) / total; 
             if (Charge >= total) Charge = 0;
-            else return false;    
+            else return false; 
             return true;
-                
-
         }
         
         /**<summary>
         The blood that is reduced. If it is negative, the it recover
-        </summary>*/
-        public void ReduceCurrentBlood(int amount = -999999)
-        {
-            Main[7] -= amount;
+        </summary>*/ 
+        public void ReduceCurrentBlood(int amount = -999999) 
+        { 
+            Main[7] -= amount; 
             if (Main[7] > Main[0]) Main[7] = Main[0];
             else if(Main[7] < 0) Main[7] = 0;
         }
         
         /**<summary>
         The karma that is reduced. If it is negative, the it recover
-        </summary>*/
-        public void ReduceCurrentKarma(int amount = -999999)
-        {
-            Main[8] -= amount;
+        </summary>*/ 
+        public void ReduceCurrentKarma(int amount = -999999) 
+        { 
+            Main[8] -= amount; 
             if (Main[8] > Main[1]) Main[8] = Main[1];
             else if(Main[8] < 0) Main[8] = 0;
         }
@@ -351,30 +338,28 @@ namespace Entities
         <para>ROUND(e[0]*(level - 1)^(0.9+(e[2]/250))*l*(level+1)/(6+l^2)/50/e[3])+(l-1)*e[1])</para>
         <para>Where "l" is the current level</para>
         Where "e" it´s the expData
-        </summary>*/
-        private int MainFormulaExperience()
-        {
-            int nextLevel = Level + 1;
-            return Convert.ToInt32(Mathf.Round(ExpData[0]
-                *Mathf.Pow(nextLevel - 1, 0.9f+Convert.ToSingle(ExpData[2])/250)
-                *nextLevel
-                *(nextLevel+1)/(6+Mathf.Pow(nextLevel, 2)/50/ExpData[3])+(nextLevel-1)
-                *ExpData[1]));
+        </summary>*/ 
+        private int MainFormulaExperience() 
+        { 
+            int nextLevel = Level + 1; 
+            return Convert.ToInt32(Mathf.Round(ExpData[0] 
+                *Mathf.Pow(nextLevel - 1, 0.9f+Convert.ToSingle(ExpData[2])/250) 
+                *nextLevel 
+                *(nextLevel+1)/(6+Mathf.Pow(nextLevel, 2)/50/ExpData[3])+(nextLevel-1) 
+                *ExpData[1])); 
         }
         
         /**<summary>
         Update the experience from user, If actExp >= nedExp, nedExp is updated, using the current level.
-        </summary>
-        */
+        </summary>*/ 
         public void UpdateExperience() { nedExp = Level < MaxLevel ? MainFormulaExperience() : 0; }
         
         /**<summary>
         Return true if the character has dead (if current blood is less than 0).
-        </summary>
-        */
+        </summary>*/ 
         public bool IsKo() { return 0 > CurrentBloodPoints; }
         
         #endregion
-
+        
     }
 }

@@ -7,15 +7,13 @@ namespace Data.Database
 {
     [CreateAssetMenu(menuName = "Database/Profiles", fileName = "ProfileDB")]
     public class Profiles : ScriptableObject
-    {
-        
-        /**<summary>Array that save the Serialize data.</summary>*/
+    { 
+        /**<summary>Array that save the Serialize data.</summary>*/ 
         [SerializeField] private Profile[] profiles = {};
-        [SerializeField] private Profile[] profilesCharacter = {};
 
-
+        
         #region GET
-
+        
         /**<summary>Get the number of items.</summary>*/
         public int Count => profiles.Length;
 
@@ -27,8 +25,8 @@ namespace Data.Database
 
         /**<summary>Get All Names of the items of the array.</summary>*/
         public string[] Names
-        {
-            get
+        { 
+            get 
             {
                 string[] res = new string[profiles.Length];
                 for (int i = 0; i < profiles.Length; i++) { res[i] = profiles[i].Name; }
@@ -43,7 +41,7 @@ namespace Data.Database
         /**<summary>Find item by ID.</summary>*/
         public Profile FindByID(int id)
         {
-            if(id<0) return profilesCharacter.FirstOrDefault(profile => profile.ID == -id);
+            if(id<0) return AllCharacters.FirstOrDefault(profile => profile.ID == -id-1);
             return profiles.FirstOrDefault(profile => profile.ID == id);
         }
         
@@ -65,22 +63,22 @@ namespace Data.Database
         }
 
         /**<summary>Modify a item of the array. It's modify by item ID.</summary>*/
-        public void Modify(Profile profile)
-        {
+        public void Modify(Profile profile) 
+        { 
             profiles[Array.IndexOf(profiles, FindByID(profile.ID))] = profile;
         }
-
-        /**<summary>Remove a item of the array</summary>*/
-        public void Remove(int id)
-        {
-            for (int i = Array.IndexOf(profiles, FindByID(id)); i < Count-1; i++)
-            {
-                profiles[i] = profiles[i+1];
+      
+        /**<summary>Remove a item of the array</summary>*/ 
+        public void Remove(int id) 
+        { 
+            for (int i = Array.IndexOf(profiles, FindByID(id)); i < Count-1; i++) 
+            { 
+                profiles[i] = profiles[i+1]; 
                 profiles[i].ID--;
             }
-            Array.Resize(ref profiles, Count - 1);
+            Array.Resize(ref profiles, Count - 1); 
         }
-
+        
         #endregion
         
     }

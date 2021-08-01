@@ -5,12 +5,14 @@ using UnityEngine;
 
 namespace Data.Windows.ManageStats
 {
+    /**<summary>This class it's for generate stats generator values.</summary>*/
     public static class StatsGeneratorWindow
     {
         private static readonly GUILayoutOption[] Options = { GUILayout.MaxWidth(150f), GUILayout.MinWidth(20f) };
 
         #region TABLE
 
+        /**<summary>This method makes a Table with "content", the rows its the first value.</summary>*/
         public static void Table(string[][] content, GUILayoutOption[] options = null)
         {
             options ??= Options;
@@ -35,6 +37,7 @@ namespace Data.Windows.ManageStats
 
         #region Set
 
+        /**<summary>It's makes a window for introduce the values for stats generator for Characters.</summary>*/
         public static void GenerateStats(Character chara, GUILayoutOption[] options = null)
         {
             options ??= Options;
@@ -188,6 +191,7 @@ namespace Data.Windows.ManageStats
         
         #region Validator
 
+        /**<summary>It's validate the stats generator for Characters.</summary>*/
         public static bool Validator(Character chara)
         {
             float[] bases = chara.Bases;
@@ -248,6 +252,7 @@ namespace Data.Windows.ManageStats
 
         #region Dispaly Stats
 
+        /**<summary>It's display the stats evolution for Characters using the stats generator value.</summary>*/
         public static void Display(Character character, GUILayoutOption[] options = null)
         {
             
@@ -323,6 +328,7 @@ namespace Data.Windows.ManageStats
 
         #region Set
 
+        /**<summary>It's makes a window for introduce the values for stats generator for Abilities.</summary>*/
         public static void GenerateStats(Ability item, GUILayoutOption[] options = null)
         {
             options ??= Options;
@@ -403,6 +409,7 @@ namespace Data.Windows.ManageStats
 
         #region Validator
 
+        /**<summary>It's validate the stats generator for Abilities.</summary>*/
         public static bool Validator(Ability item)
         {
             float[] bases = item.Bases;
@@ -444,6 +451,7 @@ namespace Data.Windows.ManageStats
 
         #region Display
 
+        /**<summary>It's display the stats evolution for Abilities using the stats generator value.</summary>*/
         public static void Display(Ability item, GUILayoutOption[] options = null)
         {
             

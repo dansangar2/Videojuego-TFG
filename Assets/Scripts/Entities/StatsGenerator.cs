@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Entities
 {
+    /**<summary>It generates a stats of "Stats". It uses a formulas for it.</summary>*/
     [Serializable]
     public class StatsGenerator : Stats
     {
@@ -41,14 +42,10 @@ namespace Entities
         
         #region CONSTRUCTORS
         
-        /**<summary>
-        Empty StatsInfo constructor
-        </summary>*/ 
+        /**<summary>Empty StatsGenerator constructor</summary>*/ 
         protected StatsGenerator(int id): base(id){ }
         
-        /**<summary>
-        StatsInfo clone constructor.
-        </summary>*/ 
+        /**<summary>StatsGenerator clone constructor.</summary>*/ 
         public StatsGenerator(StatsGenerator stats) : base(stats) 
         { 
             for (int i = 0; i < stats.bases.Length; i++) { bases[i] = stats.bases[i]; }
@@ -72,53 +69,28 @@ namespace Entities
         
         #region GETTERS & SETTERS
         
-        /**<summary>
-        Get the bases parameters.
-        </summary>*/ 
+        /**<summary>Get the bases parameters.</summary>*/ 
         public float[] Bases => bases;
         
-        /**<summary>
-        Get the pluses parameters.
-        </summary>*/ 
+        /**<summary>Get the pluses parameters.</summary>*/ 
         public int[] Plus => plus;
         
-        /**<summary>
-        Get the rates parameters.
-        </summary>*/ 
+        /**<summary>Get the rates parameters.</summary>*/ 
         public float[] Rate => rate;
         
-        /**<summary>
-        Get the learning rates parameters.
-        </summary>*/ 
+        /**<summary>Get the learning rates parameters.</summary>*/ 
         public float[] Learning => learning;
         
-        /**<summary>
-        Get the flats parameters.
-        </summary>*/ 
+        /**<summary>Get the flats parameters.</summary>*/ 
         public int[] Flat => flat;
         
-        /**<summary>
-        Get the maximum parameters.
-        </summary>*/ 
+        /**<summary>Get the maximum parameters.</summary>*/ 
         public float[] Max => max;
         
-        /**<summary>
-        Get if the regeneration values is activate.
-        </summary>*/ 
+        /**<summary>Get if the regeneration values is activate.</summary>*/ 
         public bool[] Yes => yes;
-        
-        /**<summary>
-        Set the parameters that decide Max Blood Points value by level.
-        </summary>*/ 
-        public void SetMaxBloodPoints(float nBase, int nPlus, float nRate, int nFlat) 
-        { 
-            MainSet(0, nBase, nPlus, nRate, nFlat); 
-            UpdateMaxBloodPoints();
-        }
-        
-        /**<summary>
-        Set all parameters of the item.
-        </summary>*/ 
+
+        /**<summary>Set all parameters of the item.</summary>*/ 
         public void SetAll(float[] nBase, int[] nPlus, float[] nRate, int[] nFlat, float[] nLearning, float[] nMax, bool[] nYes, int[] nExp) 
         { 
             for (int i = 0; i < flat.Length; i++) 
@@ -145,54 +117,30 @@ namespace Entities
         
         #region Public
         
-        /**<summary>
-        Update the Max Blood Point from user, using the current level.
-        </summary>*/ 
+        /**<summary>Update the Max Blood Point from user, using the current level.</summary>*/ 
         public void UpdateMaxBloodPoints() { Main[0] = Calculate(0); } 
-        /**<summary>
-        Update the Max Karma Point from user, using the current level.
-        </summary>*/ 
+        /**<summary>Update the Max Karma Point from user, using the current level.</summary>*/ 
         public void UpdateMaxKarmaPoints() { Main[1] = Calculate(1); } 
-        /**<summary>
-        Update the Attack from user, using the current level.
-        </summary>*/
+        /**<summary>Update the Attack from user, using the current level.</summary>*/
         public void UpdateAttack() { Main[2] = Calculate(2); } 
-        /**<summary>
-        Update the Defense from user, using the current level.
-        </summary>*/ 
+        /**<summary>Update the Defense from user, using the current level.</summary>*/ 
         public void UpdateDefense() { Main[3] = Calculate(3); }
-        /**<summary>
-        Update the Spirit from user, using the current level.
-        </summary>*/
+        /**<summary>Update the Spirit from user, using the current level.</summary>*/
         public void UpdateSpirit() { Main[4] = Calculate(4); } 
-        /**<summary>
-        Update the Mentality from user, using the current level.
-        </summary>*/ 
+        /**<summary>Update the Mentality from user, using the current level.</summary>*/ 
         public void UpdateMentality() { Main[5] = Calculate(5); }
-        /**<summary>
-        Update the Agility from user, using the current level.
-        </summary>*/ 
+        /**<summary>Update the Agility from user, using the current level.</summary>*/ 
         public void UpdateAgility() { Main[6] = Calculate(6); }
-        /**<summary>
-        Update the Recovery Rate from user, using the current level.
-        </summary>*/ 
+        /**<summary>Update the Recovery Rate from user, using the current level.</summary>*/ 
         public void UpdateRecoveryBlood() { Special[0] = MainFormulaForRecoveryStats(0); } 
-        /**<summary>
-        Update the Recovery Karma Rate from user, using the current level.
-        </summary>*/ 
+        /**<summary>Update the Recovery Karma Rate from user, using the current level.</summary>*/ 
         public void UpdateRecoveryKarma() { Special[1] = MainFormulaForRecoveryStats(1); }
-        /**<summary>
-        Update the Regenerate Blood Rate from user, using the current level.
-        </summary>*/ 
+        /**<summary>Update the Regenerate Blood Rate from user, using the current level.</summary>*/ 
         public void UpdateRegenerateBlood() { Special[2] = MainFormulaForRegenerateStats(0); }
-        /**<summary>
-        Update the Regenerate Karma Rate from user, using the current level.
-        </summary>*/ 
+        /**<summary>Update the Regenerate Karma Rate from user, using the current level.</summary>*/ 
         public void UpdateRegenerateKarma() { Special[3] = MainFormulaForRegenerateStats(1); }
     
-        /**<summary>
-        Update All parameters from user, using the current level.
-        </summary>*/ 
+        /**<summary>Update All parameters from user, using the current level.</summary>*/ 
         public void Update() 
         { 
             for (int i = 0; i < Main.Length-3; i++) 
@@ -221,9 +169,7 @@ namespace Entities
             Leveling();
         }
         
-        /**<summary>
-        Increment in 1 the level and update.
-        </summary>*/ 
+        /**<summary>Increment in 1 the level and update stats.</summary>*/ 
         public void Leveling() 
         { 
             if (MaxLevel <= level) return; 
@@ -320,7 +266,7 @@ namespace Entities
         }
         
         /**<summary>
-        Set the values of experience curve
+        Set the values of experience curve.
         </summary>*/ 
         private void MainSet(int value1, int value2, int value3, int value4) 
         { 
@@ -333,7 +279,7 @@ namespace Entities
         /**<summary>
         <para>ROUND(e[0]*(level - 1)^(0.9+(e[2]/250))*l*(level+1)/(6+l^2)/50/e[3])+(l-1)*e[1])</para>
         <para>Where "l" is the current level</para>
-        Where "e" it´s the expData
+        Where "e" it´s the expData.
         </summary>*/ 
         private int MainFormulaExperience() 
         { 
@@ -348,7 +294,7 @@ namespace Entities
         /**<summary>
         <para>((level*50 + 400 + plus)*rate + flat), Interval(99, level, pow))</para>
         <para>Where "l" is the current level</para>
-        Where "e" it´s the expData
+        Where "e" it´s the expData.
         </summary>*/ 
         private float LearningRate(int index){ 
             //decimal p = (1 - (decimal)learning[index])/(decimal) Mathf.Pow(Convert.ToSingle(maxLevel/2), 2);

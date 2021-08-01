@@ -7,18 +7,25 @@ using UnityEngine.UI;
 
 namespace Core.Messages
 {
+    /**<summary>The dialog system with two characters.</summary>*/
     public class Dialog : Monologue
     {
 
         #region ATTRIBUTES
 
+        /**<summary>It's the character 2 face or body.</summary>*/
         private Image _characterIcon2;
+        /**<summary>The text where the message of the character 2 is showing.</summary>*/
         private Text _textWindow2;
+        /**<summary>It's the character 2 name.</summary>*/
         private Text _characterName2;
 
+        /**<summary>It's the transform that contains the TextWindow where the message of character 2 being.</summary>*/
         private Transform _textBox2;
+        /**<summary>It's the transform that contains the image where the character 2 image being.</summary>*/
         private Transform _charImage2;
 
+        /**<summary>It marks the text box that it's using.</summary>*/
         private int _iteration;
 
         #endregion
@@ -44,6 +51,7 @@ namespace Core.Messages
 
         private void Update()
         {
+            IsSomeMessageOn = true;
             switch (type)
             {
                 case TextBoxType.Message:
@@ -62,6 +70,7 @@ namespace Core.Messages
         
         #region START
         
+        /**<summary>Set the text transform for use both messages box and images.</summary>*/
         private void DialogStart()
         {
             IsSomeMessageOn = true;
@@ -81,6 +90,7 @@ namespace Core.Messages
             StartCoroutine(Next());
         }
 
+        /**<summary>Init the text, and image and name of both characters.</summary>*/
         private new void InitUI()
         {
             base.InitUI();
@@ -89,15 +99,11 @@ namespace Core.Messages
             _textWindow2 = _textBox2.GetChild(0).GetChild(0).GetComponent<Text>();
         }
 
-        private void DialogUpdate()
-        {
-            ResetMessage(_iteration == 1 ? _textWindow2 : TextWindow);
-        }
-
         #endregion
 
         #region NEXT
 
+        /**<summary>Pass the next character message.</summary>*/
         private IEnumerator Next()
         {
             UpdateUI();
@@ -105,6 +111,7 @@ namespace Core.Messages
             else yield return Speaker(TextWindow);
         }
         
+        /**<summary>Wait the "retard" seconds and destroy if it's the last message.</summary>*/
         private new IEnumerator Wait()
         {
             messages[Index].automated = false;
@@ -134,6 +141,13 @@ namespace Core.Messages
 
         #region UPDATE
 
+        /**<summary>Update the current message or change the box if another character is speaking.</summary>*/
+        private void DialogUpdate()
+        {
+            ResetMessage(_iteration == 1 ? _textWindow2 : TextWindow);
+        }
+        
+        /**<summary>It shows when the message finish.</summary>*/
         private IEnumerator Speaker(Text text)
         {
             text.text = "";
@@ -146,6 +160,7 @@ namespace Core.Messages
             ToNext = true;
         }
         
+        /**<summary>Reset the message for prepare other one.</summary>*/
         private void ResetMessage(Text text1)
         {
             
@@ -155,6 +170,8 @@ namespace Core.Messages
             StartCoroutine(Wait());
         }
 
+        /**<summary>Update the text of the box or the UI of the other box if another
+        character is speaking.</summary>*/
         private new void UpdateUI()
         {
             if(_iteration==1)

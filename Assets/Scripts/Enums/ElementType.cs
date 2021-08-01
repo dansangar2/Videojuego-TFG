@@ -2,6 +2,7 @@
 
 namespace Enums
 {
+    /**<summary>Enum that contains all Elements of the game.</summary>*/
     [Serializable]
     public enum ElementType
     {

@@ -6,6 +6,7 @@ using Utils;
 
 namespace Entities
 {
+    /**<summary>The elementos of the game</summary>*/ 
     [Serializable]
     public class Element: Base
     {
@@ -14,21 +15,16 @@ namespace Entities
         
         [SerializeField] private ElementType type = ElementType.None;
         [SerializeField] private Sprite icon; 
-        //[Serializable] public class DictionaryOfElementTypeAndFloat : SerializableDictionary<ElementType, float>{}
         [SerializeField] private SerializableDictionary<ElementType, float> multiplicity = new SerializableDictionary<ElementType, float>();
            
         #endregion
         
         #region CONSTRUCTORS
         
-        /**<summary>
-        Empty Element constructor
-        </summary>*/ 
+        /**<summary>Empty Element constructor.</summary>*/ 
         public Element(int id): base(id){ }
 
-        /**<summary>
-        Element clone constructor
-        </summary>*/ 
+        /**<summary>Element clone constructor.</summary>*/ 
         public Element(Element element): base(element) 
         { 
             Type = element.Type; 

@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace Entities
 {
+    /**<summary>It's the ability of the character, with the
+    need level to unlock and current level of the ability.</summary>*/ 
     [Serializable]
     public class SpecialAbility
     {

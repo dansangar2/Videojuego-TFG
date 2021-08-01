@@ -8,6 +8,8 @@ using Random = UnityEngine.Random;
 
 namespace Entities
 {
+    
+    /**<summary>The Ability that the character can use.</summary>*/
     [Serializable]
     public class Ability : Base
     {
@@ -39,7 +41,6 @@ namespace Entities
         learning for = {pic, div, uiv}
         </summary>*/ 
         [SerializeField] protected float[] learning = {1, 1, 1};
-        
         [SerializeField] private int maxLevel = 10; 
         [SerializeField] private bool canRepeatRandomTarget; 
         [SerializeField] private int actExp; 
@@ -50,14 +51,10 @@ namespace Entities
         
         #region CONSTRUCTORS
         
-        /**<summary>
-        Empty ability constructor
-        </summary>*/ 
+        /**<summary>Empty ability constructor</summary>*/ 
         public Ability(int id): base(id) { }
       
-        /**<summary>
-        Ability clone constructor
-        </summary>*/ 
+        /**<summary>Ability clone constructor</summary>*/ 
         public Ability(Ability ability, int level = 1): base(ability)
         { 
             formula = ability.formula; 
@@ -85,57 +82,55 @@ namespace Entities
         
         #region GETTERS & SETTERS
         
+        /**<summary>The type of the ability (Normal or Karmic).</summary>*/
         public AbilityType Type { get => type; set => type = value; }
-        
+        /**<summary>The icon of the ability.</summary>*/
         public Sprite Icon { get => icon; set => icon = value; }
-        
+        /**<summary>The number of hits for the target.</summary>*/
         public int Hits { get=> hits; set => hits = value > 0? value : 1; }
-        
+        /**<summary>It indicates if you attack random, yourself or your group.</summary>*/
         public TargetRange Range { get => range; set => range = value; }
-        
+        /**<summary>It indicates how much targets you can have.</summary>*/
         public int NumberOfTarget { get => numberOfTarget; set => numberOfTarget = value > 0? value : 1; }
-        
+        /**<summary>It indicates who you can attack.</summary>*/
         public TargetType Target { get => target; set => target = value; }
-        
+        /**<summary>The max interval of the attack.</summary>*/
         public float UpperInterval { get => stats[2]; set => stats[2] = value; }
-        
+        /**<summary>The min interval of the attack.</summary>*/
         public float DownInterval { get => stats[1]; set => stats[1] = value; }
-        
+        /**<summary>The power up of the attack (extra power).</summary>*/
         public float PowerIncrement { get => stats[0]; set => stats[0] = value; }
-        
+        /**<summary>Set the element.</summary>*/
         public int ElementID { set => elementID = value; }
-        
+        /**<summary>Set the element of the ability. If it's null,
+        then the ability element is being of the character.</summary>*/
         public Element Element => GameData.ElementDB.FindByID(elementID);
-        
+        /**<summary>Values for Bases.</summary>*/
         public float[] Bases { get => bases; set => bases = value; }
-        
+        /**<summary>Values for Rates.</summary>*/
         public float[] Rate { get => rate; set => rate = value; }
-        
+        /**<summary>Learning values.</summary>*/
         public float[] Learning { get => learning; set => learning = value; }
-        
+        /**<summary>Max Level of the ability.</summary>*/
         public int MaxLevel { get => maxLevel; set => maxLevel = value > 0 ? value > 15 ? 15 : value : 1; }
-        
+        /**<summary>Cost for to do the ability.</summary>*/
         public int Cost { get => cost; set => cost = value > 0? value : 1; }
-        
+        /**<summary>Can repeat the target.</summary>*/
         public bool CanRepeatRandomTarget { get => canRepeatRandomTarget; set => canRepeatRandomTarget = value; }
-        
+        /**<summary>Need points for to level up the ability.</summary>*/
         public int NedExp => nedExp;
-        
+        /**<summary>Current point for level up.</summary>*/
         public int ActExp => actExp;
-        
+        /**<summary>Values for calculate exp.</summary>*/
         public int[] ExpData { get => expData; set => expData = value; }
-        
-        //public float[] GetCurrentInterval(int level) { return new []{downInterval[level], upperInterval[level]}; }
-
+        /**<summary>Formula that indicates the final damage.</summary>*/
         public string Formula { get => formula; set => formula = value; }
         
         #endregion
         
         #region METHODS
              
-        /**<summary>
-         Set all parameters of the item.
-         </summary>*/ 
+        /**<summary>Set all parameters of the item.</summary>*/ 
         public void SetAll(float[] nBase, float[] nRate, float[] nLearning, int[] nExp, int level)
         { 
             for (int i = 0; i < 3; i++) 
@@ -146,9 +141,7 @@ namespace Entities
             Update(level);
         }
 
-        /**<summary>
-        Update All parameters of ability, using the current level.
-        </summary>*/ 
+        /**<summary>Update All parameters of ability, using the current level.</summary>*/ 
         public void Update(int level) 
         { 
             for (int i = 0; i < 3; i++) 
@@ -158,17 +151,13 @@ namespace Entities
             UpdateExperience(level);
         }
             
-        /**<summary>
-        Get the final value of parameter of "index". 
-        </summary>*/ 
+        /**<summary>Get the final value of parameter of "index". </summary>*/ 
         private float Calculate(int index, int level) 
         { 
             return bases[index]*Mathf.Pow(rate[index],level)*LearningRate(index, level);
         }
         
-        /**<summary>
-        Obtain the damage that does the user and received the target.
-        </summary>*/ 
+        /**<summary>Obtain the damage that does the user and received the target.</summary>*/ 
         public int Damage(Character user, Character destiny) 
         {
             #region Init
@@ -229,6 +218,7 @@ namespace Entities
                 *PowerIncrement); 
         }
         
+        /**<summary>Get the learning rate.</summary>*/
         private float LearningRate(int index, int level)
         { 
             if (level <= 2) return 1; 
@@ -251,9 +241,7 @@ namespace Entities
             learning[index] = learningValue;
         }
         
-        /**<summary>
-        Set the values of experience curve
-        </summary>*/ 
+        /**<summary>Set the values of experience curve</summary>*/ 
         private void MainSet(int value1, int value2, int value3, int value4) 
         { 
             ExpData[0] = value1; 
@@ -261,9 +249,7 @@ namespace Entities
             ExpData[2] = value3; 
             ExpData[3] = value4;
         }
-            
-        #endregion
-        
+
         /**<summary>
         <para>ROUND(e[0]*(level - 1)^(0.9+(e[2]/250))*l*(level+1)/(6+l^2)/50/e[3])+(l-1)*e[1])</para>
         <para>Where "l" is the current level</para>
@@ -300,5 +286,6 @@ namespace Entities
             for (int i = 0; i < expValues.Length; i++) { expData[i] = expValues[i]; } 
         }
 
+        #endregion
     }
 }

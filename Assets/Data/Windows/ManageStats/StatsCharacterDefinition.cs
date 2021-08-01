@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Data.Windows.ManageStats
 {
+    /**<summary>This window shows the formulas for generate Character stats.</summary>*/
     public class StatsCharacterDefinition : EditorWindow
     {
 
@@ -49,7 +50,7 @@ namespace Data.Windows.ManageStats
             
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("For EXP: ", _options);
-            GUILayout.Label("Base*(Level - 1)^(0.9+(Rate/250))*Level*(Level+1)/(6+Level^2)/50/Flat)+(Level-1)*Plus", _options2);
+            GUILayout.Label("Base*(Level - 1)^(0.9+(Rate/250))*Level*(Level+1)/((6+Level^2)/50/Flat)+(Level-1)*Plus", _options2);
             EditorGUILayout.EndHorizontal();
             
             if (GUILayout.Button("Close")) _window.Close();

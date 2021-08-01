@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Entities
 {
+    /**<summary>The character of the game.</summary>*/ 
     [Serializable]
     public class Character : StatsGenerator
     {
@@ -17,21 +18,16 @@ namespace Entities
         [SerializeField] private int meleeAttackID; 
         [SerializeField] private int longAttackID; 
         //<Ability, int[abilityLevel, neededLevel]>
-        ////[SerializeField] private SerializableDictionary<int, int[]> abilities = new SerializableDictionary<int, int[]>();
         [SerializeField] private SpecialAbility[] abilities = {};
         
         #endregion
         
         #region CONSTRUCTORS
         
-        /**<summary>
-        Empty constructor for character.
-        </summary>*/ 
+        /**<summary>Empty constructor for character.</summary>*/ 
         public Character(int id): base(id){ }
         
-        /**<summary>
-        Clone character constructor.
-        </summary>*/ 
+        /**<summary>Clone character constructor.</summary>*/ 
         public Character(Character chara): base(chara) 
         { 
             face = chara.face; 
@@ -126,6 +122,9 @@ namespace Entities
             else AddSpAbility(abilityID, abilityLevel <= 0 ? 1 : abilityLevel, needLevel <= 0 ? 1 : needLevel);
         }
         
+        /**<summary>
+        Add a Special ability with the need level to unlock the ability and the current level of it.
+        </summary>*/ 
         private void AddSpAbility(int abilityID, int needLevel, int abilityLevel) 
         { 
             Array.Resize(ref abilities, abilities.Length + 1); 

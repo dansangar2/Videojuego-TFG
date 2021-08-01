@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Data.Windows.ManageStats
 {
+    /**<summary>This window shows the formulas for generate Ability stats.</summary>*/
     public class StatsAbilityDefinition : EditorWindow
     {
 
@@ -25,7 +26,7 @@ namespace Data.Windows.ManageStats
             GUILayout.Label("Stats Formula: \n", _options);
 
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("For All except EXP: ", _options);
+            GUILayout.Label("For All - EXP: ", _options);
             GUILayout.Label("Base * Rate^2", _options2);
             EditorGUILayout.EndHorizontal();
 

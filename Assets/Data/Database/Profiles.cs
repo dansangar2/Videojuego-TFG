@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Data.Database
 {
+    /**<summary>The Profiles Database system.</summary>*/
     [CreateAssetMenu(menuName = "Database/Profiles", fileName = "ProfileDB")]
     public class Profiles : ScriptableObject
     { 
@@ -38,7 +39,9 @@ namespace Data.Database
 
         #region FINDBY
 
-        /**<summary>Find item by ID.</summary>*/
+        /**<summary>Find item by ID. If you want a Character profile, you must give a negative ID.
+        <para>For example. -1 = Character with ID 0.</para> 
+        </summary>*/
         public Profile FindByID(int id)
         {
             if(id<0) return AllCharacters.FirstOrDefault(profile => profile.ID == -id-1);
@@ -48,7 +51,9 @@ namespace Data.Database
         /**<summary>Find item by name.</summary>*/
         public Profile FindByName(string nameOf)
         {
-            return profiles.FirstOrDefault(profile => profile.Name == nameOf);
+            Profile res = AllCharacters.FirstOrDefault(profile => profile.Name == nameOf);
+            if(res==null) return profiles.FirstOrDefault(profile => profile.Name == nameOf);
+            return res;
         }
 
         #endregion
@@ -62,7 +67,7 @@ namespace Data.Database
             profiles[Count - 1] = profile;
         }
 
-        /**<summary>Modify a item of the array. It's modify by item ID.</summary>*/
+        /**<summary>Modify a item of the array. It's modify by the item ID.</summary>*/
         public void Modify(Profile profile) 
         { 
             profiles[Array.IndexOf(profiles, FindByID(profile.ID))] = profile;

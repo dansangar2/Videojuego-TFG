@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Data.Database
 {
+    /**<summary>The Abilities Database system.</summary>*/
     [CreateAssetMenu(menuName = "Database/Abilities", fileName = "AbilityDB")]
     public class Abilities : ScriptableObject
     {
@@ -58,7 +59,7 @@ namespace Data.Database
             abilities[Count - 1] = ability;
         }
         
-        /**<summary>Modify a item of the array. It's modify by item ID.</summary>*/ 
+        /**<summary>Modify a item of the array. It's modify by the item ID.</summary>*/ 
         public void Modify(Ability ability) 
         { 
             abilities[Array.IndexOf(abilities, FindByID(ability.ID))] = ability;

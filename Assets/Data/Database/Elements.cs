@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace Data.Database
 {
+    
+    /**<summary>The Elements Database system.</summary>*/
     [CreateAssetMenu(menuName = "Database/Elements", fileName = "ElementDB")]
     public class Elements : ScriptableObject
     {
@@ -58,7 +60,7 @@ namespace Data.Database
             elements[Count - 1] = element;
         }
         
-        /**<summary>Modify a item of the array. It's modify by item ID.</summary>*/ 
+        /**<summary>Modify a item of the array. It's modify by the item ID.</summary>*/ 
         public void Modify(Element element) 
         { 
             elements[Array.IndexOf(elements, FindByID(element.ID))] = element;

@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Entities
 {
+    /**<summary>The profiles of the characters.</summary>*/ 
     [Serializable]
     public class Profile: Base
     {

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Data.Database
 {
+    /**<summary>The Character Database system.</summary>*/
     [CreateAssetMenu(menuName = "Database/Characters", fileName = "CharacterDB")]
     public class Characters : ScriptableObject
     {
@@ -58,7 +59,7 @@ namespace Data.Database
             characters[Count - 1] = character;
         }
         
-        /**<summary>Modify a item of the array. It's modify by item ID.</summary>*/ 
+        /**<summary>Modify a item of the array. It's modify by the item ID.</summary>*/ 
         public void Modify(Character character) 
         { 
             characters[Array.IndexOf(characters, FindByID(character.ID))] = character;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Data.Windows.ManageStats
 {
+    /**<summary>This window shows the evolution of stats with the Stats Generator parameters.</summary>*/
     public class AbilityByLevelHelp: EditorWindow
     {
         

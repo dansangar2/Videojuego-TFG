@@ -10,14 +10,19 @@ using UnityEngine.UI;
 namespace Core.Messages
 {
     
+    /**<summary>A message text with only one Character speaking.</summary>*/
     public class Monologue : Message
     {
         #region ATTRIBUTES
 
+        /**<summary>It indicates that the character image appear on the right.</summary>*/
         public bool right;
         
+        /**<summary>It's the character face or body.</summary>*/
         protected Image CharacterIcon;
+        /**<summary>It's the character name.</summary>*/
         protected Text CharacterName;
+        /**<summary>It's the transform that contains the image where the character image being.</summary>*/
         protected Transform CharImage;
 
         #endregion
@@ -40,6 +45,7 @@ namespace Core.Messages
         
         void Update()
         {
+            IsSomeMessageOn = true;
             switch (type)
             {
                 case TextBoxType.Message:
@@ -55,6 +61,7 @@ namespace Core.Messages
 
         #region START
 
+        /**<summary>Set the text and image transform for use it in the monologue.</summary>*/
         protected void MonologueStart()
         {
             IsSomeMessageOn = true;
@@ -71,6 +78,7 @@ namespace Core.Messages
             StartCoroutine(Next());
         }
 
+        /**<summary>Init the text, and character name and face.</summary>*/
         protected new void InitUI()
         {
             base.InitUI();
@@ -82,6 +90,7 @@ namespace Core.Messages
 
         #region NEXT
 
+        /**<summary>Pass the next message.</summary>*/
         private IEnumerator Next()
         {
             TextWindow.text = "";
@@ -99,6 +108,7 @@ namespace Core.Messages
         
         #region UPDATE
 
+        /**<summary>Update the message with the new one.</summary>*/
         protected void MonologueUpdate()
         {
             UpdateUI();
@@ -108,6 +118,7 @@ namespace Core.Messages
             StartCoroutine(Wait());
         }
         
+        /**<summary>Update the UI with the character that are speaking and new message.</summary>*/
         protected new void UpdateUI()
         {
             Profile current = GameData.ProfileDB.FindByID(messages[Index].characterId);

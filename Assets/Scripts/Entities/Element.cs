@@ -99,19 +99,20 @@ namespace Entities
         /**<summary>
         Add Multiplicity has 2 functionalities:
         <para>- Add new Type with its multiplicity multiplicity.</para>
-        <para>- Change the value of existing Type multiplicity.</para>
+        - Change the value of existing Type multiplicity.
         <param name="element">The type that you want add or change.</param>
         <param name="value">The value of the type.</param>
+        <param name="toChange">Default yes. If it's true, it'll change the value of key if it exits</param>
         </summary>*/ 
-        public void AddMultiplicityTo(ElementType element, float value) 
-        { 
-            if (Multiplicity.ContainsKey(element)) 
-            { 
-                Multiplicity[element] = value;    
+        public void AddMultiplicityTo(ElementType element, float value, bool toChange = true) 
+        {
+            if (Multiplicity.ContainsKey(element))
+            {
+                if(toChange) Multiplicity[element] = value;
             }
-            else 
-            { 
-                Multiplicity.Add(element, value);    
+            else
+            {
+                Multiplicity.Add(element, value);
             } 
         }
      

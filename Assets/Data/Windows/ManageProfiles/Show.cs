@@ -2,21 +2,21 @@ using Entities;
 using UnityEditor;
 using UnityEngine;
 
-namespace Data.Windows.ManageElements
+namespace Data.Windows.ManageProfiles
 {
     public class Show : EditorWindow
     {
         private static EditorWindow _window;
-        private static Element _element;
+        private static Profile _profile;
         
         private Vector2 _scroll;
         
         
-        public static void Window(Element element)
+        public static void Window(Profile profile)
         {
             _window = GetWindow<Show>();
             Display.Window(_window);
-            _element = new Element(element);
+            _profile = new Profile(profile);
         }
 
         public void OnGUI()
@@ -25,7 +25,7 @@ namespace Data.Windows.ManageElements
             _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.MinHeight(5), GUILayout.MinHeight(position.height));
             EditorGUILayout.BeginVertical("Box");
             
-            Display.Displayed(_element, true);
+            Display.Displayed(_profile, true);
             if (GUILayout.Button("Close")) { _window.Close(); }
             
             EditorGUILayout.EndVertical();

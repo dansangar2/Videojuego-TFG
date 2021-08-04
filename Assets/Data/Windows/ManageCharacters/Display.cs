@@ -16,6 +16,12 @@ namespace Data.Windows.ManageCharacters
         private static int _need;
         private static int _level;
 
+        public static void Window(EditorWindow window)
+        {
+            window.maxSize = new Vector2(1000, 600);
+            window.minSize = new Vector2(900, 600);
+        }
+        
         public static void Displayed(Character item, bool readOnly = false)
         {
             if (readOnly) DisplayedReadOnly(item);

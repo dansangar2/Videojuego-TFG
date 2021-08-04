@@ -19,8 +19,7 @@ namespace Data.Windows.ManageCharacters
             _characterDB = characterDB;
             
             _window = GetWindow<Modifier>();
-            _window.maxSize = new Vector2(1000, 600);
-            _window.minSize = new Vector2(900, 600);
+            Display.Window(_window);
             _character = new Character(character);
             
         }

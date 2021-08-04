@@ -15,8 +15,7 @@ namespace Data.Windows.ManageAbilities
         public static void Window(Ability ability)
         {
             _window = GetWindow<Show>();
-            _window.maxSize = new Vector2(450, 700);
-            _window.minSize = new Vector2(450, 600);
+            Display.Window(_window);
             _ability = new Ability(ability);
         }
 

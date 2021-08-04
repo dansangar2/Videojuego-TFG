@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Entities;
 using Enums;
 using UnityEditor;
@@ -12,7 +13,12 @@ namespace Data.Windows.ManageElements
         private static readonly GUIStyle TextAreaStyle = new GUIStyle(GUI.skin.textArea) {wordWrap = true};
         private static ElementType _key;
 
-
+        public static void Window(EditorWindow window)
+        {
+            window.maxSize = new Vector2(350, 500);
+            window.minSize = new Vector2(300, 300);
+        }
+        
         public static void Displayed(Element item, bool readOnly = false)
         {
             if(readOnly) DisplayedReadOnly(item);
@@ -76,7 +82,7 @@ namespace Data.Windows.ManageElements
             EditorGUILayout.BeginHorizontal();
             _key = (ElementType)EditorGUILayout.EnumPopup(_key, Options);
             if (GUILayout.Button("+", Options) && size < Enum.GetValues(typeof(ElementType)).Length)
-                item.AddMultiplicityTo(_key, 1f);
+                item.AddMultiplicityTo(_key, 1f, false);
             EditorGUILayout.EndHorizontal();
 
             foreach (ElementType elem in item.GetMultiplicityElements())
@@ -94,12 +100,6 @@ namespace Data.Windows.ManageElements
         
         private static void DisplayedReadOnly(Element item)
         {
-
-            #region Options
-
-            GUIStyle textAreaStyle = new GUIStyle(GUI.skin.textArea) {wordWrap = true};
-            
-            #endregion
             
             #region ID
 
@@ -140,7 +140,7 @@ namespace Data.Windows.ManageElements
             #region Description
 
             GUILayout.Label("Description: ");
-            GUILayout.Label(item.Description, textAreaStyle, GUILayout.MinHeight(100));
+            GUILayout.Label(item.Description, TextAreaStyle, GUILayout.MinHeight(100));
 
             #endregion
 
@@ -150,15 +150,11 @@ namespace Data.Windows.ManageElements
             GUILayout.Label("Strengths: " + item.GetMultiplicityCount());
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Strengths: " + item.GetMultiplicityCount());
-            EditorGUILayout.EndHorizontal();
-
             foreach (ElementType elem in item.GetMultiplicityElements())
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(elem + ": ", Options);
-                GUILayout.Label(item.GetMultiplicityOf(elem).ToString(), Options);
+                GUILayout.Label(item.GetMultiplicityOf(elem).ToString(CultureInfo.InvariantCulture), Options);
                 EditorGUILayout.EndHorizontal();
             }
 

@@ -9,7 +9,6 @@ namespace Enums
         None, 
         Physic, 
         Karmic, 
-        Demon, 
         Mercury, 
         Venus, 
         Earth, 
@@ -18,10 +17,10 @@ namespace Enums
         Saturn, 
         Uranus, 
         Neptune, 
-        Comet,
+        //Comet,
         Pluto, 
         Ceres, 
-        Pallas, 
+        /*Pallas, 
         Juno, 
         Vesta, 
         Chiron, 
@@ -32,7 +31,7 @@ namespace Enums
         Metis, 
         Hygiea, 
         Parthenope,
-        Victoria, 
+        Victoria,*/ 
         Sun, 
         Moon
     };

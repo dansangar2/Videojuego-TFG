@@ -359,6 +359,8 @@ namespace Entities
         </summary>*/ 
         public bool IsKo() { return 0 > CurrentBloodPoints; }
         
+        public void ResetCharge() { Charge = 0; }
+        
         #endregion
         
     }

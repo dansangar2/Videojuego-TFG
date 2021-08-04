@@ -20,8 +20,7 @@ namespace Data.Windows.ManageElements
             _elementDB = elementDB;
             
             _window = GetWindow<Modifier>();
-            _window.maxSize = new Vector2(350, 500);
-            _window.minSize = new Vector2(300, 300);
+            Display.Window(_window);
             _element = new Element(element);
             
         }

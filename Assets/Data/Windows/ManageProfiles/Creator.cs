@@ -3,26 +3,26 @@ using Entities;
 using UnityEditor;
 using UnityEngine;
 
-namespace Data.Windows.ManageAbilities
+namespace Data.Windows.ManageProfiles
 {
     public class Creator : EditorWindow
     {
         
         private static EditorWindow _window;
 
-        private static Ability _ability;
-        private static Abilities _abilityDB;
+        private static Profile _profile;
+        private static Profiles _profileDB;
         
         private Vector2 _scroll;
         
-        public static void Window(Abilities abilityDB)
+        public static void Window(Profiles profileDB)
         {
-            _abilityDB = abilityDB;
+            _profileDB = profileDB;
 
             _window = GetWindow<Creator>();
             Display.Window(_window);
 
-            _ability = new Ability(_abilityDB.Count);
+            _profile = new Profile(_profileDB.Count);
         }
 
         public void OnGUI()
@@ -32,8 +32,8 @@ namespace Data.Windows.ManageAbilities
                 GUILayout.MinHeight(position.height));
             EditorGUILayout.BeginVertical("Box");
             
-            Display.Displayed(_ability);
-            EditorGUI.BeginDisabledGroup(Validator.Validate(_ability));
+            Display.Displayed(_profile);
+            EditorGUI.BeginDisabledGroup(Validator.Validate(_profile));
             if (GUILayout.Button("Confirm")) { Add(); }
             
             EditorGUILayout.EndVertical();
@@ -44,11 +44,11 @@ namespace Data.Windows.ManageAbilities
 
         private static void Add()
         {
-            Undo.RecordObject(_abilityDB, "Ability Modify");
-            _abilityDB.Add(_ability);
-            EditorUtility.SetDirty(_abilityDB);
+            Undo.RecordObject(_profileDB, "Profile Modify");
+            _profileDB.Add(_profile);
+            EditorUtility.SetDirty(_profileDB);
             _window.Close();
         }
-       
+        
     }
 }

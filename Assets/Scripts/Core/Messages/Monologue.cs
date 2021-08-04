@@ -19,9 +19,9 @@ namespace Core.Messages
         public bool right;
         
         /**<summary>It's the character face or body.</summary>*/
-        protected Image CharacterIcon;
+        private Image _characterIcon;
         /**<summary>It's the character name.</summary>*/
-        protected Text CharacterName;
+        private Text _characterName;
         /**<summary>It's the transform that contains the image where the character image being.</summary>*/
         protected Transform CharImage;
 
@@ -82,8 +82,8 @@ namespace Core.Messages
         protected new void InitUI()
         {
             base.InitUI();
-            CharacterIcon = CharImage.GetComponent<Image>();
-            CharacterName = TextBox.GetChild(1).GetChild(0).GetComponentInChildren<Text>();
+            _characterIcon = CharImage.GetComponent<Image>();
+            _characterName = TextBox.GetChild(1).GetChild(0).GetComponentInChildren<Text>();
         }
         
         #endregion
@@ -122,8 +122,8 @@ namespace Core.Messages
         protected new void UpdateUI()
         {
             Profile current = GameData.ProfileDB.FindByID(messages[Index].characterId);
-            CharacterIcon.sprite = current.Art; 
-            CharacterName.text = current.Name;
+            _characterIcon.sprite = current.Art; 
+            _characterName.text = current.Name;
 
             base.UpdateUI();
 

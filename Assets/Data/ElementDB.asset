@@ -19,5 +19,9 @@ MonoBehaviour:
     type: 2
     icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
     multiplicity:
-      keys: 
-      values: []
+      keys: 0b00000000000000090000000d000000
+      values:
+      - 1
+      - 4
+      - 3
+      - 0.3

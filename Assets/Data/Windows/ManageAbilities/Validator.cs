@@ -41,7 +41,7 @@ namespace Data.Windows.ManageAbilities
             {
                 item.Damage(GameData.CharacterDB.FindByID(0), GameData.CharacterDB.FindByID(0));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 advice += "The formula has a error.";
                 _res = true;

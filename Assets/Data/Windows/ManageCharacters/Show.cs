@@ -15,8 +15,7 @@ namespace Data.Windows.ManageCharacters
         public static void Window(Character character)
         {
             _window = GetWindow<Show>();
-            _window.maxSize = new Vector2(1000, 600);
-            _window.minSize = new Vector2(900, 600);
+            Display.Window(_window);
             _character = new Character(character);
         }
 

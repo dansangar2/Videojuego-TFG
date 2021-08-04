@@ -14,6 +14,12 @@ namespace Data.Windows.ManageAbilities
         private static bool _haveElement;
         private static int _index;
         
+        public static void Window(EditorWindow window)
+        {
+            window.maxSize = new Vector2(450, 700);
+            window.minSize = new Vector2(450, 600);
+        }
+        
         public static void Displayed(Ability item, bool readOnly = false)
         {
             if (readOnly) DisplayedReadOnly(item);

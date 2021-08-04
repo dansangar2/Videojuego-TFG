@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0abe64437424319bbb80b4b8f50da70, type: 3}
   m_Name: ProfileDB
   m_EditorClassIdentifier: 
-  profiles: []
-  profilesCharacter: []
+  profiles:
+  - id: 0
+    name: fsafdas
+    description: 
+    art: {fileID: -4841785371778001956, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}

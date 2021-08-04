@@ -25,10 +25,10 @@ namespace Entities
         [SerializeField] private int numberOfTarget = 1; 
         [SerializeField] private int cost = 100; 
         [SerializeField] private int elementID;
-  
+
         //power increment/down interval/upper interval
         [SerializeField] private float[] stats = {1f, 0.8f, 1.2f};
-        
+
         /**<summary>
         bases for = {pic, div, uiv}
         </summary>*/ 
@@ -47,6 +47,8 @@ namespace Entities
         [SerializeField] private int nedExp; 
         [SerializeField] private int[] expData = {10, 5, 15, 10};
         
+        private bool UseCharacterElement  => Element == null;
+
         #endregion
         
         #region CONSTRUCTORS
@@ -125,6 +127,15 @@ namespace Entities
         public int[] ExpData { get => expData; set => expData = value; }
         /**<summary>Formula that indicates the final damage.</summary>*/
         public string Formula { get => formula; set => formula = value; }
+        
+        /**<summary>
+        Return a pair of Icons that represent the attack and element of ability. 
+        <para>If the ability hasn't a element, then return empty image.</para>
+        </summary>*/
+        public Tuple<Sprite, Sprite> AbilityIcons()
+        {
+            return UseCharacterElement ? new Tuple<Sprite, Sprite>(icon, Element.Icon) : new Tuple<Sprite, Sprite>(icon, null);
+        }
         
         #endregion
         

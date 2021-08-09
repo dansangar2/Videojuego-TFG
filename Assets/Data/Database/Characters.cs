@@ -13,6 +13,17 @@ namespace Data.Database
         /**<summary>Array that save the Serialize data.</summary>*/
         [SerializeField] private Character[] characters = {};
 
+        /**<summary>Clone constructor.</summary>*/ 
+        public Characters(Characters characters)
+        {
+            this.characters = new Character[characters.Count];
+            //Array.Copy(characters.characters, this.characters, characters.Count);
+            for (int i = 0; i < characters.Count; i++)
+            {
+                this.characters[i] = new Character(characters.characters[i]);
+            }
+        }
+        
         #region GET
         
         /**<summary>Get the number of items.</summary>*/ 

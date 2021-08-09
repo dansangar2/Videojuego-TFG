@@ -45,7 +45,7 @@ namespace Data.Windows.ManageAbilities
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Type: ", Options);
-            item.Type = (AbilityType)EditorGUILayout.EnumPopup(item.Type, Options);
+            item.Type = (AttackType)EditorGUILayout.EnumPopup(item.Type, Options);
             EditorGUILayout.EndHorizontal();
 
             #endregion

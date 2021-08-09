@@ -8,37 +8,30 @@ namespace Core.Buttons
     {
 
         #region ATTRIBUTES
-
-        /**<sumary>The data of the buttons.</sumary>*/
-        public ButtonData[] buttonsData;
-        /**<sumary>The button prefab.</sumary>*/
-        public Button prefab;
+        
         /**<sumary>Marks if the buttons will blink.</sumary>*/
         public bool buttonsBlinks;
         /**<summary>If blink is marks, then it'll the velocity of the blinks.</summary>*/
         public float velocity = 0.005f;
         /**<summary>It marks The color when it's marked.</summary>*/
         public Color buttonColor = Color.green;
+        /**<summary>It indicates the number of columns</summary>*/
+        public int numsOfCol = 1;
         
         #region Size
 
         /**<summary>It depends of the nums of columns value.
         <para>It indicates the number of rows</para></summary>*/
         private int _numsOfRows = 1;
-        /**<summary>It indicates the number of columns</summary>*/
-        public int numsOfCol = 1;
         /**<summary>It indicates the number of row at the moment it's generating</summary>*/
         private int _currentNumOfRows;
-        /**<sumary>The list of buttons. It marks what button is select.
-        <para>It'll get all entity Button.</para></sumary>*/
-        private Button[] _buttons;
 
         #endregion
 
         #region Position
 
         /**<sumary>The current position.</sumary>*/
-        private int _position;
+        protected int Position;
         /**<summary>The current column index.</summary>*/
         private int _currentColumn;
         /**<summary>The current row index.</summary>*/
@@ -47,33 +40,27 @@ namespace Core.Buttons
         #endregion
         
         #endregion
-        
-        protected void Start()
+
+        protected void SetColumnsAndRows(Button[] buttons)
         {
-            foreach (ButtonData button in buttonsData)
-            {
-                prefab.SetUp(button, buttonsBlinks, velocity, buttonColor);
-                Instantiate(prefab,
-                    transform.GetChild(0)
-                        .transform);
-            }
-            _buttons = gameObject.GetComponentsInChildren<Button>();
-            _numsOfRows = buttonsData.Length/numsOfCol + buttonsData.Length%numsOfCol;
+            _numsOfRows = buttons.Length/numsOfCol + buttons.Length%numsOfCol;
             _currentNumOfRows = _numsOfRows;
-            _buttons[0].IsSelect = true;
+            _currentRow = Position;
+            
         }
 
         // Update is called once per frame
-        protected void Update()
+        protected void Move(Button[] buttons)
         {
-            if (_buttons.Length == 0) return;
+            
+            if (buttons.Length == 0) return;
 
             //if (_buttons[_position].IsStopped) return;
             
             //Check if some button is Down
             if (!ControlsKeys.DirectionalKeyIsDown()) return;
             
-            _buttons[_position].IsSelect = false;
+            buttons[Position].IsSelect = false;
             
             //Check the current Column of the button list
             _currentColumn = _currentColumn 
@@ -84,7 +71,7 @@ namespace Core.Buttons
             if (_currentColumn < 0) _currentColumn = numsOfCol-1;
 
             //Update the column size with the number of the values that it have
-            if (_currentColumn == numsOfCol-1) _currentNumOfRows = _numsOfRows - _buttons.Length % numsOfCol;
+            if (_currentColumn == numsOfCol-1) _currentNumOfRows = _numsOfRows - buttons.Length % numsOfCol;
             else _currentNumOfRows = _numsOfRows;
 
             //Check the current Column of the button list
@@ -98,10 +85,10 @@ namespace Core.Buttons
             if (_currentRow < 0) _currentRow = _currentNumOfRows-1;
             
             //With the row and column pos I get the position. I mean where is the button now. 
-            _position = _currentRow + _numsOfRows * _currentColumn;
+            Position = _currentRow + _numsOfRows * _currentColumn;
             
             
-            _buttons[_position].IsSelect = true;
+            buttons[Position].IsSelect = true;
 
         }
     }

@@ -12,7 +12,16 @@ namespace Data.Database
         /**<summary>Array that save the Serialize data.</summary>*/ 
         [SerializeField] private Profile[] profiles = {};
 
-        
+        /**<summary>Clone constructor.</summary>*/ 
+        public Profiles(Profiles profiles)
+        {
+            this.profiles = new Profile[profiles.Count];
+            for (int i = 0; i < profiles.Count; i++)
+            {
+                this.profiles[i] = new Profile(profiles.profiles[i]);
+            }
+        }
+
         #region GET
         
         /**<summary>Get the number of items.</summary>*/

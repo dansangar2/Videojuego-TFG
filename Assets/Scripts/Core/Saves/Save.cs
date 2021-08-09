@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using Data;
 using Data.Database;
 using Entities;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Core.Saves
 {
@@ -11,21 +13,25 @@ namespace Core.Saves
     {
 
         /**<summary>The Character status in this save file.</summary>*/
-        [SerializeField] private Characters characters;
+        [SerializeField] private Characters characters = new Characters(GameData.CharacterDB);
 
         /**<summary>The current party of the player.</summary>*/
-        [SerializeField] private int[] charactersInParty;
+        [SerializeField] private int[] charactersInParty = {};
 
         /**<summary>The Money of the player.</summary>*/
         [SerializeField] private int money;
 
+        /**<summary>The current scene where the character is.</summary>*/
+        [SerializeField] private string currentScene;
+        
         [SerializeField] private bool isEmpty;
         
         /**<summary>Init the save file.</summary>*/
         public Save()
         {
             IsEmpty = true;
-            characters = Data.GameData.CharacterDB;
+            // ReSharper disable once Unity.IncorrectScriptableObjectInstantiation
+            //characters = new Characters(GameData.CharacterDB);
         }
         
         #region CHARACTERS
@@ -42,7 +48,7 @@ namespace Core.Saves
         {
             foreach (int c in charIds)
             {
-                if(charactersInParty.Contains(c)) return;
+                if(charactersInParty.Contains(c)) continue;
                 Array.Resize(ref charactersInParty, charactersInParty.Length + 1);
                 charactersInParty[charactersInParty.Length - 1] = c;
             }
@@ -53,7 +59,7 @@ namespace Core.Saves
         {
             foreach (Character c in charIds)
             {
-                if(charactersInParty.Contains(c.ID)) return;
+                if(charactersInParty.Contains(c.ID)) continue;
                 Array.Resize(ref charactersInParty, charactersInParty.Length + 1);
                 charactersInParty[charactersInParty.Length - 1] = c.ID;
             }
@@ -68,7 +74,7 @@ namespace Core.Saves
         {
             foreach (Character character in chars)
             {
-                if (!charactersInParty.Contains(character.ID)) return;
+                if (!charactersInParty.Contains(character.ID)) continue;
                 charactersInParty = charactersInParty
                     .Where(c => c != character.ID).ToArray();
             }
@@ -80,7 +86,7 @@ namespace Core.Saves
         {
             foreach (int id in charIds)
             {
-                if (!charactersInParty.Contains(id)) return;
+                if (!charactersInParty.Contains(id)) continue;
                 charactersInParty = charactersInParty
                     .Where(c => c != id).ToArray();
             }
@@ -111,7 +117,7 @@ namespace Core.Saves
 
         /**<summary>It mark if the save data is empty.</summary>*/
         public bool IsEmpty { get => isEmpty; set => isEmpty = value; }
-        
+
         /**<summary>It get the money of the player.</summary>*/
         public int Money
         {
@@ -121,6 +127,23 @@ namespace Core.Saves
                 money = value < 0 ? 0:value;
                 money = value >= 9999999 ? 9999999 : value;
             }
+        }
+
+        /**<summary>Set the scene where the player is.
+        <param name="scene">The scene name where the character is.</param>
+        <param name="goThere">Optional param, default true. If it's true, 
+        then the player move to the new scene</param>
+        </summary> */
+        public void SetScene(string scene, bool goThere = true)
+        {
+            currentScene = scene;
+            if (goThere) SceneManager.LoadScene(currentScene);
+        }
+        
+        /**<summary>Go to the scene registered.</summary> */
+        public void GoToScene()
+        {
+            SceneManager.LoadScene(currentScene);
         }
 
         #endregion

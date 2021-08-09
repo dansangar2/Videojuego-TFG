@@ -14,27 +14,39 @@ namespace Core.Buttons
 
         /**<summary>It decides if when the player press it, it'll send you
         to another window. If it's empty, then the player isn't moving.</summary>*/
-        [SerializeField]private string sceneRedirect;
+        public string sceneRedirect;
         /**<summary>If blink is marks, then it'll the velocity of the blinks.</summary>*/
-        [SerializeField]private float velocity = 0.005f;
+        public float velocity = 0.005f;
         /**<summary>It's the name of the button.</summary>*/
-        [SerializeField]private string buttonName;
+        public string buttonName;
         /**<summary>This windows will appear when the button is pressing.</summary>*/
-        [SerializeField]private Transform window;
+        public Transform window;
         /**<summary>Close the game.</summary>*/
-        [SerializeField]private bool quitGame;
+        public bool quitGame;
+        /**<summary>Close the game.</summary>*/
+        public bool canSendMessage;
+        /**<summary>Send a message.</summary>*/
+        public string messageToSend;
+        /**<summary>It's a global variable it can use for:
+        <para>You can write in messageToSend for when you'll press the button send this message.</para>
+        </summary>
+         */
+        public static string Message = "";
         
         /**<summary>It marks if the button is selected.</summary>*/
         public bool IsSelect { get; set; }
         /**<summary>It marks The color when it's marked.</summary>*/
-        [SerializeField]private Color buttonColor = Color.green;
+        [SerializeField]protected Color buttonColor = Color.green;
         
         /**<summary>It decides if when it's marked, it'll blink</summary>*/
-        [SerializeField]private bool blink;
+        [SerializeField]protected bool blink;
         /**<summary>The image button if it'll be necessary.</summary>*/
-        [SerializeField]private Image buttonImage;
+        [SerializeField]protected Image buttonImage;
         /**<summary>It decides if the blink return back or continue.</summary>*/
-        [SerializeField]private bool buttonChangeColor;
+        [SerializeField]protected bool buttonChangeColor;
+        
+        /**<summary>Get the buttons panel object.</summary>*/
+        private Buttons _parent;
 
         //public bool IsStopped { get; }
 
@@ -44,6 +56,17 @@ namespace Core.Buttons
 
         protected void Start()
         {
+            IsBlink();
+            GetComponentInChildren<Text>().text = buttonName;
+            buttonImage.color = new Color(
+                buttonImage.color.r, 
+                buttonImage.color.g, 
+                buttonImage.color.b, 
+                0.8f);
+        }
+
+        protected void IsBlink()
+        {
             if (blink)
             {
                 buttonImage = transform.Find("Blink").GetComponent<Image>();
@@ -51,12 +74,7 @@ namespace Core.Buttons
             }
             else buttonImage = transform.Find("NoBlink").GetComponent<Image>();
             buttonImage.gameObject.SetActive(true);
-            GetComponentInChildren<Text>().text = buttonName;
-            buttonImage.color = new Color(
-                buttonImage.color.r, 
-                buttonImage.color.g, 
-                buttonImage.color.b, 
-                0.8f);
+            _parent = GetComponentInParent<Buttons>();
         }
 
         protected void Update()
@@ -81,7 +99,13 @@ namespace Core.Buttons
                 {
                     Application.Quit();
                 }
-                
+
+                if (canSendMessage && !messageToSend.Equals(""))
+                {
+                    Message = messageToSend;
+                    Destroy(_parent.transform.gameObject);
+
+                }
             }
             
         }
@@ -90,7 +114,7 @@ namespace Core.Buttons
 
         #region BLINK
 
-        private void ToBlink()
+        protected void ToBlink()
         {
             if (IsSelect)
             {
@@ -131,9 +155,9 @@ namespace Core.Buttons
         #endregion
 
         public void SetUp(ButtonData buttonData, 
+            Color nButtonColor = default, 
             bool nBlink = false, 
-            float nVelocity = 0, 
-            Color nButtonColor = default)
+            float nVelocity = 0)
         {
             
             blink = nBlink;

@@ -13,6 +13,16 @@ namespace Data.Database
         /**<summary>Array that save the Serialize data.</summary>*/ 
         [SerializeField] private Ability[] abilities = {};
 
+        /**<summary>Clone constructor.</summary>*/ 
+        public Abilities(Abilities abilities)
+        {
+            this.abilities = new Ability[abilities.Count];
+            for (int i = 0; i < abilities.Count; i++)
+            {
+                this.abilities[i] = new Ability(abilities.abilities[i]);
+            }
+        }
+        
         #region GET
         
         /**<summary>Get the number of items.</summary>*/ 

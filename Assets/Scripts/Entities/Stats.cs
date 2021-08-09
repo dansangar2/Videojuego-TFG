@@ -54,7 +54,7 @@ namespace Entities
             
             //List<Affinity> afi;
             //element = new Element(bases.element);
-            ElementID = bases.elementID;
+            elementID = bases.elementID;
             
             for (int i = 0; i < bases.ExpData.Length; i++) 
             { 
@@ -357,7 +357,7 @@ namespace Entities
         /**<summary>
         Return true if the character has dead (if current blood is less than 0).
         </summary>*/ 
-        public bool IsKo() { return 0 > CurrentBloodPoints; }
+        public bool IsKo() { return 0 >= CurrentBloodPoints; }
         
         public void ResetCharge() { Charge = 0; }
         

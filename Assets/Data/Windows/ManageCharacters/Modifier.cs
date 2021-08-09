@@ -17,6 +17,7 @@ namespace Data.Windows.ManageCharacters
         public static void Window(Characters characterDB, Character character)
         {
             _characterDB = characterDB;
+
             
             _window = GetWindow<Modifier>();
             Display.Window(_window);

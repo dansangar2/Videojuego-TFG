@@ -32,7 +32,7 @@ namespace Entities
         { 
             face = chara.face; 
             model = chara.model; 
-            abilities = chara.abilities; 
+            abilities = chara.abilities;
             meleeAttackID = chara.meleeAttackID; 
             longAttackID = chara.longAttackID;
         }
@@ -59,7 +59,7 @@ namespace Entities
         /**<summary>
         Set the Melee Attack of the character. 
         </summary>*/ 
-        public int MeleeAttackID { set => elementID = value; }
+        public int MeleeAttackID { set => meleeAttackID = value; }
         
         /**<summary>
         Long Attack of the character. 
@@ -85,6 +85,15 @@ namespace Entities
             if (all) return abilities.Select(a => a.SpAbility).ToArray(); 
             return abilities.Where(a => level >= a.NeedLevel)
                 .Select(a => a.SpAbility).ToArray();
+        }
+        
+        /**<summary>
+        Get the ability with specific ID.
+        <param name="abilityID">The id of the ability.</param> 
+        </summary>*/ 
+        public Ability GetAbility(int abilityID) 
+        { 
+            return abilities.Select(a => a.SpAbility).First(a => a.ID == abilityID);
         }
         
         /**<summary>

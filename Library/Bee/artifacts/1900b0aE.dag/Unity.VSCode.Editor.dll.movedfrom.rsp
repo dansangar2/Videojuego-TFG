@@ -2,10 +2,9 @@ Library\Bee\artifacts\movedfrom\UnityEditor.TestRunner.ref.dll_18191076894890228
 Library\Bee\artifacts\movedfrom\UnityEditor.UI.ref.dll_5519394401220875509.movedfrom
 Library\Bee\artifacts\movedfrom\UnityEngine.TestRunner.ref.dll_16527383234446630302.movedfrom
 Library\Bee\artifacts\movedfrom\UnityEngine.UI.ref.dll_648142665722821984.movedfrom
-Library\Bee\artifacts\movedfrom\Unity.Plastic.Antlr3.Runtime.dll_6158709525516319638.movedfrom
-Library\Bee\artifacts\movedfrom\Unity.VisualScripting.IonicZip.dll_586523484808375689.movedfrom
-Library\Bee\artifacts\movedfrom\Unity.VisualScripting.YamlDotNet.dll_41533370101216451.movedfrom
-Library\Bee\artifacts\movedfrom\Unity.VisualScripting.Antlr3.Runtime.dll_12826451035903902946.movedfrom
+Library\Bee\artifacts\movedfrom\Unity.Analytics.StandardEvents.dll_15435211386135030325.movedfrom
+Library\Bee\artifacts\movedfrom\Unity.Analytics.Editor.dll_15012378659960795801.movedfrom
+Library\Bee\artifacts\movedfrom\Unity.Analytics.Tracker.dll_1420783004139273992.movedfrom
 Library\Bee\artifacts\movedfrom\UnityEditor.Graphs.dll_9268879020013663948.movedfrom
 Library\Bee\artifacts\movedfrom\UnityEditor.CoreModule.dll_11284561233275045530.movedfrom
 Library\Bee\artifacts\movedfrom\UnityEditor.DeviceSimulatorModule.dll_1076817527774232647.movedfrom

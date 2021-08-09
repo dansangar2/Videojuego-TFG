@@ -27,6 +27,7 @@
 -define:PLATFORM_ARCH_64
 -define:UNITY_64
 -define:UNITY_INCLUDE_TESTS
+-define:UNITY_ANALYTICS
 -define:USE_SEARCH_ENGINE_API
 -define:USE_QUICK_SEARCH_MODULE
 -define:SCENE_TEMPLATE_MODULE
@@ -113,13 +114,9 @@
 -define:PACKAGE_UITOOLKIT
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
--r:"D:/Estudios/4o/TFG/project_k/project_k/Library/PackageCache/com.unity.collab-proxy@1.5.7/Lib/Editor/PlasticSCM/log4netPlastic.dll"
--r:"D:/Estudios/4o/TFG/project_k/project_k/Library/PackageCache/com.unity.collab-proxy@1.5.7/Lib/Editor/PlasticSCM/Unity.Plastic.Antlr3.Runtime.dll"
--r:"D:/Estudios/4o/TFG/project_k/project_k/Library/PackageCache/com.unity.collab-proxy@1.5.7/Lib/Editor/PlasticSCM/unityplastic.dll"
--r:"D:/Estudios/4o/TFG/project_k/project_k/Library/PackageCache/com.unity.nuget.newtonsoft-json@2.0.0/Runtime/Newtonsoft.Json.dll"
--r:"D:/Estudios/4o/TFG/project_k/project_k/Library/PackageCache/com.unity.visualscripting@1.6.1/Editor/VisualScripting.Core/Dependencies/DotNetZip/Unity.VisualScripting.IonicZip.dll"
--r:"D:/Estudios/4o/TFG/project_k/project_k/Library/PackageCache/com.unity.visualscripting@1.6.1/Editor/VisualScripting.Core/Dependencies/YamlDotNet/Unity.VisualScripting.YamlDotNet.dll"
--r:"D:/Estudios/4o/TFG/project_k/project_k/Library/PackageCache/com.unity.visualscripting@1.6.1/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
+-r:"D:/Estudios/4o/TFG/project_k/Library/PackageCache/com.unity.analytics@3.5.3/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll"
+-r:"D:/Estudios/4o/TFG/project_k/Library/PackageCache/com.unity.analytics@3.5.3/Unity.Analytics.Editor.dll"
+-r:"D:/Estudios/4o/TFG/project_k/Library/PackageCache/com.unity.analytics@3.5.3/Unity.Analytics.Tracker.dll"
 -r:"D:/Program Files/2021.1.12f1/Editor/Data/Managed/UnityEditor.Graphs.dll"
 -r:"D:/Program Files/2021.1.12f1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreModule.dll"
 -r:"D:/Program Files/2021.1.12f1/Editor/Data/Managed/UnityEngine/UnityEditor.DeviceSimulatorModule.dll"

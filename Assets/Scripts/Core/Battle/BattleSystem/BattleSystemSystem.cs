@@ -1,0 +1,302 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Core.Battle.DamageText;
+using Core.HUDs;
+using Core.Messages;
+using Core.Saves;
+using Data;
+using Entities;
+using Enums;
+using UnityEngine;
+using UnityEngine.UI;
+using Button = Core.Buttons.Button;
+
+namespace Core.Battle.BattleSystem
+{
+    public partial class BattleSystem
+    {
+        public GameObject damageText;
+        
+        private int[] _orderBySpeed;
+        //private Text _damageText;
+        private AnimatedText _damageText;
+
+        private AbilityList _abilityList;
+        
+        
+        #region MESSAGE
+
+        private TextData[] GenEnemyMessage(float speed = 0.02f)
+        {
+            
+            Dictionary<int, int> results = new Dictionary<int, int>();
+            foreach (int id in enemiesId)
+            {
+                if(results.ContainsKey(id)) continue;
+                int i = enemiesId.Count(n => n==id);
+                results.Add(id, i);
+            }
+
+            string messages = results.Select(i 
+                    => (i.Value.ToString().Equals("1") ? "" : i.Value.ToString()) + " " +
+                       GameData.EnemyDB.FindByID(i.Key).Name)
+                .Aggregate((i, j) => i + ", " + j) + " was detected!";
+            
+            messages = messages.Substring(0, messages.LastIndexOf(','))
+                + " and" + messages.Substring(messages.LastIndexOf(',')+1);
+
+            TextData data = new TextData(messages) {speed = speed};
+            return new []{data};
+        }
+
+        #endregion
+
+        #region ORDER
+
+        private void OrderBySpeed()
+        {
+            _orderBySpeed = _fighters.OrderByDescending(m => m.character.Agility)
+                .Select(f => f.id).ToArray();
+            
+        }
+
+        #endregion
+        
+        #region INIT
+
+        private void InitFighters()
+        {
+            int members = maxMembers > SavesFiles.GetSave().Characters.Length
+                ? SavesFiles.GetSave().Characters.Length : maxMembers;
+
+            _fighters = new Fighter[members+enemiesId.Length];
+            
+            MeshRenderer[] fighterRenderers = GetComponentsInChildren<MeshRenderer>();
+            MeshCollider[] fightersColliders = GetComponentsInChildren<MeshCollider>();
+            MeshFilter[] fightersFilters = GetComponentsInChildren<MeshFilter>();
+
+            for (int i = 0; i<maxMembers ;i++)
+            {
+                try
+                {
+                    _fighters[i] = gameObject.AddComponent<Fighter>();
+                    _fighters[i].SetData(i, memberBase, GetComponentInChildren<GridLayoutGroup>(),
+                        fightersFilters, fighterRenderers, fightersColliders);
+                    _fighters[i].character.ResetCharge();
+                    _fighters[i].CharacterMark();
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e);
+                    Destroy(fightersFilters[i].gameObject);
+                }
+
+            }
+            
+            for (int i = members; i<_fighters.Length ;i++)
+            {
+                _fighters[i] = gameObject.AddComponent<Fighter>();
+                _fighters[i].SetData(i, enemiesId, fightersFilters, fighterRenderers, fightersColliders);
+                _fighters[i].character.ResetCharge();
+                _fighters[i].CharacterMark();
+            }
+        }
+
+        private void InitFightersHud()
+        {
+            foreach (Fighter fighter in _fighters.Where(m => !m.isEnemy).ToArray())
+            {
+                fighter.member.gameObject.SetActive(true);
+            }
+        }
+
+        
+        private void ChooseTurns()
+        {
+            
+            int total = _fighters.Select(i => i.character.Agility).Sum();
+            
+            while (true)
+            {
+                foreach (int i in _orderBySpeed)
+                {
+                    if (!_fighters[i].character.AddCharge(total)) continue;
+                    _currentTurn = i;
+                    return;
+                }
+            }
+        }
+        
+        #endregion
+
+        #region DAMAGE
+
+        public void DoAttack(Fighter attacker, params Fighter[] targets)
+        {
+            List<int> idsToDestroy = new List<int>();
+            _actionType = ActionType.Process;
+            attacker.character.ReduceCurrentKarma(_abilityInUse.Cost);
+            attacker.CharacterMark();
+            foreach (Fighter fighter in targets)
+            {
+                for (int i = 0; i < _abilityInUse.Hits; i++)
+                {
+                    Damage(fighter, _abilityInUse.Damage(attacker.character, fighter.character));
+                }
+
+                if(fighter.character.IsKo() && fighter.isEnemy) idsToDestroy.Add(fighter.id);
+                if(fighter.character.IsKo() && !fighter.isEnemy) fighter.meshRenderer.material.color = Color.red;
+            }
+            UpdateBattlefield(idsToDestroy.OrderBy(i => i).ToArray());
+            _actionType = ActionType.None;
+            _lastActionSelectAbility = false;
+            Button.Message = "";
+        }
+
+        public void Damage(Fighter fighter, int damage)
+        {
+            fighter.CharacterMark();
+            _damageText.SetDamage(damage, fighter, _abilityInUse.Type);
+            if (_abilityInUse.Type == AttackType.Blood) fighter.character.ReduceCurrentBlood(damage);
+            else fighter.character.ReduceCurrentKarma(damage);
+        }
+        
+        #endregion
+
+        #region EXPERIENCE
+
+        private void GetExperienceFor()
+        {
+            int[,] experienceGained = new int[SavesFiles.GetParty().Length, GetGroup(true).Length];
+
+            for (int i = 0; i < SavesFiles.GetParty().Length; i++)
+            {
+                for (int j = 0; j < GetGroup(true).Length; j++)
+                {
+                    //The experience gained is reduced or increment if the
+                    //character level is lower o upper than the enemy.
+                    int exp = Convert.ToInt32(
+                        //The experience gained is reduced if the character isn't in the battlefield.
+                        Mathf.Round(GetGroup(true)[j].character.NedExp * 
+                                    //The max increment of experience is x2 if the enemy it's 20 level upper.
+                                    (1 + Convert.ToSingle(
+                                        GetGroup(true)[j].character.Level 
+                                        - GetGroup()[i].character.Level)/20)));
+                    // The min is 1.
+                    exp = Mathf.Min(exp, GetGroup(true)[j].character.NedExp*2);
+                    exp = Mathf.Max(1, exp);
+                    /*
+                    int exp = _fighters.Sum(enemy => Mathf
+                        .Max(1, (int) Mathf.Round(enemy.character.ActExp 
+                                                  * (1 + (enemy.character.Level - Math.Max((float) 
+                                                      SavesFiles.GetCharacterOfParty(i).Level 
+                                                      / 20, 0.5f))))));*/
+                    
+                    experienceGained[SavesFiles.GetParty()[i].ID,j] = exp;
+                }
+            }
+            
+            _experienceGained = experienceGained;
+        }
+
+        private void AddExperience(params int[] ids)
+        {
+            if(ids.Length == 0) return;
+            int i = 0;
+            
+            foreach (Character character in SavesFiles.GetParty())
+            {
+                int exp = 0;
+                //Check if the character is in the battlefield. If not his experience is 80%.
+                float played = i < maxMembers ? 1 : 0.8f;
+
+                foreach (var id in ids)
+                {
+                    exp += Convert.ToInt32(Mathf.Max(1, Mathf.Floor(
+                        _experienceGained[character.ID, id - maxMembers]*played)));
+                }
+
+                character.GainExperience(exp);
+                
+                //Print the exp. gained upper the character.
+                if (i<maxMembers) _damageText.GainExp(exp, _fighters[i]);
+                i++;
+            }
+        }
+
+        #endregion
+
+        public void UpdateBattlefield(params int[] ids)
+        {
+            for (int id = ids.Length-1; id >= 0; id--)
+            {
+                AddExperience(ids);
+                Destroy(_fighters[ids[id]].meshFilter.gameObject);
+                Destroy(_fighters[ids[id]]);
+                for (int i = ids[id]; i < _fighters.Length-1; i++) 
+                {
+                    _fighters[i] = _fighters[i+1]; 
+                    _fighters[i].id--;
+                } 
+                Array.Resize(ref _fighters, _fighters.Length - 1);
+                _orderBySpeed = _fighters.OrderByDescending(f => f.character.Agility).Select(f => f.character.ID)
+                    .ToArray();
+            }
+
+            if (GetGroup().All(f => f.character.IsKo())) _state = BattleState.Lose;
+            else if (GetGroup(true).Length==0) _state = BattleState.Win;
+            else _state = BattleState.Turn;
+        }
+
+        #region TESTS
+
+        [ContextMenu("Set Up")]
+        public void TestSetUp()
+        {
+            TestDelete();
+            TestInit1();
+            TestLoad();
+            TestParty();
+        }
+        
+        [ContextMenu("Init Party1")]
+        public void TestInit1()
+        {
+            SavesFiles.GetSave().AddCharacter(0, 1, 2, 3);
+            SavesFiles.SaveData();
+        }
+        
+        [ContextMenu("Init Party2")]
+        public void TestInit2()
+        {
+            SavesFiles.GetSave().AddCharacter(1);
+            SavesFiles.SaveData();
+        }
+        
+        [ContextMenu("Load data")]
+        public void TestLoad()
+        {
+            
+            SavesFiles.LoadData();
+        }
+        
+        [ContextMenu("Delete")]
+        public void TestDelete()
+        {
+            SavesFiles.Init();
+        }
+        
+        [ContextMenu("Print current party")]
+        public void TestParty()
+        {
+            foreach (Character cha in SavesFiles.GetSave().Party)
+            {
+                Debug.Log(cha);
+            }
+        }
+        
+        #endregion
+        
+    }
+}

@@ -30,6 +30,7 @@ namespace Data.Windows.ManageCharacters
         
         private static void DisplayedReadWrite(Character item)
         {
+
             
             EditorGUILayout.BeginVertical();
             EditorGUILayout.BeginHorizontal();
@@ -56,6 +57,7 @@ namespace Data.Windows.ManageCharacters
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Element: ", Options);
+            _index = item.Element.ID;
             _index = EditorGUILayout.Popup(_index, GameData.ElementDB.Names, Options);
             item.ElementID = _index;
             EditorGUILayout.EndHorizontal();
@@ -137,7 +139,8 @@ namespace Data.Windows.ManageCharacters
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Melee Attack: ", Options);
-            _melee = EditorGUILayout.Popup(_melee,GameData.AbilityDB.Names, Options);
+            _melee = item.MeleeAttack.ID;
+            _melee = EditorGUILayout.Popup(_melee, GameData.AbilityDB.Names, Options); 
             item.MeleeAttackID = _melee;
             EditorGUILayout.EndHorizontal();
             
@@ -147,8 +150,9 @@ namespace Data.Windows.ManageCharacters
             
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Long Attack: ", Options);
-            _long = EditorGUILayout.Popup(_long,GameData.AbilityDB.Names, Options);
-            item.LongAttackID = _long;
+            _long = item.LongAttack.ID;
+            _long = EditorGUILayout.Popup(_long, GameData.AbilityDB.Names, Options);
+            item.LongAttackID = _long; 
             EditorGUILayout.EndHorizontal();
             
             #endregion

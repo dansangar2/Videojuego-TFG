@@ -14,6 +14,17 @@ namespace Data.Database
         /**<summary>Array that save the Serialize data.</summary>*/ 
         [SerializeField] private Element[] elements = {};
 
+        
+        /**<summary>Clone constructor.</summary>*/ 
+        public Elements(Elements elements)
+        {
+            this.elements = new Element[elements.Count];
+            for (int i = 0; i < elements.Count; i++)
+            {
+                this.elements[i] = new Element(elements.elements[i]);
+            }
+        }
+
         #region GET
         
         /**<summary>Get the number of items.</summary>*/ 

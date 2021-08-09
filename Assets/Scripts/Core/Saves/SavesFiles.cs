@@ -22,22 +22,32 @@ namespace Core.Saves
 
         #region MANAGE
 
+        /**<summary>Initialize all saves.</summary>*/
+        public static void Init()
+        {
+            for (int i = 0; i < _saves.Length; i++)
+            {
+                _saves[i] = new Save();
+            }
+
+            CurrentSave = 0;
+        }
+        
         /**<summary>Save the game in the save file using the current file index.</summary>*/
         public static void SaveData()
         {
             string file = _fileName + CurrentSave;
-            
-            _jsonFile = JsonUtility.ToJson(_saves[CurrentSave]); 
+            _jsonFile = JsonUtility.ToJson(_saves[CurrentSave]);
             _saves[CurrentSave].IsEmpty = false;
             //It save the _jsonFile with the data of _currentFile.
             PlayerPrefs.SetString(file, _jsonFile);
         }
-        
+
         /**<summary>Load the game in the save file using the current file index.</summary>*/
         public static void LoadData()
         {
             string file = _fileName + CurrentSave;
-            _jsonFile = PlayerPrefs.GetString(file + CurrentSave);
+            _jsonFile = PlayerPrefs.GetString(file);
             _saves[CurrentSave] = JsonUtility.FromJson<Save>(_jsonFile);
         }
 
@@ -57,6 +67,8 @@ namespace Core.Saves
         /**<summary>Get the current data.</summary>*/
         public static Save GetSave()
         {
+            string file = _fileName + CurrentSave;
+            _jsonFile = PlayerPrefs.GetString(file);
             return _saves[CurrentSave];
         }
         

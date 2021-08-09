@@ -17,7 +17,7 @@ namespace Entities
         #region ATTRIBUTES
         
         [SerializeField] private string formula = "4*{a.atk} - 2*{a.def} < 0 ? 1 : 4*{a.atk} - 2*{a.def}"; 
-        [SerializeField] private AbilityType type = AbilityType.Normal; 
+        [SerializeField] private AttackType type = AttackType.Blood; 
         [SerializeField] private TargetRange range = TargetRange.One; 
         [SerializeField] private TargetType target = TargetType.Enemy; 
         [SerializeField] private Sprite icon; 
@@ -84,8 +84,8 @@ namespace Entities
         
         #region GETTERS & SETTERS
         
-        /**<summary>The type of the ability (Normal or Karmic).</summary>*/
-        public AbilityType Type { get => type; set => type = value; }
+        /**<summary>The type of the ability if it damages Karma or Blood points.</summary>*/
+        public AttackType Type { get => type; set => type = value; }
         /**<summary>The icon of the ability.</summary>*/
         public Sprite Icon { get => icon; set => icon = value; }
         /**<summary>The number of hits for the target.</summary>*/
@@ -134,7 +134,9 @@ namespace Entities
         </summary>*/
         public Tuple<Sprite, Sprite> AbilityIcons()
         {
-            return UseCharacterElement ? new Tuple<Sprite, Sprite>(icon, Element.Icon) : new Tuple<Sprite, Sprite>(icon, null);
+            return UseCharacterElement
+                ? new Tuple<Sprite, Sprite>(icon, null)
+                : new Tuple<Sprite, Sprite>(icon, Element.Icon);
         }
         
         #endregion
@@ -223,10 +225,11 @@ namespace Entities
             
             #endregion
             
-            return Convert.ToInt32(
-                Convert.ToInt32(dt.Compute(damage, "")) 
-                *Random.Range(DownInterval, UpperInterval) 
-                *PowerIncrement); 
+            return  Convert.ToInt32(
+                Convert.ToInt32(dt.Compute(damage, ""))
+                *Random.Range(DownInterval, UpperInterval)
+                *PowerIncrement);
+            
         }
         
         /**<summary>Get the learning rate.</summary>*/

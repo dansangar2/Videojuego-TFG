@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Battle.DamageText;
-using Core.HUDs;
+using Core.ButtonsSystem.ButtonList;
+using Core.ButtonsSystem.ButtonType;
 using Core.Messages;
 using Core.Saves;
 using Data;
@@ -10,23 +11,31 @@ using Entities;
 using Enums;
 using UnityEngine;
 using UnityEngine.UI;
-using Button = Core.Buttons.Button;
 
 namespace Core.Battle.BattleSystem
 {
     public partial class BattleSystem
     {
-        public GameObject damageText;
         
-        private int[] _orderBySpeed;
-        //private Text _damageText;
-        private AnimatedText _damageText;
+        #region ATTRIBUTES
 
-        private AbilityList _abilityList;
+        /**<summary>The text that appear when the character receive damage or experience.</summary>*/
+        public GameObject animatedText;
         
+        /**<summary>The array with the characters ids order by speed.</summary>*/
+        private int[] _orderBySpeed;
         
+        /**<summary>The current animated text.</summary>*/
+        private AnimatedText _animatedText;
+
+        /**<summary>List of abilities of the characters.</summary>*/
+        private AbilityButtonsList _abilityList;
+
+        #endregion
+
         #region MESSAGE
 
+        /**<summary>It generate a enemy appeared message.</summary>*/
         private TextData[] GenEnemyMessage(float speed = 0.02f)
         {
             
@@ -54,6 +63,7 @@ namespace Core.Battle.BattleSystem
 
         #region ORDER
 
+        /**<summary>Set the order by speed array with the ids of the characters.</summary>*/
         private void OrderBySpeed()
         {
             _orderBySpeed = _fighters.OrderByDescending(m => m.character.Agility)
@@ -65,10 +75,11 @@ namespace Core.Battle.BattleSystem
         
         #region INIT
 
+        /**<summary>Init the character and enemies model, HUDs, renders, etc...</summary>*/
         private void InitFighters()
         {
-            int members = maxMembers > SavesFiles.GetSave().Characters.Length
-                ? SavesFiles.GetSave().Characters.Length : maxMembers;
+            int members = maxMembers > SavesFiles.GetSave().Party.Length
+                ? SavesFiles.GetSave().Party.Length : maxMembers;
 
             _fighters = new Fighter[members+enemiesId.Length];
             
@@ -103,6 +114,7 @@ namespace Core.Battle.BattleSystem
             }
         }
 
+        /**<summary>Set active the HUDs of the characters when the enemies appeared message dead.</summary>*/
         private void InitFightersHud()
         {
             foreach (Fighter fighter in _fighters.Where(m => !m.isEnemy).ToArray())
@@ -112,6 +124,7 @@ namespace Core.Battle.BattleSystem
         }
 
         
+        /**<summary>It get the next character turn.</summary>*/
         private void ChooseTurns()
         {
             
@@ -132,6 +145,7 @@ namespace Core.Battle.BattleSystem
 
         #region DAMAGE
 
+        /**<summary>The array with the characters ids order by speed.</summary>*/
         public void DoAttack(Fighter attacker, params Fighter[] targets)
         {
             List<int> idsToDestroy = new List<int>();
@@ -148,16 +162,38 @@ namespace Core.Battle.BattleSystem
                 if(fighter.character.IsKo() && fighter.isEnemy) idsToDestroy.Add(fighter.id);
                 if(fighter.character.IsKo() && !fighter.isEnemy) fighter.meshRenderer.material.color = Color.red;
             }
+            foreach (Fighter f in GetGroup()) { f.member.UpdateUI(); }
             UpdateBattlefield(idsToDestroy.OrderBy(i => i).ToArray());
             _actionType = ActionType.None;
             _lastActionSelectAbility = false;
-            Button.Message = "";
+            GenericButton.Message = "";
         }
 
+        public void UpdateBattlefield(params int[] ids)
+        {
+            for (int id = ids.Length-1; id >= 0; id--)
+            {
+                AddExperience(ids);
+                Destroy(_fighters[ids[id]].meshFilter.gameObject);
+                Destroy(_fighters[ids[id]]);
+                for (int i = ids[id]; i < _fighters.Length-1; i++) 
+                {
+                    _fighters[i] = _fighters[i+1]; 
+                    _fighters[i].id--;
+                } 
+                Array.Resize(ref _fighters, _fighters.Length - 1);
+                _orderBySpeed = _fighters.OrderByDescending(f => f.character.Agility).Select(f => f.character.ID)
+                    .ToArray();
+            }
+            if (GetGroup().Length == 0) _state = BattleState.Lose;
+            else if (GetGroup(true).Length==0) _state = BattleState.Win;
+            else _state = BattleState.Turn;
+        }
+        
         public void Damage(Fighter fighter, int damage)
         {
             fighter.CharacterMark();
-            _damageText.SetDamage(damage, fighter, _abilityInUse.Type);
+            _animatedText.SetDamage(damage, fighter, _abilityInUse.Type);
             if (_abilityInUse.Type == AttackType.Blood) fighter.character.ReduceCurrentBlood(damage);
             else fighter.character.ReduceCurrentKarma(damage);
         }
@@ -182,16 +218,10 @@ namespace Core.Battle.BattleSystem
                                     //The max increment of experience is x2 if the enemy it's 20 level upper.
                                     (1 + Convert.ToSingle(
                                         GetGroup(true)[j].character.Level 
-                                        - GetGroup()[i].character.Level)/20)));
+                                        - SavesFiles.GetParty()[i].Level)/20)));
                     // The min is 1.
                     exp = Mathf.Min(exp, GetGroup(true)[j].character.NedExp*2);
                     exp = Mathf.Max(1, exp);
-                    /*
-                    int exp = _fighters.Sum(enemy => Mathf
-                        .Max(1, (int) Mathf.Round(enemy.character.ActExp 
-                                                  * (1 + (enemy.character.Level - Math.Max((float) 
-                                                      SavesFiles.GetCharacterOfParty(i).Level 
-                                                      / 20, 0.5f))))));*/
                     
                     experienceGained[SavesFiles.GetParty()[i].ID,j] = exp;
                 }
@@ -220,34 +250,12 @@ namespace Core.Battle.BattleSystem
                 character.GainExperience(exp);
                 
                 //Print the exp. gained upper the character.
-                if (i<maxMembers) _damageText.GainExp(exp, _fighters[i]);
+                if (i<maxMembers) _animatedText.GainExp(exp, _fighters[i]);
                 i++;
             }
         }
 
         #endregion
-
-        public void UpdateBattlefield(params int[] ids)
-        {
-            for (int id = ids.Length-1; id >= 0; id--)
-            {
-                AddExperience(ids);
-                Destroy(_fighters[ids[id]].meshFilter.gameObject);
-                Destroy(_fighters[ids[id]]);
-                for (int i = ids[id]; i < _fighters.Length-1; i++) 
-                {
-                    _fighters[i] = _fighters[i+1]; 
-                    _fighters[i].id--;
-                } 
-                Array.Resize(ref _fighters, _fighters.Length - 1);
-                _orderBySpeed = _fighters.OrderByDescending(f => f.character.Agility).Select(f => f.character.ID)
-                    .ToArray();
-            }
-
-            if (GetGroup().All(f => f.character.IsKo())) _state = BattleState.Lose;
-            else if (GetGroup(true).Length==0) _state = BattleState.Win;
-            else _state = BattleState.Turn;
-        }
 
         #region TESTS
 
@@ -263,7 +271,7 @@ namespace Core.Battle.BattleSystem
         [ContextMenu("Init Party1")]
         public void TestInit1()
         {
-            SavesFiles.GetSave().AddCharacter(0, 1, 2, 3);
+            SavesFiles.GetSave().AddCharacter(3, 0, 2, 1);
             SavesFiles.SaveData();
         }
         

@@ -39,8 +39,11 @@ namespace Core.Saves
         /**<summary>Get all character status of the file.</summary>*/
         public Character[] Characters => characters.All;
         /**<summary>Get all character in the party of the player.</summary>*/
-        public Character[] Party => characters.All.Where(c => charactersInParty.Contains(c.ID)).ToArray();
+        public Character[] Party => charactersInParty.Select(c => characters.FindByID(c)).ToArray();// .All.Where(c => charactersInParty.Contains(c.ID)).ToArray();
+        /**<summary>Get all character status of the file.</summary>*/
+        public Character GetCharacter(int id) => characters.FindByID(id);
 
+        
         #region Add
 
         /**<summary>Add character to the party.</summary>*/

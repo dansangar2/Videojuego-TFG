@@ -1,10 +1,13 @@
 using System;
+using System.Linq;
+using Core.ButtonsSystem.ButtonType;
 using Core.Controls;
 using UnityEngine;
 
-namespace Core.Buttons
+namespace Core.ButtonsSystem.ButtonList
 {
-    public class Buttons : MonoBehaviour
+    /**<sumary>The base for lists.</sumary>*/
+    public class BaseButtonsList : MonoBehaviour
     {
 
         #region ATTRIBUTES
@@ -31,7 +34,7 @@ namespace Core.Buttons
         #region Position
 
         /**<sumary>The current position.</sumary>*/
-        protected int Position;
+        public int position;
         /**<summary>The current column index.</summary>*/
         private int _currentColumn;
         /**<summary>The current row index.</summary>*/
@@ -41,26 +44,31 @@ namespace Core.Buttons
         
         #endregion
 
-        protected void SetColumnsAndRows(Button[] buttons)
+        #region MOVEMENT
+
+        /**<sumary>Set the columns and rows.</sumary>*/
+        protected void SetColumnsAndRows(GenericButton[] buttons)
         {
-            _numsOfRows = buttons.Length/numsOfCol + buttons.Length%numsOfCol;
+            _numsOfRows = buttons.Where(b => b
+                                  .gameObject.activeInHierarchy).ToArray()
+                              .Length/numsOfCol 
+                          + buttons.Where(b => b
+                                  .gameObject.activeInHierarchy).ToArray()
+                              .Length%numsOfCol;
             _currentNumOfRows = _numsOfRows;
-            _currentRow = Position;
+            _currentRow = position;
             
         }
-
-        // Update is called once per frame
-        protected void Move(Button[] buttons)
+        
+        /**<sumary>The button directional movement.</sumary>*/
+        protected void Move(GenericButton[] buttons)
         {
-            
             if (buttons.Length == 0) return;
-
-            //if (_buttons[_position].IsStopped) return;
-            
+    
             //Check if some button is Down
             if (!ControlsKeys.DirectionalKeyIsDown()) return;
             
-            buttons[Position].IsSelect = false;
+            buttons[position].IsSelect = false;
             
             //Check the current Column of the button list
             _currentColumn = _currentColumn 
@@ -71,7 +79,9 @@ namespace Core.Buttons
             if (_currentColumn < 0) _currentColumn = numsOfCol-1;
 
             //Update the column size with the number of the values that it have
-            if (_currentColumn == numsOfCol-1) _currentNumOfRows = _numsOfRows - buttons.Length % numsOfCol;
+            if (_currentColumn == numsOfCol-1) _currentNumOfRows =
+                _numsOfRows - buttons.Where(b => b
+                    .gameObject.activeInHierarchy).ToArray().Length % numsOfCol;
             else _currentNumOfRows = _numsOfRows;
 
             //Check the current Column of the button list
@@ -79,17 +89,39 @@ namespace Core.Buttons
             
             //Check the current row of the button list
             _currentRow = _currentRow + Convert.ToInt32(Input.GetKeyDown(ControlsKeys.MoveDown))
-                       - Convert.ToInt32(Input.GetKeyDown(ControlsKeys.MoveUp));
+                          - Convert.ToInt32(Input.GetKeyDown(ControlsKeys.MoveUp));
 
             _currentRow %= _currentNumOfRows;
             if (_currentRow < 0) _currentRow = _currentNumOfRows-1;
             
             //With the row and column pos I get the position. I mean where is the button now. 
-            Position = _currentRow + _numsOfRows * _currentColumn;
+            position = _currentRow + _numsOfRows * _currentColumn;
             
             
-            buttons[Position].IsSelect = true;
+            buttons[position].IsSelect = true;
 
         }
+
+        #endregion
+
+        #region SELECT OPTIONS
+
+        /**<sumary>Quit all Select.</sumary>*/
+        protected void SelectNone(GenericButton[] buttons)
+        {
+            foreach (GenericButton button in buttons)
+            {
+                button.IsSelect = false;
+            }
+        }
+
+        /**<sumary>Select the current position button.</sumary>*/
+        protected void SelectCurrent(GenericButton[] buttons)
+        {
+            buttons[position].IsSelect = true;
+        }
+
+        #endregion
+        
     }
 }

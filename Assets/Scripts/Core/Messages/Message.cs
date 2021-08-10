@@ -36,13 +36,13 @@ namespace Core.Messages
         
         private void Start() 
         { 
+            IsSomeMessageOn = true;
             if (messages.Length == 0) messages = new []{new TextData("")}; 
             MessageStart(); 
         }
 
         private void Update()
         {
-            IsSomeMessageOn = true;
             MessageUpdate();
         }
         
@@ -53,7 +53,6 @@ namespace Core.Messages
         /**<summary>Set the text transform for use it in the message.</summary>*/
         protected void MessageStart() 
         { 
-            IsSomeMessageOn = true; 
             TextBox = transform.GetChild(up ? 0 : 3); 
             
             TextBox.GetChild(1).gameObject.SetActive(false); 
@@ -142,12 +141,16 @@ namespace Core.Messages
         /**<summary>Destroy the message system.</summary>*/
         protected void DestroyItem() 
         { 
-            Destroy(gameObject); 
+            IsSomeMessageOn = false;
+            Destroy(gameObject);
         }
 
         #endregion
 
         /**<summary>It's a global variable that indicates if there are some message on.</summary>*/
         public static bool ThereAreMessage() { return IsSomeMessageOn; }
+        
+        /**<summary>Set true the global variable that indicates that there are a messages or not.</summary>*/
+        public static void SetExitsMessage(bool thereAre = true) { IsSomeMessageOn = thereAre; }
     }
 }

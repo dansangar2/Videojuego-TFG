@@ -1,25 +1,27 @@
-﻿namespace Core.Buttons
+﻿using Core.ButtonsSystem.ButtonType;
+
+namespace Core.ButtonsSystem.ButtonList
 {
-    public class ButtonsSlot : Buttons
+    public class GenericButtonsList : BaseButtonsList
     {
         /**<sumary>The data of the buttons.</sumary>*/
-        public ButtonData[] buttonsData;
+        public ButtonData.GenericButtonData[] buttonsData;
         /**<sumary>The list of buttons. It marks what button is select.
         <para>It'll get all entity Button.</para></sumary>*/ 
-        private Button[] _buttons;
+        private GenericButton[] _buttons;
         /**<sumary>The button prefab.</sumary>*/
-        public Button prefab;
+        public GenericButton prefab;
         
         protected void Start()
         {
-            foreach (ButtonData button in buttonsData)
+            foreach (ButtonData.GenericButtonData button in buttonsData)
             {
                 prefab.SetUp(button, buttonColor, buttonsBlinks, velocity);
                 Instantiate(prefab,
                     transform.GetChild(0)
                         .transform);
             }
-            _buttons = gameObject.GetComponentsInChildren<Button>();
+            _buttons = gameObject.GetComponentsInChildren<GenericButton>();
             SetColumnsAndRows(_buttons);
             _buttons[0].IsSelect = true;
         }

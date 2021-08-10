@@ -1,4 +1,4 @@
-﻿using Core.HUDs;
+﻿using Core.ButtonsSystem.ButtonType;
 using Core.Saves;
 using Data;
 using Entities;
@@ -15,7 +15,7 @@ namespace Core.Battle
         public MeshRenderer meshRenderer;
         public MeshCollider meshCollider;
         public bool isEnemy;
-        public Member member;
+        public MemberHUDButton member;
 
         private bool _isTurn;
         
@@ -42,20 +42,21 @@ namespace Core.Battle
             meshFilter.mesh = character.Model;
         }
         
-        public Fighter(int pos, Member member, MeshFilter meshFilter, MeshRenderer meshRenderer, MeshCollider meshCollider)
+        public Fighter(int pos, MemberHUDButton member, MeshFilter meshFilter, MeshRenderer meshRenderer, MeshCollider meshCollider)
         {
             id = pos;
             isEnemy = false;
             character = SavesFiles.GetCharacterOfParty(pos);
             member.SetUp(character.ID);
             this.member = Instantiate(member, GetComponentInChildren<GridLayoutGroup>().gameObject.transform);
+            this.member.gameObject.SetActive(false);
             this.meshFilter = meshFilter;
             this.meshRenderer = meshRenderer;
             this.meshCollider = meshCollider;
             this.meshFilter.mesh = character.Model;
         }
 
-        public Fighter(int pos, Member memberBase, GridLayoutGroup set, MeshFilter[] meshFilters, MeshRenderer[] meshRenderers, MeshCollider[] meshColliders)
+        public Fighter(int pos, MemberHUDButton memberBase, GridLayoutGroup set, MeshFilter[] meshFilters, MeshRenderer[] meshRenderers, MeshCollider[] meshColliders)
         {
             id = pos;
             isEnemy = false;
@@ -93,26 +94,27 @@ namespace Core.Battle
             meshFilter.mesh = character.Model;
         }
         
-        public void SetData(int pos, Member nMember, MeshFilter nMeshFilter, MeshRenderer nMeshRenderer, MeshCollider nMeshCollider)
+        public void SetData(int pos, MemberHUDButton nMember, MeshFilter nMeshFilter, MeshRenderer nMeshRenderer, MeshCollider nMeshCollider)
         {
             id = pos;
             isEnemy = false;
             character = SavesFiles.GetCharacterOfParty(pos);
             member.SetUp(character.ID);
-            member = Instantiate(member, GetComponentInChildren<GridLayoutGroup>().gameObject.transform);
+            member = Instantiate(nMember, GetComponentInChildren<GridLayoutGroup>().gameObject.transform);
             meshFilter = nMeshFilter;
             meshRenderer = nMeshRenderer;
             meshCollider = nMeshCollider;
             meshFilter.mesh = character.Model;
         }
 
-        public void SetData(int pos, Member memberBase, GridLayoutGroup set, MeshFilter[] meshFilters, MeshRenderer[] meshRenderers, MeshCollider[] meshColliders)
+        public void SetData(int pos, MemberHUDButton memberBase, GridLayoutGroup set, MeshFilter[] meshFilters, MeshRenderer[] meshRenderers, MeshCollider[] meshColliders)
         {
             id = pos;
             isEnemy = false;
             character = SavesFiles.GetCharacterOfParty(pos);
             memberBase.SetUp(character.ID);
             member = Instantiate(memberBase, set.gameObject.transform);
+            member.gameObject.SetActive(false);
             meshFilter = meshFilters[pos];
             meshRenderer = meshRenderers[pos];
             meshCollider = meshColliders[pos];

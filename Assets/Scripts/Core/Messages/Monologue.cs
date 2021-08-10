@@ -31,6 +31,7 @@ namespace Core.Messages
 
         private void Start()
         {
+            IsSomeMessageOn = true;
             if (messages.Length == 0) messages = new []{new TextData("")};
             switch (type)
             {
@@ -45,7 +46,6 @@ namespace Core.Messages
         
         void Update()
         {
-            IsSomeMessageOn = true;
             switch (type)
             {
                 case TextBoxType.Message:
@@ -64,7 +64,6 @@ namespace Core.Messages
         /**<summary>Set the text and image transform for use it in the monologue.</summary>*/
         protected void MonologueStart()
         {
-            IsSomeMessageOn = true;
             
             TextBox = transform.GetChild(up ? 0 : 3);
             CharImage = transform.GetChild(right ? 2 : 1);

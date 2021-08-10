@@ -84,6 +84,7 @@ MonoBehaviour:
     - abilityID: 4
       needLevel: 1
       level: 1
+    restPoints: 0
   - id: 1
     name: Example 2
     description: 
@@ -155,6 +156,7 @@ MonoBehaviour:
     - abilityID: 2
       needLevel: 1
       level: 1
+    restPoints: 0
   - id: 2
     name: Example 3
     description: 
@@ -226,6 +228,7 @@ MonoBehaviour:
     - abilityID: 4
       needLevel: 1
       level: 1
+    restPoints: 0
   - id: 3
     name: Outside
     description: 
@@ -285,3 +288,64 @@ MonoBehaviour:
     meleeAttackID: 0
     longAttackID: 0
     abilities: []
+    restPoints: 0
+  - id: 4
+    name: Example Outside 4
+    description: 
+    art: {fileID: 8997866966031257783, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    level: 1
+    maxLevel: 99
+    main: c201000064000000330000002d00000028000000230000001e000000c20100006400000000000000
+    special:
+    - 0.011
+    - 0.019
+    - 0
+    - 0
+    expData: 1e000000140000001e00000014000000
+    elementID: 0
+    actExp: 0
+    nedExp: 50
+    bases:
+    - 50
+    - 30
+    - 6
+    - 5.5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    plus: 90010000460000002d00000028000000230000001e000000190000001e00000023000000230000001e000000
+    rate:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 6
+    - 4
+    - 15
+    - 15
+    flat: 00000000000000000000000000000000000000000000000000000000
+    learning:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    max:
+    - 0.5
+    - 0.5
+    yes: 0000
+    face: {fileID: 21300000, guid: e3e53d45e1f347e2b0cd3ee6c4eea3d9, type: 3}
+    model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+    meleeAttackID: 0
+    longAttackID: 0
+    abilities: []
+    restPoints: 5

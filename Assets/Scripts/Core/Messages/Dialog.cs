@@ -34,6 +34,7 @@ namespace Core.Messages
 
         private void Start()
         {
+            IsSomeMessageOn = true;
             if (messages.Length == 0) messages = new []{new TextData("")};
             switch (type)
             {
@@ -51,7 +52,6 @@ namespace Core.Messages
 
         private void Update()
         {
-            IsSomeMessageOn = true;
             switch (type)
             {
                 case TextBoxType.Message:

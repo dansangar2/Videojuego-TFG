@@ -19,6 +19,7 @@ namespace Entities
         [SerializeField] private int longAttackID; 
         //<Ability, int[abilityLevel, neededLevel]>
         [SerializeField] private SpecialAbility[] abilities = {};
+        [SerializeField] private int restPoints = 5;
         
         #endregion
         
@@ -108,6 +109,9 @@ namespace Entities
                     b => b.Level); 
         }
     
+        /**<summary>The points that the character has to use in the rest zone.</summary>*/ 
+        public int RestPoints { get => restPoints; set => restPoints = value; }
+        
         #endregion
         
         #region METHODS

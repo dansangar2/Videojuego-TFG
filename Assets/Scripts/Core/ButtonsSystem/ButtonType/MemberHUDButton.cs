@@ -1,11 +1,14 @@
-﻿using Data;
+﻿using Core.Saves;
 using Entities;
 using UnityEngine.UI;
 
-namespace Core.HUDs
+namespace Core.ButtonsSystem.ButtonType
 {
-    public class Member: BaseHUD
+    /**<summary>The HUD and data of the characters.</summary>*/
+    public class MemberHUDButton: BaseHUDButton
     {
+        #region MyRegion
+
         public Text bloodPoints;
         public Text karmaPoints;
         public Text bloodMax;
@@ -14,7 +17,12 @@ namespace Core.HUDs
         public Text level;
         public Slider bp;
         public Slider kp;
+        /**<summary>It indicates if is a button or only a HUD.</summary>*/
         public bool onlyHUD;
+
+        #endregion
+
+        #region SYSTEM
 
         private new void Start()
         {
@@ -27,16 +35,20 @@ namespace Core.HUDs
             if (onlyHUD) return;
             base.Update();
         }
+
+        #endregion
         
+        /**<summary>Set up the data of this Character HUD with the new ID.</summary>*/
         public new void SetUp(int nId) 
         { 
             base.SetUp(nId);
             UpdateUI();
         }
         
+        /**<summary>Update the data of the character HUD with the current data of the CharacterID.</summary>*/
         public void UpdateUI()
         {
-            Character character = GameData.CharacterDB.FindByID(id); 
+            Character character = SavesFiles.GetSave().Characters[id]; 
             itemIcon.sprite = character.Face; 
             elementIcon.sprite = character.Element.Icon;
             bloodPoints.text = character.CurrentBloodPoints.ToString();

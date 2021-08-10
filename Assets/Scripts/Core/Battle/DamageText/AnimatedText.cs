@@ -7,6 +7,8 @@ namespace Core.Battle.DamageText
 {
     public class AnimatedText : Text
     {
+        #region ATTRIBUTES
+
         /**<summary>The direction of the hit animation.</summary>*/
         public Vector3 hitDirection;
         //public Vector3 position;
@@ -30,6 +32,8 @@ namespace Core.Battle.DamageText
         private float _v = 10f;
         /**<summary>The time of the </summary>*/
         private float _t = 1f;
+
+        #endregion
 
         protected override void Start()
         {
@@ -66,6 +70,8 @@ namespace Core.Battle.DamageText
             
         }
 
+        #region ANIMATION
+
         /**<summary>Instance a new Text with the damage number.</summary>*/
         public void SetDamage(int damage, Fighter fighter, AttackType type)
         {
@@ -78,9 +84,9 @@ namespace Core.Battle.DamageText
             text = Mathf.Abs(damage).ToString(); 
             if(type == AttackType.Blood) 
             {
-                    if (fall) force = GetThrow(fighter.character.MaxKarmaPoints,  damage);
-                    else force = 1;
-                    color = damage < 0 ? Color.green : Color.red;
+                if (fall) force = GetThrow(fighter.character.MaxKarmaPoints,  damage);
+                else force = 1;
+                color = damage < 0 ? Color.green : Color.red;
             }
             else
             {
@@ -109,6 +115,10 @@ namespace Core.Battle.DamageText
             Instantiate(transform.parent.gameObject, position, Quaternion.identity);
         }
 
+        #endregion
+
+        #region METHODS
+
         public void SetVelocity(float velocity = 0.1f, float acceleration = 0.1f)
         {
             _t = 0;
@@ -120,5 +130,7 @@ namespace Core.Battle.DamageText
         {
             return Mathf.Max(Mathf.Min(fighter / (fighter - damage), 5f), 1f);
         }
+
+        #endregion
     }
 }

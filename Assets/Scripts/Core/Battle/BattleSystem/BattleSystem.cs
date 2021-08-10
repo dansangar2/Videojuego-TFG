@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Core.Battle.DamageText;
-using Core.HUDs;
+using Core.ButtonsSystem.ButtonList;
+using Core.ButtonsSystem.ButtonType;
 using Core.Messages;
 using Core.Saves;
 using UnityEngine;
@@ -11,45 +12,61 @@ namespace Core.Battle.BattleSystem
     public partial class BattleSystem : MonoBehaviour
     {
 
+        #region ATTRIBUTES
+
+        /**<summary>The array with the enemies.</summary>*/
         public int[] enemiesId;
+        /**<summary>The max member party.</summary>*/
         public int maxMembers = 3;
-        public Member memberBase;
-        public AbilityList abilitiesOf;
+        /**<summary>The prefab for character HUBs.</summary>*/
+        public MemberHUDButton memberBase;
+        /**<summary>The ability list for the player party.</summary>*/
+        public AbilityButtonsList abilitiesOf;
+        /**<summary>The message text.</summary>*/
         public Message message;
+        /**<summary>The velocity of the character blink.</summary>*/
         public float velocity = 0.003f;
         
+        /**<summary>The array with the fighter of the battle.</summary>*/
         private Fighter[] _fighters = {};
         
+        /**<summary>The array with the experience gained [charThatGained, enemyFrom].</summary>*/
         private int[,] _experienceGained;
         
+        /**<summary>Current Character turn.</summary>*/
         private int _currentTurn;
+        /**<summary>The current state of the battle.</summary>*/
         private BattleState _state;
 
+        /**<summary>The current action of the character selected.</summary>*/
         private ActionType _actionType;
 
-        private string _scene;
+        /**<summary>The scene where you returned.</summary>*/
+        private string _scene = "RestSystemTest";
+
+        #endregion
 
         private void Start()
         {
+            Message.SetExitsMessage();
             SavesFiles.CurrentSave = 0;
             TestSetUp();
             
-            memberBase.gameObject.SetActive(false);
-            memberBase.onlyHUD = true;
-            _damageText = damageText.transform.GetComponentInChildren<AnimatedText>();
-            //_damageText = damageText.transform.GetComponentInChildren<Text>();
             message.type = TextBoxType.Message;
             message.up = true;
             message.messages = GenEnemyMessage();
-
             Instantiate(message, transform);
             
             memberBase.gameObject.SetActive(false);
+            memberBase.onlyHUD = true;
+            
+            _animatedText = animatedText.transform.GetComponentInChildren<AnimatedText>();
 
-            _state = BattleState.Start;
             InitFighters();
             OrderBySpeed();
             GetExperienceFor();
+            
+            _state = BattleState.Start;
         }
         
         private void Update()
@@ -93,20 +110,24 @@ namespace Core.Battle.BattleSystem
                         message.messages = gainMessage;
                         Instantiate(message, transform);
                     }
-                    else if(!Message.ThereAreMessage()) SceneManager.LoadScene("MainMenu");
+                    else if(!Message.ThereAreMessage()) SceneManager.LoadScene(_scene);
                     break;
             }
         }
         
         #region GETTERS
 
+        /**<summary>Get the group of fighters.
+        <param name="enemy">If it's true, then it return the enemies, else, it return the party.
+        </param></summary>*/
         public Fighter[] GetGroup(bool enemy = false)
         {
             return enemy ? _fighters.Where(f => f.isEnemy).ToArray() : 
-                _fighters.Where(f => !(f.isEnemy && f.character.IsKo())).ToArray();
+                _fighters.Where(f => !(f.isEnemy || f.character.IsKo())).ToArray();
         }
+        /**<summary>Current Fighter turn.</summary>*/
         private Fighter GetFighterTurn() { return _fighters[_currentTurn]; }
-        private Fighter GetFighterTarget() { return _fighters[_posOfTarget]; }
+        //private Fighter GetFighterTarget() { return _fighters[_posOfTarget]; }
 
         #endregion
         

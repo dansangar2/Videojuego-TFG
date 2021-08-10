@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Core.Buttons;
+using Core.ButtonsSystem;
+using Core.ButtonsSystem.ButtonType;
 using Core.Controls;
 using Data;
 using Entities;
@@ -19,7 +20,7 @@ namespace Core.Battle.BattleSystem
         private int _posOfTarget;
         private bool _lastActionSelectAbility;
         
-        #region CHOOSETURN
+        #region CHOOSETARGET
         
         private void UseAbility(bool enemies)
         {
@@ -170,8 +171,8 @@ namespace Core.Battle.BattleSystem
                     {
                         _actionType = ActionType.None;
                     }
-                    if(Button.Message.Equals("")) return;
-                    _abilityInUse = GameData.AbilityDB.FindByID(Convert.ToInt32(Button.Message));
+                    if(GenericButton.Message.Equals("")) return;
+                    _abilityInUse = GameData.AbilityDB.FindByID(Convert.ToInt32(GenericButton.Message));
                     _lastActionSelectAbility = true;
                     _actionType = ActionType.Process;
                     //Destroy(transform.parent.GetChild(transform.GetChild(0).childCount-1).gameObject);

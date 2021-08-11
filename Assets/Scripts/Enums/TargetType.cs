@@ -21,6 +21,7 @@
         All,
         MoreThanOne,
         Random,
-        Himself
+        Himself,
+        AllExceptHimself
     }
 }

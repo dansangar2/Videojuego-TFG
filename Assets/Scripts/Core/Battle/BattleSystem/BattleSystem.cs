@@ -4,6 +4,7 @@ using Core.ButtonsSystem.ButtonList;
 using Core.ButtonsSystem.ButtonType;
 using Core.Messages;
 using Core.Saves;
+using Entities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -83,7 +84,7 @@ namespace Core.Battle.BattleSystem
                     _state = BattleState.TurnAction;
                     break;
                 case BattleState.TurnAction:
-                    if (GetFighterTurn().isEnemy) EnemyTurn();
+                    if (FighterTurn.isEnemy) EnemyTurn();
                     else CharacterTurn();
                     break;
                 case BattleState.Lose:
@@ -100,10 +101,10 @@ namespace Core.Battle.BattleSystem
                     else if(!Message.ThereAreMessage()) SceneManager.LoadScene("BattleSystemTest");
                     break;
                 case BattleState.Win:
-                    if (_fighters.Any(f => !f.member.Equals(null)))
+                    if (PartyFighter.Any(f => !f.member.Equals(null)))
                     {
                         TextData[] gainMessage = {new TextData("You won!!!")};
-                        foreach (Fighter fighter in _fighters)
+                        foreach (Fighter fighter in PartyFighter)
                         {
                             Destroy(fighter.member.gameObject);
                         }
@@ -122,14 +123,29 @@ namespace Core.Battle.BattleSystem
         </param></summary>*/
         public Fighter[] GetGroup(bool enemy = false)
         {
-            return enemy ? _fighters.Where(f => f.isEnemy).ToArray() : 
+            return enemy ? _fighters.Where(f => f.isEnemy && !f.character.IsKo()).ToArray() : 
                 _fighters.Where(f => !(f.isEnemy || f.character.IsKo())).ToArray();
         }
         /**<summary>Current Fighter turn.</summary>*/
-        private Fighter GetFighterTurn() { return _fighters[_currentTurn]; }
+        private Fighter FighterTurn => _fighters[_currentTurn];
         //private Fighter GetFighterTarget() { return _fighters[_posOfTarget]; }
 
-        #endregion
+        /**<summary>Get the character of current turn.</summary>*/
+        public Character CurrentTurn => _fighters[_currentTurn].character;
         
+        /**<summary>Get all party members fighting.</summary>*/
+        public Fighter[] PartyFighter => GetGroup();
+
+        /**<summary>Get all enemies fighting.</summary>*/
+        public Fighter[] EnemiesFighter => GetGroup(true);
+
+        /**<summary>Get all party members fighting.</summary>*/
+        public Character[] Party => _fighters.Where(f => !f.isEnemy).Select(f => f.character).ToArray();
+
+        /**<summary>Get all enemies fighting.</summary>*/
+        public Character[] Enemies => _fighters.Where(f => f.isEnemy).Select(f => f.character).ToArray();
+
+        #endregion
+
     }
 }

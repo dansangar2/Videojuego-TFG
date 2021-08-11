@@ -7,7 +7,7 @@ namespace Core.ButtonsSystem.ButtonType
     /**<summary>The HUD and data of the characters.</summary>*/
     public class MemberHUDButton: BaseHUDButton
     {
-        #region MyRegion
+        #region ATTRIBUTES
 
         public Text bloodPoints;
         public Text karmaPoints;

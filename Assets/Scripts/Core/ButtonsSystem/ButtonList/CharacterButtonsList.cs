@@ -15,6 +15,7 @@ namespace Core.ButtonsSystem.ButtonList
         /**<sumary>The button prefab.</sumary>*/
         public MemberHUDButton prefab;
 
+        /**<sumary>The Character gets.</sumary>*/
         public static int Pos = -1;
         
         public void Start()

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Core.ButtonsSystem;
 using Core.ButtonsSystem.ButtonType;
 using Core.Controls;
 using Data;
@@ -57,7 +56,10 @@ namespace Core.Battle.BattleSystem
                     AttackAll(fighters, true, _abilityInUse.NumberOfTarget);
                     break;
                 case TargetRange.Himself:
-                    SelectTarget(new [] {GetFighterTurn()});
+                    SelectTarget(new [] {FighterTurn});
+                    break;
+                case TargetRange.AllExceptHimself:
+                    AttackAll(fighters.Where(c => c.character.ID != CurrentTurn.ID).ToArray());
                     break;
             }
         }
@@ -80,9 +82,11 @@ namespace Core.Battle.BattleSystem
                 _target = _target < 0 ? fighters.Length-1 : _target;
                 fighters[_target].CharacterMark(true);
             }
+
+            if (_target < 0 || _target >= fighters.Length) _target = 0;
             fighters[_target].CharacterBlink();
             
-            if(Input.GetKeyDown(ControlsKeys.Ok)) DoAttack(GetFighterTurn(), _fighters[fighters[_target].id]);
+            if(Input.GetKeyDown(ControlsKeys.Ok)) DoAttack(FighterTurn, _fighters[fighters[_target].id]);
         }
 
         private void AttackAll(Fighter[] fighters, bool random = false, int numberOfRandom = 1)
@@ -118,7 +122,7 @@ namespace Core.Battle.BattleSystem
             { 
                 fighter.CharacterMark();
             }
-            DoAttack(GetFighterTurn(), fighters);
+            DoAttack(FighterTurn, fighters);
         }
         
         #endregion
@@ -132,33 +136,33 @@ namespace Core.Battle.BattleSystem
                 //Choose action
                 case ActionType.None when Input.GetKeyDown(ControlsKeys.Ok):
                     _actionType = ActionType.Melee;
-                    GetFighterTurn().CharacterMark();
+                    FighterTurn.CharacterMark();
                     break;
                 case ActionType.None when Input.GetKeyDown(ControlsKeys.ActionButton1) || _lastActionSelectAbility:
                     _lastActionSelectAbility = false;
-                    abilitiesOf.character = GetFighterTurn().character;
+                    abilitiesOf.character = FighterTurn.character;
                     _abilityList = Instantiate(abilitiesOf, transform.GetChild(0));
                     //abilitiesOf.SetUp(_fighters[_currentTurn].character.ID,
                     //    transform.GetChild(0).transform);
                     _actionType = ActionType.Ability;
-                    GetFighterTurn().CharacterMark();
+                    FighterTurn.CharacterMark();
                     break;
                 case ActionType.None when Input.GetKeyDown(ControlsKeys.ActionButton2):
                     //_actionType = ActionType.Item;
                     break;
                 case ActionType.None when Input.GetKeyDown(ControlsKeys.Back):
                     _actionType = ActionType.Long;
-                    GetFighterTurn().CharacterMark();
+                    FighterTurn.CharacterMark();
                     break;
                 //Melee attack
                 case ActionType.Melee:
-                    _abilityInUse = GetFighterTurn().character.MeleeAttack;
+                    _abilityInUse = FighterTurn.character.MeleeAttack;
                     _actionType = ActionType.Process;
                     //UseAbility(false);
                     break;
                 //Long attack
                 case ActionType.Long:
-                    _abilityInUse = GetFighterTurn().character.LongAttack;
+                    _abilityInUse = FighterTurn.character.LongAttack;
                     _actionType = ActionType.Process;
                     //UseAbility(false);
                     break;
@@ -184,7 +188,7 @@ namespace Core.Battle.BattleSystem
                     UseAbility(false);
                     break;
                 default:
-                    GetFighterTurn().CharacterBlink(velocity);
+                    FighterTurn.CharacterBlink(velocity);
                     break;
                 
             }

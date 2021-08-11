@@ -160,36 +160,16 @@ namespace Core.Battle.BattleSystem
                 }
 
                 if(fighter.character.IsKo() && fighter.isEnemy) idsToDestroy.Add(fighter.id);
-                if(fighter.character.IsKo() && !fighter.isEnemy) fighter.meshRenderer.material.color = Color.red;
+                if(!fighter.isEnemy) fighter.member.UpdateUI();
+                if(fighter.character.IsKo()) fighter.meshRenderer.material.color = Color.red;
             }
-            foreach (Fighter f in GetGroup()) { f.member.UpdateUI(); }
+            //foreach (Fighter f in GetGroup()) { f.member.UpdateUI(); }
             UpdateBattlefield(idsToDestroy.OrderBy(i => i).ToArray());
             _actionType = ActionType.None;
             _lastActionSelectAbility = false;
             GenericButton.Message = "";
         }
 
-        public void UpdateBattlefield(params int[] ids)
-        {
-            for (int id = ids.Length-1; id >= 0; id--)
-            {
-                AddExperience(ids);
-                Destroy(_fighters[ids[id]].meshFilter.gameObject);
-                Destroy(_fighters[ids[id]]);
-                for (int i = ids[id]; i < _fighters.Length-1; i++) 
-                {
-                    _fighters[i] = _fighters[i+1]; 
-                    _fighters[i].id--;
-                } 
-                Array.Resize(ref _fighters, _fighters.Length - 1);
-                _orderBySpeed = _fighters.OrderByDescending(f => f.character.Agility).Select(f => f.character.ID)
-                    .ToArray();
-            }
-            if (GetGroup().Length == 0) _state = BattleState.Lose;
-            else if (GetGroup(true).Length==0) _state = BattleState.Win;
-            else _state = BattleState.Turn;
-        }
-        
         public void Damage(Fighter fighter, int damage)
         {
             fighter.CharacterMark();
@@ -198,6 +178,28 @@ namespace Core.Battle.BattleSystem
             else fighter.character.ReduceCurrentKarma(damage);
         }
         
+        public void UpdateBattlefield(params int[] ids)
+        {
+            for (int id = ids.Length-1; id >= 0; id--)
+            {
+                AddExperience(ids);
+                //Destroy(_fighters[ids[id]].meshFilter.gameObject);
+                //Destroy(_fighters[ids[id]]);
+                /*for (int i = ids[id]; i < _fighters.Length-1; i++) 
+                {
+                    _fighters[i] = _fighters[i+1]; 
+                    _fighters[i].id--;
+                } 
+                Array.Resize(ref _fighters, _fighters.Length - 1);
+                */
+                _orderBySpeed = _fighters.OrderByDescending(f => f.character.Agility).Select(f => f.character.ID)
+                    .ToArray();
+            }
+            if (PartyFighter.Length == 0) _state = BattleState.Lose;
+            else if (EnemiesFighter.Length==0) _state = BattleState.Win;
+            else _state = BattleState.Turn;
+        }
+
         #endregion
 
         #region EXPERIENCE
@@ -214,13 +216,13 @@ namespace Core.Battle.BattleSystem
                     //character level is lower o upper than the enemy.
                     int exp = Convert.ToInt32(
                         //The experience gained is reduced if the character isn't in the battlefield.
-                        Mathf.Round(GetGroup(true)[j].character.NedExp * 
+                        Mathf.Round(EnemiesFighter[j].character.NedExp * 
                                     //The max increment of experience is x2 if the enemy it's 20 level upper.
                                     (1 + Convert.ToSingle(
-                                        GetGroup(true)[j].character.Level 
-                                        - SavesFiles.GetParty()[i].Level)/20)));
+                                        EnemiesFighter[j].character.Level 
+                                        - SavesFiles.GetSave().GetCharacter(i).Level)/20)));
                     // The min is 1.
-                    exp = Mathf.Min(exp, GetGroup(true)[j].character.NedExp*2);
+                    exp = Mathf.Min(exp, EnemiesFighter[j].character.NedExp*2);
                     exp = Mathf.Max(1, exp);
                     
                     experienceGained[SavesFiles.GetParty()[i].ID,j] = exp;

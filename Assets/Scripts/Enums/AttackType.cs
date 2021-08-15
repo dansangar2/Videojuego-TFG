@@ -7,6 +7,8 @@ namespace Enums
     public enum AttackType
     {
         Blood,
-        Karma
+        Karma,
+        AbsorbBlood,
+        AbsorbKarma
     }
 }

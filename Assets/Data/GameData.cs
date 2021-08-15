@@ -1,4 +1,5 @@
 using Data.Database;
+using Entities;
 using UnityEditor;
 
 namespace Data
@@ -13,5 +14,6 @@ namespace Data
         public static readonly Elements ElementDB = (Elements)AssetDatabase.LoadAssetAtPath(CurrentDirectory + "ElementDB.asset", typeof(Elements));
         public static readonly Abilities AbilityDB = (Abilities)AssetDatabase.LoadAssetAtPath(CurrentDirectory + "AbilityDB.asset", typeof(Abilities));
         public static readonly Profiles ProfileDB = (Profiles)AssetDatabase.LoadAssetAtPath(CurrentDirectory + "ProfileDB.asset", typeof(Profiles));
+        public static readonly Statuses StatusDB = (Statuses)AssetDatabase.LoadAssetAtPath(CurrentDirectory + "StatusDB.asset", typeof(Statuses));
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Data;
 using System.Globalization;
+using System.Linq;
 using Data;
 using Enums;
 using UnityEngine;
+using Utils;
 using Random = UnityEngine.Random;
 
 namespace Entities
@@ -17,9 +19,9 @@ namespace Entities
         #region ATTRIBUTES
         
         [SerializeField] private string formula = "4*{a.atk} - 2*{a.def} < 0 ? 1 : 4*{a.atk} - 2*{a.def}"; 
-        [SerializeField] private AttackType type = AttackType.Blood; 
-        [SerializeField] private TargetRange range = TargetRange.One; 
-        [SerializeField] private TargetType target = TargetType.Enemy; 
+        [SerializeField] private AttackType type = AttackType.Blood;
+        [SerializeField] private TargetRange range = TargetRange.One;
+        [SerializeField] private TargetType target = TargetType.Enemy;
         [SerializeField] private Sprite icon; 
         [SerializeField] private int hits = 1; 
         [SerializeField] private int numberOfTarget = 1; 
@@ -28,24 +30,9 @@ namespace Entities
 
         //power increment/down interval/upper interval
         [SerializeField] private float[] stats = {1f, 0.8f, 1.2f};
-
-        /**<summary>
-        bases for = {pic, div, uiv}
-        </summary>*/ 
-        [SerializeField] protected float[] bases = {1, 0.8f, 1.2f};
-        /**<summary>
-        rate for = {pic, div, uiv}
-        </summary>*/ 
-        [SerializeField] protected float[] rate = {1, 1, 1};
-        /**<summary>
-        learning for = {pic, div, uiv}
-        </summary>*/ 
-        [SerializeField] protected float[] learning = {1, 1, 1};
-        [SerializeField] private int maxLevel = 10; 
         [SerializeField] private bool canRepeatRandomTarget; 
-        [SerializeField] private int actExp; 
-        [SerializeField] private int nedExp; 
-        [SerializeField] private int[] expData = {10, 5, 15, 10};
+        
+        [SerializeField] private SerializableDictionary<StatusOf, float> statusesToDo = new SerializableDictionary<StatusOf, float>();
         
         private bool UseCharacterElement  => Element == null;
 
@@ -57,7 +44,7 @@ namespace Entities
         public Ability(int id): base(id) { }
       
         /**<summary>Ability clone constructor</summary>*/ 
-        public Ability(Ability ability, int level = 1): base(ability)
+        public Ability(Ability ability): base(ability)
         { 
             formula = ability.formula; 
             type = ability.type; 
@@ -65,19 +52,15 @@ namespace Entities
             hits = ability.hits; 
             range = ability.range; 
             numberOfTarget = ability.numberOfTarget; 
-            target = ability.target; 
-            maxLevel = ability.maxLevel; 
+            target = ability.target;
             cost = ability.cost; 
             elementID = ability.elementID; 
-            canRepeatRandomTarget = ability.canRepeatRandomTarget; 
-            for (int i = 0; i < stats.Length; i++) 
-            { 
-                bases[i] = ability.bases[i]; 
-                rate[i] = ability.rate[i]; 
-                learning[i] = ability.learning[i];
-            } 
-            expData = ability.expData; 
-            Update(level);
+            canRepeatRandomTarget = ability.canRepeatRandomTarget;
+            for (int i = 0; i < ability.statusesToDo.Count; i++)
+            {
+                statusesToDo.Add(ability.statusesToDo.Keys.ToArray()[i],
+                    ability.statusesToDo.Values.ToArray()[i]);
+            }
         }
         
         #endregion
@@ -107,27 +90,22 @@ namespace Entities
         /**<summary>Set the element of the ability. If it's null,
         then the ability element is being of the character.</summary>*/
         public Element Element => GameData.ElementDB.FindByID(elementID);
-        /**<summary>Values for Bases.</summary>*/
-        public float[] Bases { get => bases; set => bases = value; }
-        /**<summary>Values for Rates.</summary>*/
-        public float[] Rate { get => rate; set => rate = value; }
-        /**<summary>Learning values.</summary>*/
-        public float[] Learning { get => learning; set => learning = value; }
-        /**<summary>Max Level of the ability.</summary>*/
-        public int MaxLevel { get => maxLevel; set => maxLevel = value > 0 ? value > 15 ? 15 : value : 1; }
         /**<summary>Cost for to do the ability.</summary>*/
-        public int Cost { get => cost; set => cost = value > 0? value : 1; }
+        public int Cost { get => cost; set => cost = value > 0? value : 0; }
         /**<summary>Can repeat the target.</summary>*/
         public bool CanRepeatRandomTarget { get => canRepeatRandomTarget; set => canRepeatRandomTarget = value; }
-        /**<summary>Need points for to level up the ability.</summary>*/
-        public int NedExp => nedExp;
-        /**<summary>Current point for level up.</summary>*/
-        public int ActExp => actExp;
-        /**<summary>Values for calculate exp.</summary>*/
-        public int[] ExpData { get => expData; set => expData = value; }
         /**<summary>Formula that indicates the final damage.</summary>*/
         public string Formula { get => formula; set => formula = value; }
-        
+        /**<summary>The stats in one array.
+        <para>0 -> power increment.</para>
+        1 -> down interval.
+        <para>2 -> up interval.</para></summary>*/
+        public float[] Stats => stats;
+
+        /**<summary>Get all statuses to do with the possibility.</summary>*/
+        public SerializableDictionary<StatusOf, float> Statuses => statusesToDo;
+
+
         /**<summary>
         Return a pair of Icons that represent the attack and element of ability. 
         <para>If the ability hasn't a element, then return empty image.</para>
@@ -142,36 +120,70 @@ namespace Entities
         #endregion
         
         #region METHODS
-             
-        /**<summary>Set all parameters of the item.</summary>*/ 
-        public void SetAll(float[] nBase, float[] nRate, float[] nLearning, int[] nExp, int level)
-        { 
-            for (int i = 0; i < 3; i++) 
-            { 
-                MainSet(i, nBase[i], nRate[i], nLearning[i]);
-            } 
-            SetExperienceCurveParameters(nExp); 
-            Update(level);
-        }
 
-        /**<summary>Update All parameters of ability, using the current level.</summary>*/ 
-        public void Update(int level) 
-        { 
-            for (int i = 0; i < 3; i++) 
-            { 
-                stats[i] = Calculate(i, level);
+        /**<summary>
+        Add Multiplicity has 2 functionalities:
+        <para>- Add new Type with its multiplicity multiplicity.</para>
+        - Change the value of existing Type multiplicity.
+        <param name="statusID">The ID of the status that the ability can do.</param>
+        <param name="possibility">Possibility of that the attack can do it.</param>
+        <param name="toChange">Default yes. If it's true, it'll change the value of key if it exits</param>
+        </summary>*/ 
+        public void AddStatusToDo(int statusID, float possibility, float[] incrementPowerPlus = null, bool toChange = true)
+        {
+            possibility = possibility < -1 ? -1 : possibility > 1 ? 1 : possibility;
+            if (statusesToDo.Select(s => s.Key.Status.ID).Contains(statusID))
+            {
+                StatusOf of = statusesToDo
+                    .First(s => s.Key.Status.ID == statusID).Key;
+                if (!toChange) return;
+                statusesToDo[of] = possibility;
+                incrementPowerPlus ??= of.IncrementPowerPlus;
+                
+                of.SetIncrements(incrementPowerPlus); 
+            }
+            else
+            {
+                incrementPowerPlus ??= new []{1f,1f,1f,1f,1f,1f,1f,1f,1f,1f,1f,1f,1f,1f};
+                statusesToDo.Add(new StatusOf(statusID, incrementPowerPlus), possibility);
             } 
-            UpdateExperience(level);
         }
-            
-        /**<summary>Get the final value of parameter of "index". </summary>*/ 
-        private float Calculate(int index, int level) 
+     
+        /**<summary>
+        Delete Multiplicity.
+        <para>Remove from the Dictionary the type and the multiplicity passing by parameter</para>
+        <param name="statusID">The ID of the status to remove</param>
+        </summary>*/ 
+        public void RemoveStatus(int statusID) 
         { 
-            return bases[index]*Mathf.Pow(rate[index],level)*LearningRate(index, level);
+            if (statusesToDo.Select(s => s.Key.Status.ID).Contains(statusID)) 
+            { 
+                statusesToDo.Remove(statusesToDo
+                    .First(s => s.Key.Status.ID == statusID).Key); 
+            } 
         }
         
-        /**<summary>Obtain the damage that does the user and received the target.</summary>*/ 
-        public int Damage(Character user, Character destiny) 
+        /**<summary>Obtain the statuses.</summary>*/ 
+        public StatusOf[] GetAllStatuses()
+        {
+            return statusesToDo.Keys.ToArray();
+        }
+        
+        /**<summary>Obtain the statuses.</summary>*/ 
+        public float GetPossibilityOfStatus(int statusID)
+        {
+            if (statusesToDo.Select(s => s.Key.Status.ID).Contains(statusID))
+            {
+                return statusesToDo[statusesToDo.First(s => s.Key.Status.ID == statusID).Key];
+            }
+
+            return 0;
+        }
+        
+        /**<summary>Obtain the damage value without the intervals or power extra.
+        <param name="user">Character that to do the attack.</param>
+        <param name="destiny">Character that received the damage.</param></summary>*/ 
+        public int BaseDamage(Character user, Character destiny) 
         {
             #region Init
             
@@ -224,82 +236,55 @@ namespace Entities
             }
             
             #endregion
+
+            int finalDamage = Convert.ToInt32(dt.Compute(damage, ""));
+
+            //ToDoADamage(finalDamage, destiny, user);
             
-            return  Convert.ToInt32(
-                Convert.ToInt32(dt.Compute(damage, ""))
-                *Random.Range(DownInterval, UpperInterval)
-                *PowerIncrement);
-            
-        }
-        
-        /**<summary>Get the learning rate.</summary>*/
-        private float LearningRate(int index, int level)
-        { 
-            if (level <= 2) return 1; 
-            return learning[index] + (1 - learning[index]) * 
-                Mathf.Pow(level-1 - Convert.ToSingle((MaxLevel-1) / 2), 2) / 
-                Mathf.Pow(Convert.ToSingle((MaxLevel-1) / 2), 2);
-        }
-        
-        /**<summary>
-        Set the values of normal Main
-        <param name="index">The index of stat. Example 0 = mbp</param>
-        <param name="baseValue">The base Value of the stat</param>
-        <param name="rateValue">The rate Value of the stat</param>
-        <param name="learningValue">The exponent Value of the stat</param>
-        </summary>*/ 
-        private void MainSet(int index, float baseValue, float rateValue, float learningValue) 
-        { 
-            bases[index] = baseValue; 
-            rate[index] = rateValue; 
-            learning[index] = learningValue;
-        }
-        
-        /**<summary>Set the values of experience curve</summary>*/ 
-        private void MainSet(int value1, int value2, int value3, int value4) 
-        { 
-            ExpData[0] = value1; 
-            ExpData[1] = value2; 
-            ExpData[2] = value3; 
-            ExpData[3] = value4;
+            return finalDamage;
+
         }
 
-        /**<summary>
-        <para>ROUND(e[0]*(level - 1)^(0.9+(e[2]/250))*l*(level+1)/(6+l^2)/50/e[3])+(l-1)*e[1])</para>
-        <para>Where "l" is the current level</para>
-        Where "e" it´s the expData
-        </summary>*/ 
-        private int MainFormulaExperience(int level) 
-        { 
-            int nextLevel = level + 1; 
-            return Convert.ToInt32(Mathf.Round(ExpData[0] 
-                *Mathf.Pow(nextLevel - 1, 0.9f+Convert.ToSingle(ExpData[2])/250) 
-                *nextLevel 
-                *(nextLevel+1)/(6+Mathf.Pow(nextLevel, 2)/50/ExpData[3])+(nextLevel-1) 
-                *ExpData[1])); 
-        }
-        
-        /**<summary>
-        Update the experience of ability, If actExp >= nedExp, nedExp is updated, using the current level.
-        </summary>*/ 
-        public bool GainExperience(int experience) 
-        { 
-            if ((actExp += experience) < 999999999) actExp += experience;
-            else actExp = 999999999; 
-            return actExp <= nedExp; 
-        }
-        
-        /**<summary>
-        Update the experience from user, If actExp >= nedExp, nedExp is updated, using the current level.
-        </summary>*/ 
-        public void UpdateExperience(int level) { nedExp = level < MaxLevel ? MainFormulaExperience(level) : 0; }
-        
-        /**<summary>Set the experience value curve.</summary>*/ 
-        public void SetExperienceCurveParameters(int[] expValues) 
-        { 
-            for (int i = 0; i < expValues.Length; i++) { expData[i] = expValues[i]; } 
+        /**<summary>Get and do the final damage to the character.
+        <param name="user">Character that to do the attack.</param>
+        <param name="destiny">Character that received the damage.</param>
+        <param name="extra">The 3 parameters that increment o decrement the intervals(1-2)
+        and power extra(0).</param></summary>*/ 
+        public int Damage(Character user, Character destiny, params float[] extra)
+        {
+            extra ??= new[] {1f, 1f, 1f};
+            extra = extra.Length < 3 ? new []{1f,1f,1f} : extra;
+            int damage = Convert.ToInt32(BaseDamage(user, destiny)
+                                         *Random.Range(DownInterval*extra[1], 
+                                                      UpperInterval*extra[2])
+                                         *PowerIncrement*extra[0]);
+            damage = damage < 999999999 ? damage > -999999999 ? damage : -999999999 : 999999999;
+            ToDoADamage(damage, destiny, user);
+            return damage;
         }
 
+        /**<summary>Apply the damage to the character.</summary>*/
+        public void ToDoADamage(int damage, Character destiny, Character user)
+        {
+            switch (type)
+            {
+                case AttackType.Blood:
+                    destiny.ReduceCurrentBlood(damage);
+                    break;
+                case AttackType.Karma:
+                    destiny.ReduceCurrentKarma(damage);
+                    break;
+                case AttackType.AbsorbBlood:
+                    destiny.ReduceCurrentBlood(damage);
+                    user.ReduceCurrentBlood(-damage);
+                    break;
+                case AttackType.AbsorbKarma:
+                    destiny.ReduceCurrentKarma(damage);
+                    user.ReduceCurrentKarma(-damage);
+                    break;
+            }
+        }
+        
         #endregion
     }
 }

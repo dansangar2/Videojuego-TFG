@@ -9,10 +9,10 @@ namespace Data.Windows.ManageStats
     {
         
         private static EditorWindow _window;
-        private static Ability _newAbi;
+        private static SpecialAbility _newAbi;
         
         
-        public static void Window(Ability item)
+        public static void Window(SpecialAbility item)
         {
             _window = GetWindow<AbilityByLevelHelp>();
             _window.maxSize = new Vector2(1300, 300);

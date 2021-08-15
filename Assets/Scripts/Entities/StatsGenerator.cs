@@ -102,13 +102,17 @@ namespace Entities
                 MainSet(i, nBase[i+7], nPlus[i+7], nRate[i+7], nMax[i]);
             } 
             for (int i = 0; i < yes.Length; i++) 
-            { 
+            {
                 MainSet(i, nBase[i+9], nPlus[i+9], nRate[i+9], nYes[i]);
-            } 
+            }
             SetExperienceCurveParameters(nExp); 
-            Update(); 
-            Main[7] = Main[0]; 
-            Main[8] = Main[1];
+            Update();
+            foreach (var VARIABLE in main)
+            {
+                Debug.Log(VARIABLE);
+            }
+            main[7] = main[0]; 
+            main[8] = main[1];
         }
 
         #endregion
@@ -140,19 +144,21 @@ namespace Entities
         /**<summary>Update the Regenerate Karma Rate from user, using the current level.</summary>*/ 
         public void UpdateRegenerateKarma() { Special[3] = MainFormulaForRegenerateStats(1); }
     
-        /**<summary>Update All parameters from user, using the current level.</summary>*/ 
-        public void Update() 
+        /**<summary>Update All parameters from user, using the current level.
+        <param name="updateExp">Uses for update the need exp or not</param></summary>*/
+        public void Update(bool updateExp = true) 
         { 
-            for (int i = 0; i < Main.Length-3; i++) 
+            for (int i = 0; i < main.Length-2; i++) 
             { 
                 Main[i] = Calculate(i);
             }
             
-            for (int i = 0; i < Special.Length/2; i++) 
+            for (int i = 0; i < special.Length/2; i++) 
             { 
                 Special[i] = MainFormulaForRecoveryStats(i); 
                 Special[i+2] = MainFormulaForRegenerateStats(i);
             } 
+            if(!updateExp) return;
             UpdateExperience();
         }
         
@@ -165,7 +171,7 @@ namespace Entities
             
             if ((actExp += experience) < 999999999) actExp += experience;
             else actExp = 999999999; 
-            if (ActExp > NedExp) return; 
+            if (ActExp < NedExp ) return; 
             Leveling();
         }
         

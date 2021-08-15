@@ -28,8 +28,11 @@ namespace Entities
         public Element(Element element): base(element) 
         { 
             Type = element.Type; 
-            Icon = element.Icon; 
-            Multiplicity = element.Multiplicity;
+            Icon = element.Icon;
+            foreach (KeyValuePair<ElementType, float> values in element.multiplicity)
+            {
+                AddMultiplicityTo(values.Key, values.Value);
+            }
         }
         
         #endregion

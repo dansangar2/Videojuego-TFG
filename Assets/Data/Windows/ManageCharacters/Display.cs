@@ -15,7 +15,8 @@ namespace Data.Windows.ManageCharacters
         private static int _ability;
         private static int _need;
         private static int _level;
-
+        private static int _maxLevel;
+        
         public static void Window(EditorWindow window)
         {
             window.maxSize = new Vector2(1000, 600);
@@ -179,12 +180,26 @@ namespace Data.Windows.ManageCharacters
             GUILayout.Label("Need to unlock", Options);
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Max Level", Options);
+            EditorGUILayout.EndHorizontal();
+            //EditorGUILayout.BeginHorizontal();
+            /*GUILayout.Label("Bases values for evolution", Options);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Rate values for evolution", Options);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Learning values for evolution", Options);
+            EditorGUILayout.EndHorizontal();*/
+            EditorGUILayout.BeginHorizontal();
             GUILayout.Label("To add", Options);
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
-            
+
+            #region Abilities
+
             EditorGUILayout.BeginVertical();
             EditorGUILayout.BeginHorizontal();
             
@@ -198,9 +213,12 @@ namespace Data.Windows.ManageCharacters
             _need = EditorGUILayout.IntField(_need, Options);
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("+", Options)) item.AddAbility(_ability, _need, _level);
+            _maxLevel = EditorGUILayout.IntField(_maxLevel, Options);
             EditorGUILayout.EndHorizontal();
-            
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("+", Options)) item.AddAbility(_ability, _need, _level, _maxLevel);
+            EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
             
@@ -210,7 +228,7 @@ namespace Data.Windows.ManageCharacters
                 EditorGUILayout.BeginHorizontal();
                 
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label(abi.SpAbility.Name + ": ", Options);
+                GUILayout.Label(abi.Ability.Name + ": ", Options);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginHorizontal();
                 int level = EditorGUILayout.IntField(abi.Level, Options);
@@ -219,15 +237,22 @@ namespace Data.Windows.ManageCharacters
                 int needLevel = EditorGUILayout.IntField(abi.NeedLevel, Options);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginHorizontal();
-                item.AddAbility(abi.SpAbility.ID, needLevel, level);
+                int maxLevel = EditorGUILayout.IntField(abi.MaxLevel, Options);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button("-", Options)) item.RemoveAbility(abi.SpAbility.ID);
+                item.AddAbility(abi.Ability.ID, needLevel, level, maxLevel);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("-", Options)) item.RemoveAbility(abi.Ability.ID);
                 EditorGUILayout.EndHorizontal();
                 
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.EndVertical();
+                StatsGeneratorWindow.GenerateStats(abi);
+                if (GUILayout.Button("See Stats by Level") && (abi.MaxLevel - abi.Level)>1) AbilityByLevelHelp.Window(abi);
             }
+
+            #endregion
             
             #endregion
             
@@ -312,7 +337,7 @@ namespace Data.Windows.ManageCharacters
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Art: ", Options);
-            GUILayout.Label(item.Art == null ? "NULL" : item.Art.name, Options);
+            GUILayout.Label(item.Art.Equals(null) ? "NULL" : item.Art.name, Options);
             EditorGUILayout.EndHorizontal();        
 
             #endregion
@@ -375,6 +400,9 @@ namespace Data.Windows.ManageCharacters
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Need to unlock", Options);
             EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Max level", Options);
+            EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
@@ -386,7 +414,7 @@ namespace Data.Windows.ManageCharacters
                 EditorGUILayout.BeginHorizontal();
                 
                 EditorGUILayout.BeginHorizontal();
-                GUILayout.Label(abi.SpAbility.Name + ": ", Options);
+                GUILayout.Label(abi.Ability.Name + ": ", Options);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(abi.Level.ToString(), Options);
@@ -394,9 +422,14 @@ namespace Data.Windows.ManageCharacters
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(abi.NeedLevel.ToString(), Options);
                 EditorGUILayout.EndHorizontal();
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label(abi.MaxLevel.ToString(), Options);
+                EditorGUILayout.EndHorizontal();
                 
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.EndVertical();
+                StatsGeneratorWindow.Display(abi);
+                if (GUILayout.Button("See Stats by Level") && (abi.MaxLevel - abi.Level)>1) AbilityByLevelHelp.Window(abi);
             }
             
             #endregion

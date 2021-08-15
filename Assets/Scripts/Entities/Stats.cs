@@ -13,19 +13,19 @@ namespace Entities
         
         [SerializeField] protected int level  = 1; 
         [SerializeField] protected int maxLevel = 99; 
-        [SerializeField] protected int[] main = new int[10]; 
-        [SerializeField] protected float[] special = new float[4]; 
+        [SerializeField] protected int[] main = new int[9]; 
+        [SerializeField] protected float[] special = new float[5]; 
         [SerializeField] protected int[] expData = {30, 20, 30, 20}; 
         [SerializeField] protected int elementID; 
         [SerializeField] protected int actExp; 
         [SerializeField] protected int nedExp;
-        
+
         /**<summary>
         Next
         <para>This are incrementing until become a 100, when it´s being 100, the character can move, later return 0</para>
         <para>You can move when it´s 100%</para>
         <para>Formula: (agi*numberOfMembers)/kg, where number of members = enemies + characters</para>
-        </summary>*/ 
+        </summary>*/
         public float Charge { get; private set; }
         
         #endregion
@@ -40,29 +40,29 @@ namespace Entities
         </summary>*/ 
         protected Stats(Stats bases): base(bases) 
         { 
-            Level = bases.Level; 
-            MaxLevel = bases.MaxLevel; 
+            level = bases.level; 
+            maxLevel = bases.maxLevel; 
             for (int i =0; i<bases.Main.Length; i++) 
             { 
-                Main[i] = bases.Main[i];
+                main[i] = bases.main[i];
             }
             
-            for (int i = 0; i < bases.Special.Length; i++) 
+            for (int i = 0; i < bases.special.Length; i++) 
             { 
-                Special[i] = bases.Special[0];
+                special[i] = bases.special[0];
             }
             
             //List<Affinity> afi;
             //element = new Element(bases.element);
             elementID = bases.elementID;
             
-            for (int i = 0; i < bases.ExpData.Length; i++) 
+            for (int i = 0; i < bases.expData.Length; i++) 
             { 
-                ExpData[i] = bases.ExpData[i];
+                expData[i] = bases.expData[i];
             }
             
-            actExp = bases.ActExp; 
-            nedExp = bases.NedExp;
+            actExp = bases.actExp; 
+            nedExp = bases.nedExp;
             
         }
         
@@ -92,7 +92,7 @@ namespace Entities
             }
         }
         
-        /**<summary><para>[mbp, mkp, atk, def, spi, men, agi, abp, akp, kg, cha, nxt]</para>
+        /**<summary><para>[mbp, mkp, atk, def, spi, men, agi, cbp, ckp]</para>
         <para>0 -> mbp = Max blood points</para>
         1 -> mkp = Max karma points
         <para>2 -> atk = Attack</para>
@@ -102,15 +102,15 @@ namespace Entities
         <para>6 -> agi = Agility</para>
         7 -> cbp = Current blood points
         <para>8 -> ckp = Current karma points</para>
-        9 -> kg = Weight
         </summary>*/ 
         public int[] Main => main;
         
-        /**<summary><para>[reb, rek, rxb, rxk]</para>
+        /**<summary><para>[reb, rek, rxb, rxk, kg]</para>
         <para>0 -> reb = Recovery blood effect</para>
         1 -> rek = Recovery karma effect
         <para>2 -> rxb = Regenerate blood per turn</para>
         3 -> rxk = Regenerate karma per turn
+        <para>5 -> kg = Weight</para>
         </summary>*/ 
         public float[] Special => special;
         
@@ -169,18 +169,7 @@ namespace Entities
             get => Main[8]; 
             set => Main[8] = value;
         }
-        
-        /**<summary>
-        Weight
-        <para>This param it´s used for weapons equip limit.</para> 
-        <para>(user.mbp + user.def - user.atk - user.agi)/(user.level*100)</para>
-        </summary>*/ 
-        public int Weight 
-        { 
-            get => Main[9]; 
-            set => Main[9] = value;
-        }
-        
+
         /**<summary>
         Attack
         <para>Physical damage that you can do.</para>
@@ -279,6 +268,18 @@ namespace Entities
             set => Special[3] = value;
         }
         
+        
+        /**<summary>
+        Weight
+        <para>This param it´s used for weapons equip limit.</para> 
+        <para>(user.mbp + user.def - user.atk - user.agi)/(user.level*100)</para>
+        </summary>*/ 
+        public float Weight
+        {
+            get => Special[4];
+            set => Special[4] = value;
+        }
+        
         /**<summary>The element of the object.</summary>*/ 
         public Element Element => GameData.ElementDB.FindByID(elementID);
         
@@ -308,7 +309,7 @@ namespace Entities
         </summary>*/ 
         public bool AddCharge(int total) 
         { 
-            Charge += Convert.ToSingle(Agility)*Random.Range(0.95f, 1.05f) / total; 
+            Charge += Convert.ToSingle(Agility)*Random.Range(0.95f, 1.05f) / total;
             if (Charge >= total) Charge = 0;
             else return false; 
             return true;

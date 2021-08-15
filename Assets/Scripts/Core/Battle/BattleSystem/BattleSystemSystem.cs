@@ -8,7 +8,6 @@ using Core.Messages;
 using Core.Saves;
 using Data;
 using Entities;
-using Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -129,9 +128,9 @@ namespace Core.Battle.BattleSystem
         {
             
             int total = _fighters.Select(i => i.character.Agility).Sum();
-            
             while (true)
             {
+                
                 foreach (int i in _orderBySpeed)
                 {
                     if (!_fighters[i].character.AddCharge(total)) continue;
@@ -156,7 +155,7 @@ namespace Core.Battle.BattleSystem
             {
                 for (int i = 0; i < _abilityInUse.Hits; i++)
                 {
-                    Damage(fighter, _abilityInUse.Damage(attacker.character, fighter.character));
+                    DamageAnimation(fighter, _abilityInUse.Damage(attacker.character, fighter.character));
                 }
 
                 if(fighter.character.IsKo() && fighter.isEnemy) idsToDestroy.Add(fighter.id);
@@ -170,12 +169,10 @@ namespace Core.Battle.BattleSystem
             GenericButton.Message = "";
         }
 
-        public void Damage(Fighter fighter, int damage)
+        public void DamageAnimation(Fighter fighter, int damage)
         {
             fighter.CharacterMark();
             _animatedText.SetDamage(damage, fighter, _abilityInUse.Type);
-            if (_abilityInUse.Type == AttackType.Blood) fighter.character.ReduceCurrentBlood(damage);
-            else fighter.character.ReduceCurrentKarma(damage);
         }
         
         public void UpdateBattlefield(params int[] ids)

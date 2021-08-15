@@ -14,167 +14,136 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilities:
   - id: 0
-    name: Help2
+    name: Double Attack
     description: 
     formula: '4*{a.atk} - 2*{a.def} < 0 ? 1 : 4*{a.atk} - 2*{a.def}'
     type: 0
     range: 0
     target: 0
-    icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-    hits: 1
-    numberOfTarget: 1
-    cost: 100
-    elementID: -1
-    stats:
-    - 1
-    - 0.8
-    - 1.2
-    bases:
-    - 1
-    - 0.8
-    - 1.2
-    rate:
-    - 1
-    - 1
-    - 1
-    learning:
-    - 1
-    - 1
-    - 1
-    maxLevel: 10
-    canRepeatRandomTarget: 1
-    actExp: 0
-    nedExp: 15
-    expData: 0a000000050000000f0000000a000000
-  - id: 1
-    name: Absorb Karma
-    description: 
-    formula: '3*{a.atk} - 1*{a.def} < 0 ? 1 : 3*{a.atk} - 1*{a.def}'
-    type: 1
-    range: 1
-    target: 0
-    icon: {fileID: -4841785371778001956, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    icon: {fileID: 3482900817474427321, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
     hits: 2
     numberOfTarget: 1
-    cost: 5000
-    elementID: -1
-    stats:
-    - 1
-    - 0.8
-    - 1.2
-    bases:
-    - 1
-    - 0.8
-    - 1.2
-    rate:
-    - 1
-    - 1
-    - 1
-    learning:
-    - 1
-    - 1
-    - 1
-    maxLevel: 10
-    canRepeatRandomTarget: 0
-    actExp: 0
-    nedExp: 15
-    expData: 0a000000050000000f0000000a000000
-  - id: 2
-    name: Auto-Recovery
-    description: Auto Recovery himself
-    formula: -4*{a.spi}
-    type: 0
-    range: 4
-    target: 0
-    icon: {fileID: 3348097994612170368, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
-    hits: 1
-    numberOfTarget: 1
-    cost: 100
-    elementID: -1
-    stats:
-    - 1
-    - 0.8
-    - 1.2
-    bases:
-    - 1
-    - 0.8
-    - 1.2
-    rate:
-    - 1
-    - 1
-    - 1
-    learning:
-    - 1
-    - 1
-    - 1
-    maxLevel: 10
-    canRepeatRandomTarget: 0
-    actExp: 0
-    nedExp: 15
-    expData: 0a000000050000000f0000000a000000
-  - id: 3
-    name: Recovery Karma All
-    description: Recovery to all allies
-    formula: -4*{a.spi}
-    type: 1
-    range: 1
-    target: 1
-    icon: {fileID: -3714112297922690383, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
-    hits: 1
-    numberOfTarget: 1
-    cost: 100
+    cost: 0
     elementID: 0
     stats:
     - 1
     - 0.8
     - 1.2
-    bases:
-    - 1
-    - 0.8
-    - 1.2
-    rate:
-    - 1
-    - 1
-    - 1
-    learning:
-    - 1
-    - 1
-    - 1
-    maxLevel: 10
     canRepeatRandomTarget: 0
-    actExp: 0
-    nedExp: 15
-    expData: 0a000000050000000f0000000a000000
-  - id: 4
-    name: Absorb Blood
+    statusesToDo:
+      keys:
+      - statusId: 1
+        incrementPowerPlus:
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        level: 0
+      values:
+      - 0.6
+  - id: 1
+    name: Multi Karma Hit
     description: 
     formula: '3*{a.atk} - 2*{a.def} < 0 ? 1 : 3*{a.atk} - 2*{a.def}'
-    type: 0
-    range: 1
+    type: 1
+    range: 0
     target: 0
-    icon: {fileID: 2145951238131660284, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    icon: {fileID: 3310009709851204272, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
     hits: 1
     numberOfTarget: 1
     cost: 100
-    elementID: 0
+    elementID: -1
     stats:
     - 1
     - 0.8
     - 1.2
-    bases:
+    canRepeatRandomTarget: 0
+    statusesToDo:
+      keys:
+      - statusId: 2
+        incrementPowerPlus:
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        level: 0
+      values:
+      - 0.7
+  - id: 2
+    name: Absorb
+    description: 
+    formula: '2*{a.atk} < 0 ? 1 : 2*{a.atk}'
+    type: 2
+    range: 1
+    target: 0
+    icon: {fileID: -2820936822283385303, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    hits: 1
+    numberOfTarget: 1
+    cost: 100
+    elementID: -1
+    stats:
     - 1
     - 0.8
     - 1.2
-    rate:
-    - 1
-    - 1
-    - 1
-    learning:
-    - 1
-    - 1
-    - 1
-    maxLevel: 10
     canRepeatRandomTarget: 0
-    actExp: 0
-    nedExp: 15
-    expData: 0a000000050000000f0000000a000000
+    statusesToDo:
+      keys:
+      - statusId: 1
+        incrementPowerPlus:
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        - 1
+        level: 0
+      values:
+      - 0.1
+  - id: 3
+    name: Absorb Karma
+    description: 
+    formula: '4*{a.atk} - 2*{a.def} < 0 ? 1 : 4*{a.atk} - 2*{a.def}'
+    type: 3
+    range: 3
+    target: 0
+    icon: {fileID: 21300000, guid: c34f8b3cd8674f7fb507b2fddb548045, type: 3}
+    hits: 1
+    numberOfTarget: 1
+    cost: 100
+    elementID: -1
+    stats:
+    - 1
+    - 0.8
+    - 1.2
+    canRepeatRandomTarget: 1
+    statusesToDo:
+      keys: []
+      values: []

@@ -329,11 +329,10 @@ namespace Data.Windows.ManageStats
         #region Set
 
         /**<summary>It's makes a window for introduce the values for stats generator for Abilities.</summary>*/
-        public static void GenerateStats(Ability item, GUILayoutOption[] options = null)
+        public static void GenerateStats(SpecialAbility item, GUILayoutOption[] options = null)
         {
             options ??= Options;
 
-            float[] bases = item.Bases;
             float[] rate = item.Rate;
             float[] learning = item.Learning;
             int[] expData = item.ExpData;
@@ -345,8 +344,6 @@ namespace Data.Windows.ManageStats
             GUILayout.Label(" | ");
             GUILayout.Label("Stats", options);
             GUILayout.Label(" | ");
-            GUILayout.Label("Base", options);
-            GUILayout.Label(" | ");
             GUILayout.Label("Rate", options);
             GUILayout.Label(" | ");
             GUILayout.Label("Learning", options);
@@ -355,7 +352,7 @@ namespace Data.Windows.ManageStats
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.BeginVertical("Box");
-            for (int i = 0; i < bases.Length; i++)
+            for (int i = 0; i < rate.Length; i++)
             { 
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(" | ");
@@ -368,8 +365,6 @@ namespace Data.Windows.ManageStats
                     case 2: GUILayout.Label("Up Interval:", options);
                         break;
                 }
-                GUILayout.Label(" | ");
-                bases[i] = EditorGUILayout.FloatField(bases[i], options);
                 GUILayout.Label(" | ");
                 rate[i] = EditorGUILayout.FloatField(rate[i], options);
                 GUILayout.Label(" | ");
@@ -399,7 +394,7 @@ namespace Data.Windows.ManageStats
             
             EditorGUILayout.EndVertical();
 
-            item.SetAll(bases, rate, learning, expData, 1);
+            item.SetAll(rate, learning, expData);
 
             EditorGUILayout.EndVertical();
         }
@@ -410,28 +405,27 @@ namespace Data.Windows.ManageStats
         #region Validator
 
         /**<summary>It's validate the stats generator for Abilities.</summary>*/
-        public static bool Validator(Ability item)
+        public static bool Validator(SpecialAbility item)
         {
-            float[] bases = item.Bases;
-            float[] rate = item.Rate;
             float[] learning = item.Learning;
+            float[] rate = item.Rate;
             int[] expData = item.ExpData;
             
             bool res = false;
             string message = "";
-
-            for (int i = 0; i < bases.Length; i++)
+            
+            foreach (float t in rate)
             {
-                res = res || bases[i] <= 0 || rate[i] <= 0;
+                res = res || t > 1.5 || t < 0.5;
             }
-            if(res) message += "One or more parameter is equals(base/rate) or less(base/rate/plus) of 0, check it and change it by a number upper of 0.\n";
+            if (res) message += "One or more rates values isn´t between 0.5 and 1.5, change it by one number between these values.\n";
             res = false;
             
             foreach (float t in learning)
             {
-                res = res || t > 1.2 || t < -0.8;
+                res = res || t > 1.2 || t < 0.8;
             }
-            if (res) message += "One or more learning rates isn´t between -0.8 and 1.2, change it by one number between these values.\n";
+            if (res) message += "One or more learning rates isn´t between 0.8 and 1.2, change it by one number between these values.\n";
             res = false;
 
             foreach (int t in expData)
@@ -441,7 +435,6 @@ namespace Data.Windows.ManageStats
             if(res) message += "One or more exp parameter is less of 0, check it and change it by a number upper of 0.\n";
 
             if (!message.Equals("")) res = true;
-            
             GUILayout.Label(message);
 
             return res;
@@ -452,12 +445,12 @@ namespace Data.Windows.ManageStats
         #region Display
 
         /**<summary>It's display the stats evolution for Abilities using the stats generator value.</summary>*/
-        public static void Display(Ability item, GUILayoutOption[] options = null)
+        public static void Display(SpecialAbility item, GUILayoutOption[] options = null)
         {
             
-            Ability dummy = new Ability(item);
+            SpecialAbility dummy = new SpecialAbility(item);
             options ??= Options;
-            Ability[] characters = new Ability[6];
+            SpecialAbility[] abilities = new SpecialAbility[6];
             int[] levels = new int[6];
             
             string[][] content =
@@ -469,8 +462,8 @@ namespace Data.Windows.ManageStats
                 new[] {"EXP","","","","","",""}
             };
             
-            int levelInterval = dummy.MaxLevel / 5;
-            Ability item2;
+            int levelInterval = (dummy.MaxLevel - dummy.Level) / 5;
+            SpecialAbility item2;
             int i = 1, j = 0;
             bool cont = true;
 
@@ -478,24 +471,24 @@ namespace Data.Windows.ManageStats
             {
                 if (i >= dummy.MaxLevel || j==5)
                 {
-                    i = item.MaxLevel;
+                    dummy.Level = dummy.MaxLevel;
                     cont = false;
                 }
-                dummy.MaxLevel = item.MaxLevel;
-                item2 = new Ability(dummy, i);
-                characters[j] = item2;
-                levels[j] = i;
-                i += levelInterval;
+                //dummy.MaxLevel = item.MaxLevel;
+                item2 = new SpecialAbility(dummy);
+                abilities[j] = item2;
+                levels[j] = item2.Level;
+                dummy.Level += levelInterval;
                 j++;
             }
 
-            for (i = 1; i <=characters.Length; i++)
+            for (i = 1; i <=abilities.Length; i++)
             {
                 content[0][i] = levels[i-1].ToString();
-                content[1][i] = characters[i-1].PowerIncrement.ToString(CultureInfo.InvariantCulture);
-                content[2][i] = characters[i-1].DownInterval.ToString(CultureInfo.InvariantCulture);
-                content[3][i] = characters[i-1].UpperInterval.ToString(CultureInfo.InvariantCulture);
-                content[4][i] = characters[i-1].NedExp.ToString();
+                content[1][i] = abilities[i-1].PowerIncrement.ToString(CultureInfo.InvariantCulture);
+                content[2][i] = abilities[i-1].DownInterval.ToString(CultureInfo.InvariantCulture);
+                content[3][i] = abilities[i-1].UpperInterval.ToString(CultureInfo.InvariantCulture);
+                content[4][i] = abilities[i-1].NeedPointsToLevelUp.ToString();
             }
             
             EditorGUILayout.BeginHorizontal();

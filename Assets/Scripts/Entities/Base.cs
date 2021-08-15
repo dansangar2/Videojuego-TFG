@@ -26,13 +26,13 @@ namespace Entities
    
         /**<summary>
         A copy constructor.
-        <param name="bases">The "Base" that is going to copy</param>
+        <param name="status">The "Base" that is going to copy</param>
         </summary>*/ 
-        protected Base(Base bases) 
+        protected Base(Base status) 
         { 
-            id = bases.ID; 
-            Name = bases.Name; 
-            Description = bases.Description;
+            id = status.ID; 
+            Name = status.Name; 
+            Description = status.Description;
         }
         
         #endregion

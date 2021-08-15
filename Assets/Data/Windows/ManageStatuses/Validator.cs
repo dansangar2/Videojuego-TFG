@@ -1,15 +1,14 @@
-﻿using System;
-using Entities;
+﻿using Entities;
 using UnityEngine;
 
-namespace Data.Windows.ManageAbilities
+namespace Data.Windows.ManageStatuses
 {
     public static class Validator
     {
         
         private static bool _res;
         
-        public static bool Validate(Ability item)
+        public static bool Validate(Status item)
         {
             _res = false;
             string advice = "";
@@ -33,12 +32,12 @@ namespace Data.Windows.ManageAbilities
             }
 
             #endregion
-
+/*
             #region Formula
 
             try
             {
-                item.Damage(new Character(0), new Character(0));
+                item.Damage(GameData.CharacterDB.FindByID(0), GameData.CharacterDB.FindByID(0));
             }
             catch (Exception)
             {
@@ -58,7 +57,7 @@ namespace Data.Windows.ManageAbilities
             }
 
             #endregion
-            
+            */
             //_res = _res || StatsGeneratorWindow.Validator(item);
             
             GUILayout.Label(advice);

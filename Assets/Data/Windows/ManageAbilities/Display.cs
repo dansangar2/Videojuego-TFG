@@ -1,4 +1,4 @@
-﻿using Data.Windows.ManageStats;
+﻿using System.Globalization;
 using Entities;
 using Enums;
 using UnityEditor;
@@ -11,8 +11,12 @@ namespace Data.Windows.ManageAbilities
         private static readonly GUILayoutOption[] Options = { GUILayout.MaxWidth(150f), GUILayout.MinWidth(20f) };
         private static readonly GUIStyle TextAreaStyle = new GUIStyle(GUI.skin.textArea) {wordWrap = true};
         private static readonly string[] Elements = GameData.ElementDB.Names;
+        private static readonly string[] Stats = { "mbp", "mkp", "atk", "def", "spi", "men", "agi", "reb", "rek", "rxb", "rxk","d", "tlv", "pos" };
         private static bool _haveElement;
         private static int _index;
+        private static int _key;
+        private static int _status;
+        private static float _possibility;
         
         public static void Window(EditorWindow window)
         {
@@ -84,7 +88,7 @@ namespace Data.Windows.ManageAbilities
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Max Level: ", Options);
-            item.MaxLevel = EditorGUILayout.IntField(item.MaxLevel, Options);
+            //item.MaxLevel = EditorGUILayout.IntField(item.MaxLevel, Options);
             EditorGUILayout.EndHorizontal();
 
             #endregion
@@ -192,12 +196,38 @@ namespace Data.Windows.ManageAbilities
 
             #endregion
             
-            #region Stats
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.BeginHorizontal();
 
-            StatsGeneratorWindow.GenerateStats(item, Options);
-            if (GUILayout.Button("See Stats by Level")) AbilityByLevelHelp.Window(item);
+            #region Power Increment
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Extra Power: ");
+            item.PowerIncrement = EditorGUILayout.FloatField(item.PowerIncrement, Options);
+            EditorGUILayout.EndHorizontal();
+            
+            #endregion
+
+            #region Down Interval
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Down interval ");
+            item.DownInterval = EditorGUILayout.FloatField(item.DownInterval, Options);
+            EditorGUILayout.EndHorizontal();
 
             #endregion
+
+            #region Up Interval
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Up interval: ");
+            item.UpperInterval = EditorGUILayout.FloatField(item.UpperInterval, Options);
+            EditorGUILayout.EndHorizontal();
+
+            #endregion
+            
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
             
             #region Formula
 
@@ -208,6 +238,65 @@ namespace Data.Windows.ManageAbilities
             item.Formula = EditorGUILayout.TextField(item.Formula, GUILayout.MaxWidth(350f), GUILayout.MinWidth(20f));
             EditorGUILayout.EndHorizontal();
 
+            #endregion
+
+            #region Statuses
+
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.BeginHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Status To Do", Options);
+            GUILayout.Label("Possibility", Options);
+            GUILayout.Label("To Add", Options);
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
+            
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.BeginHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            _status = EditorGUILayout.Popup(_status, GameData.StatusDB.Names, Options);
+            _possibility = EditorGUILayout.FloatField(_possibility, Options);
+            if(GUILayout.Button("+", Options)) item.AddStatusToDo(_status, _possibility, toChange:false);
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
+            
+            
+            foreach (StatusOf of in item.GetAllStatuses())
+            {
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label(of.Status.Name, Options);
+                item.AddStatusToDo(of.Status.ID, EditorGUILayout.FloatField(item.GetPossibilityOfStatus(of.Status.ID), Options));
+                if(GUILayout.Button("-", Options)) item.RemoveStatus(of.Status.ID);
+                EditorGUILayout.EndHorizontal();
+
+                for (int i = 0; i < of.IncrementPowerPlus.Length; i+=2)
+                {
+                    EditorGUILayout.BeginVertical();
+                    EditorGUILayout.BeginHorizontal();
+
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Label(Stats[i] + ": ",Options);
+                    of.IncrementPowerPlus[i] = EditorGUILayout.FloatField(of.IncrementPowerPlus[i], Options);
+                    EditorGUILayout.EndHorizontal();
+                    
+                    EditorGUILayout.BeginHorizontal(); 
+                    GUILayout.Label(Stats[i + 1] + ": ", Options); 
+                    of.IncrementPowerPlus[i + 1] = EditorGUILayout.FloatField(of.IncrementPowerPlus[i + 1], Options); 
+                    EditorGUILayout.EndHorizontal();
+                    
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.EndVertical();
+                }
+                
+
+            }
+            
             #endregion
             
         }
@@ -270,7 +359,7 @@ namespace Data.Windows.ManageAbilities
              
             EditorGUILayout.BeginHorizontal(); 
             GUILayout.Label("Max Level: ", Options); 
-            GUILayout.Label(item.MaxLevel.ToString(), Options); 
+            //GUILayout.Label(item.MaxLevel.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
              
             #endregion
@@ -366,9 +455,41 @@ namespace Data.Windows.ManageAbilities
              
             #endregion
              
-            #region Stats
-             
-            StatsGeneratorWindow.Display(item, Options);
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.BeginHorizontal();
+
+            #region Power Increment
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Extra Power: ");
+            GUILayout.Label(item.PowerIncrement.ToString(CultureInfo.InvariantCulture), Options);
+            EditorGUILayout.EndHorizontal();
+            
+            #endregion
+
+            #region Down Interval
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Down interval ");
+            GUILayout.Label(item.DownInterval.ToString(CultureInfo.InvariantCulture), Options);
+            EditorGUILayout.EndHorizontal();
+
+            #endregion
+
+            #region Up Interval
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Up interval: ");
+            GUILayout.Label(item.UpperInterval.ToString(CultureInfo.InvariantCulture), Options);
+            EditorGUILayout.EndHorizontal();
+
+            #endregion
+            
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
+            
+            #region Status
+            
              
             #endregion
              
@@ -381,6 +502,52 @@ namespace Data.Windows.ManageAbilities
             GUILayout.Label(item.Formula, GUILayout.MaxWidth(350f), GUILayout.MinWidth(20f)); 
             EditorGUILayout.EndHorizontal();
              
+            #endregion
+            
+            #region Statuses
+
+            EditorGUILayout.BeginVertical();
+            EditorGUILayout.BeginHorizontal();
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Status To Do", Options);
+            GUILayout.Label("Possibility", Options);
+            GUILayout.Label("To Add", Options);
+            EditorGUILayout.EndHorizontal();
+            
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
+
+
+            foreach (StatusOf of in item.GetAllStatuses())
+            {
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label(of.Status.Name, Options);
+                GUILayout.Label(item.GetPossibilityOfStatus(of.Status.ID).ToString(CultureInfo.InvariantCulture));
+                EditorGUILayout.EndHorizontal();
+
+                for (int i = 0; i < of.IncrementPowerPlus.Length; i+=2)
+                {
+                    EditorGUILayout.BeginVertical();
+                    EditorGUILayout.BeginHorizontal();
+
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Label(Stats[i] + ": ",Options);
+                    GUILayout.Label(of.IncrementPowerPlus[i].ToString(CultureInfo.InvariantCulture), Options);
+                    EditorGUILayout.EndHorizontal();
+                    
+                    EditorGUILayout.BeginHorizontal(); 
+                    GUILayout.Label(Stats[i + 1] + ": ", Options); 
+                    GUILayout.Label(of.IncrementPowerPlus[i+1].ToString(CultureInfo.InvariantCulture), Options); 
+                    EditorGUILayout.EndHorizontal();
+                    
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.EndVertical();
+                }
+                
+
+            }
+            
             #endregion
             
         }
@@ -446,5 +613,6 @@ namespace Data.Windows.ManageAbilities
         }
 
         #endregion
+        
     }
 }

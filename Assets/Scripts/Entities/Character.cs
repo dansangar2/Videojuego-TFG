@@ -17,10 +17,13 @@ namespace Entities
         [SerializeField] private Mesh model; 
         [SerializeField] private int meleeAttackID; 
         [SerializeField] private int longAttackID; 
+        [SerializeField] private int abilityPoints;
+        [SerializeField] private StatusOf[] statuses = { };
         //<Ability, int[abilityLevel, neededLevel]>
         [SerializeField] private SpecialAbility[] abilities = {};
-        [SerializeField] private int restPoints = 5;
-        
+
+        public int RestPoints { get; set; } = 5;
+
         #endregion
         
         #region CONSTRUCTORS
@@ -32,10 +35,21 @@ namespace Entities
         public Character(Character chara): base(chara) 
         { 
             face = chara.face; 
-            model = chara.model; 
-            abilities = chara.abilities;
+            model = chara.model;
             meleeAttackID = chara.meleeAttackID; 
             longAttackID = chara.longAttackID;
+            
+            abilities = new SpecialAbility[chara.abilities.Length];
+            for (int i = 0; i < chara.abilities.Length; i++)
+            {
+                abilities[i] = chara.abilities[i];
+            }
+            
+            statuses = chara.statuses;
+            for (int i = 0; i < chara.statuses.Length; i++)
+            {
+                statuses[i] = chara.statuses[i];
+            }
         }
         
         #endregion
@@ -72,6 +86,15 @@ namespace Entities
         </summary>*/ 
         public int LongAttackID { set => longAttackID = value; }
         
+        /**<summary>Ability points of the character.</summary>*/ 
+        public int AbilityPoints { get => abilityPoints; set => abilityPoints = value; }
+
+        //**<summary>The status that the character has.</summary>*/ 
+        //public Status[] Status => status.Select(s => GameData.StatusDB.FindByID(s)).ToArray();
+        
+        /**<summary>The status that the character has.</summary>*/ 
+        public StatusOf[] Statuses => statuses;
+        
         /**<summary>
         All abilities with current level and need to unlock. 
         </summary>*/ 
@@ -83,9 +106,9 @@ namespace Entities
         </summary>*/ 
         public Ability[] Abilities(bool all = true) 
         { 
-            if (all) return abilities.Select(a => a.SpAbility).ToArray(); 
+            if (all) return abilities.Select(a => a.Ability).ToArray(); 
             return abilities.Where(a => level >= a.NeedLevel)
-                .Select(a => a.SpAbility).ToArray();
+                .Select(a => a.Ability).ToArray();
         }
         
         /**<summary>
@@ -94,7 +117,7 @@ namespace Entities
         </summary>*/ 
         public Ability GetAbility(int abilityID) 
         { 
-            return abilities.Select(a => a.SpAbility).First(a => a.ID == abilityID);
+            return abilities.Select(a => a.Ability).First(a => a.ID == abilityID);
         }
         
         /**<summary>
@@ -103,18 +126,92 @@ namespace Entities
         </summary>*/ 
         public Dictionary<Ability, int> AbilitiesAndLevel(bool all = true) 
         { 
-            if (all) return abilities.ToDictionary(a => a.SpAbility, b => b.NeedLevel); 
+            if (all) return abilities.ToDictionary(a => a.Ability, b => b.NeedLevel); 
             return abilities.Where(a => level >= a.NeedLevel)
-                .ToDictionary(a => a.SpAbility, 
+                .ToDictionary(a => a.Ability, 
                     b => b.Level); 
         }
     
-        /**<summary>The points that the character has to use in the rest zone.</summary>*/ 
-        public int RestPoints { get => restPoints; set => restPoints = value; }
+        /*/**<summary>The points that the character has to use in the rest zone.</summary>*/ 
+        //public int RestPoints { get => restPoints; set => restPoints = value; }
+        
+        /**<summary>Add a status to the character.</summary>*/ 
+        public void AddStatus(StatusOf status)
+        {
+            if(statuses.Select(s => s.Status.ID).Contains(status.Status.ID)) return;
+            if (statuses.First(s => s.Status.ID == status.Status.ID).Level < status.Level)
+            {
+                statuses[Array.IndexOf(statuses, 
+                    statuses.First(s => s.Status.ID == status.Status.ID))] = status;
+                return;
+            }
+            Array.Resize(ref statuses, statuses.Length + 1); 
+            statuses[statuses.Length - 1] = status;
+        }
+        
+        /**<summary>Remove a status of the Character.</summary>*/ 
+        public void RemoveStatus(int statusId) 
+        { 
+            for (int i = Array.IndexOf(statuses, 
+                statuses.First(s => s.Status.ID == statusId)); i < statuses.Length-1; i++) 
+            { 
+                statuses[i] = statuses[i+1]; 
+            } 
+            Array.Resize(ref statuses, statuses.Length - 1); 
+        }
+
+        #region Stats with status
+
+        /**<summary>Get the Max Blood Points with the status increments.</summary>*/ 
+        public new int MaxBloodPoints => Convert.ToInt32(Mathf.Round(base.MaxBloodPoints * Calculate(0)));
+
+        /**<summary>Get the Max Karma Points with the status increments.</summary>*/ 
+        public new int MaxKarmaPoints => Convert.ToInt32(Mathf.Round(base.MaxKarmaPoints * Calculate(1)));
+        
+        /**<summary>Get the Attack with the status increments.</summary>*/ 
+        public new int Attack => Convert.ToInt32(Mathf.Round(base.Attack*Calculate(2)));
+
+        /**<summary>Get the Defense with the status increments.</summary>*/ 
+        public new int Defense => Convert.ToInt32(Mathf.Round(base.Defense * Calculate(3)));
+        
+        /**<summary>Get the Spirit with the status increments.</summary>*/ 
+        public new int Spirit => Convert.ToInt32(Mathf.Round(base.Spirit * Calculate(4)));
+        
+        /**<summary>Get the Mentality with the status increments.</summary>*/ 
+        public new int Mentality => Convert.ToInt32(Mathf.Round(base.Mentality*Calculate(5)));
+        
+        /**<summary>Get the Agility with the status increments.</summary>*/ 
+        public new int Agility =>  Convert.ToInt32(Mathf.Round( base.Agility* Calculate(6)));
+
+        /**<summary>Get the Blood Recovery Plus Rate with the status increments.</summary>*/ 
+        public new float BloodRecoveryPlus => base.BloodRecoveryPlus + 
+                                              Statuses.Sum(s => s.IncrementPower[7]);
+        
+        /**<summary>Get the Karma Recovery Plus Rate with the status increments.</summary>*/ 
+        public new float KarmaRecoveryPlus => base.KarmaRegeneration + 
+                                              Statuses.Sum(s => s.IncrementPower[8]);
+
+        /**<summary>Get the Regeneration Rate with the status increments.</summary>*/ 
+        public new float Regeneration => base.Regeneration + 
+                                              Statuses.Sum(s => s.IncrementPower[9]);
+        
+        /**<summary>Get the Karma Regeneration Rate with the status increments.</summary>*/ 
+        public new float KarmaRegeneration => base.KarmaRegeneration + 
+                                              Statuses.Sum(s => s.IncrementPower[10]);
+
+
+        #endregion
         
         #endregion
         
         #region METHODS
+
+        public float Calculate(int index)
+        {
+            if (Statuses.Length == 0) return 1;
+            return Statuses.Select(s => s.IncrementPower[index])
+                .Aggregate((x, y) => x * y);
+        }
         
         /**<summary>
         Add a Ability in the special ability section of the character.
@@ -122,26 +219,61 @@ namespace Entities
         <param name="needLevel">The level necessary to learn the ability.</param>
         <param name="abilityLevel">The initial ability level.</param>
         </summary>*/ 
-        public void AddAbility(int abilityID, int needLevel = -1, int abilityLevel = -1) 
+        public void AddAbility(int abilityID, int needLevel = -1, int abilityLevel = -1,
+            int aMaxLevel = -1, float[] aRate = null, 
+            float[] aLearning = null, int[] aExpData = null) 
         { 
-            if (abilities.Any(a => a.SpAbility.ID == abilityID)) 
+            if (abilities.Any(a => a.Ability.ID == abilityID)) 
             { 
-                foreach (SpecialAbility a in abilities.Where(a => a.SpAbility.ID == abilityID)) 
+                foreach (SpecialAbility a in abilities.Where(a => a.Ability.ID == abilityID)) 
                 { 
                     a.Level = abilityLevel <= 0 ? a.Level : abilityLevel; 
                     a.NeedLevel = needLevel <= 0 ? a.NeedLevel : needLevel;
+                    a.MaxLevel = aMaxLevel <= 0 ? a.MaxLevel : aMaxLevel;
+                    if (aRate != null)
+                    {
+                        for (int i = 0; i < aRate.Length; i++)
+                        {
+                            a.Rate[i] = aRate[i];
+                        }
+                    }
+                    if (aLearning != null)
+                    {
+                        for (int i = 0; i < aLearning.Length; i++)
+                        {
+                            a.Learning[i] = aLearning[i];
+                        }
+                    }
+                    if (aExpData != null)
+                    {
+                        for (int i = 0; i < aExpData.Length; i++)
+                        {
+                            a.ExpData[i] = aExpData[i];
+                        }
+                    }
                 }
             }
-            else AddSpAbility(abilityID, abilityLevel <= 0 ? 1 : abilityLevel, needLevel <= 0 ? 1 : needLevel);
+            else
+            {
+                aRate ??= new[] {1f, 1, 1};
+                aLearning ??= new[] {1f, 1, 1};
+                aExpData ??= new[] {10, 5, 15, 10};
+                
+                AddSpAbility(abilityID, abilityLevel <= 0 ? 1 : abilityLevel, 
+                    needLevel <= 0 ? 1 : needLevel, aMaxLevel <= 0 ? 1 : aMaxLevel,
+                    aRate, aLearning, aExpData);
+            }
         }
         
         /**<summary>
         Add a Special ability with the need level to unlock the ability and the current level of it.
         </summary>*/ 
-        private void AddSpAbility(int abilityID, int needLevel, int abilityLevel) 
+        private void AddSpAbility(int abilityID, int needLevel, int abilityLevel, int aMaxLevel,
+            float[] aRate, float[] aLearning, int[] aExpData) 
         { 
             Array.Resize(ref abilities, abilities.Length + 1); 
-            abilities[abilities.Length - 1] = new SpecialAbility(abilityID, needLevel, abilityLevel);
+            abilities[abilities.Length - 1] = new SpecialAbility(abilityID, needLevel, abilityLevel, 
+                aMaxLevel, aRate, aLearning, aExpData);
         }
         
         /**<summary>
@@ -150,7 +282,7 @@ namespace Entities
         </summary>*/ 
         public void RemoveAbility(int abilityID) 
         { 
-            abilities = abilities.Where(a => a.SpAbility.ID != abilityID).ToArray(); 
+            abilities = abilities.Where(a => a.Ability.ID != abilityID).ToArray(); 
         }
         
         #endregion

@@ -14,23 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   elements:
   - id: 0
-    name: dsa
-    description: asd
-    type: 2
-    icon: {fileID: 8245974843642223914, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
-    multiplicity:
-      keys: 0b00000000000000090000000d000000
-      values:
-      - 1
-      - 4
-      - 3
-      - 0.3
-  - id: 1
-    name: Commet
+    name: E1
     description: 
-    type: 4
-    icon: {fileID: 3348097994612170368, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    type: 1
+    icon: {fileID: -3714112297922690383, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
     multiplicity:
-      keys: 04000000
+      keys: 08000000030000000a000000
       values:
-      - 1.5
+      - 0.1
+      - 1.9
+      - 0.1
+  - id: 1
+    name: E2
+    description: 
+    type: 6
+    icon: {fileID: -3166525754326677502, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    multiplicity:
+      keys: 0a0000000d000000
+      values:
+      - 1.2
+      - 0.1
+  - id: 2
+    name: E3
+    description: 
+    type: 9
+    icon: {fileID: 8997866966031257783, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    multiplicity:
+      keys: 01000000
+      values:
+      - 1.1

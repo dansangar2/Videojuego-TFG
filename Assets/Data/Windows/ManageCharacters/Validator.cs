@@ -42,6 +42,11 @@ namespace Data.Windows.ManageCharacters
             }
 
             #endregion
+
+            foreach (SpecialAbility ability in item.AllDataAbilities)
+            {
+                _res = _res || StatsGeneratorWindow.Validator(ability);   
+            }
             
             _res = _res || StatsGeneratorWindow.Validator(item);
 

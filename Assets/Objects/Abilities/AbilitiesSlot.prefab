@@ -153,7 +153,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Absorb Karma
+  m_Text: Multi Karma Hit
 --- !u!1 &1532847506858629861
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +232,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 50
+  m_Text: 100
 --- !u!1 &2341559469284326145
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,7 +374,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -4841785371778001956, guid: 30cb94ee74b94d469da91d1111b33b92,
+  m_Sprite: {fileID: 3310009709851204272, guid: 30cb94ee74b94d469da91d1111b33b92,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -526,7 +526,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 8997866966031257783, guid: 30cb94ee74b94d469da91d1111b33b92,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -553,7 +554,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2698826708257235018
 RectTransform:
   m_ObjectHideFlags: 0
@@ -594,7 +595,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 1, b: 0, a: 0.8}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -675,16 +676,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneRedirect: 
-  velocity: 0.005
-  buttonName: 
+  velocity: 0.5
+  itemName: {fileID: 4863092995157860505}
   window: {fileID: 0}
   quitGame: 0
-  buttonColor: {r: 0, g: 1, b: 0, a: 1}
+  canSendMessage: 1
+  messageToSend: 1
+  canPress: 1
   blink: 1
-  buttonImage: {fileID: 0}
+  buttonColor: {r: 0, g: 1, b: 0, a: 1}
+  buttonImage: {fileID: 6794172332773643278}
   buttonChangeColor: 0
   id: 1
-  itemName: {fileID: 4863092995157860505}
   itemIcon: {fileID: 7965614526681649499}
   elementIcon: {fileID: 3359374660838223679}
   necessaryKp: {fileID: 5008688931485799076}

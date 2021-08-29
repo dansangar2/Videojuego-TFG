@@ -9,6 +9,7 @@ namespace Core.ButtonsSystem.ButtonType
     {
         #region ATTRIBUTES
 
+        //All attributes are the stats of the character.
         public Text bloodPoints;
         public Text karmaPoints;
         public Text bloodMax;
@@ -24,10 +25,10 @@ namespace Core.ButtonsSystem.ButtonType
 
         #region SYSTEM
 
-        private new void Start()
+        private new void Awake()
         {
             if (onlyHUD) return;
-            base.Start();
+            base.Awake();
         }
 
         private new void Update()

@@ -35,7 +35,7 @@ namespace Core.Battle.DamageText
 
         #endregion
 
-        protected override void Start()
+        protected override void Awake()
         {
             Vector3 forward = Camera.main.transform.forward;
             float finalForce = Random.Range(force / 2, 10f * direction) * force;
@@ -43,15 +43,19 @@ namespace Core.Battle.DamageText
             
             transform.LookAt(Camera.main.transform);
             transform.rotation = Quaternion.LookRotation(forward);
-            base.Start();
+            base.Awake();
             //If is it's a damage, then the x pos will be a random number, it depends of force
             //Else, it won't have direction.
             posDirection = fall ? Vector3.Cross(new Vector3(
-                    finalForce, finalForce, finalForce), 
+                        finalForce, finalForce, finalForce), 
                     forward) 
                 : new Vector3(0,0,0);
+        }
+
+        protected override void Start()
+        {
+            base.Start();
             float time = fall ? 3f : 1.5f;
-            
             Destroy(transform.parent.gameObject, time);
         }
         
@@ -81,8 +85,8 @@ namespace Core.Battle.DamageText
             
             fall = damage >= 0;
     
-            text = Mathf.Abs(damage).ToString(); 
-            if(type == AttackType.Blood) 
+            text = Mathf.Abs(damage).ToString();
+            if(type == AttackType.Blood || type == AttackType.AbsorbBlood) 
             {
                 if (fall) force = GetThrow(fighter.character.MaxKarmaPoints,  damage);
                 else force = 1;

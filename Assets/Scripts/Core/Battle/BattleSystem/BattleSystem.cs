@@ -1,16 +1,18 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Core.Battle.DamageText;
-using Core.ButtonsSystem.ButtonList;
-using Core.ButtonsSystem.ButtonType;
+using Core.Battle.StatusesUI;
 using Core.Messages;
 using Core.Saves;
 using Entities;
+using Enums;
+//using Unity.MLAgents;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Core.Battle.BattleSystem
 {
-    public partial class BattleSystem : MonoBehaviour
+    public partial class BattleSystem : MonoBehaviour//Agent
     {
 
         #region ATTRIBUTES
@@ -19,36 +21,29 @@ namespace Core.Battle.BattleSystem
         public int[] enemiesId;
         /**<summary>The max member party.</summary>*/
         public int maxMembers = 3;
-        /**<summary>The prefab for character HUBs.</summary>*/
-        public MemberHUDButton memberBase;
-        /**<summary>The ability list for the player party.</summary>*/
-        public AbilityButtonsList abilitiesOf;
-        /**<summary>The message text.</summary>*/
+        /**<summary>The prefab message text.</summary>*/
         public Message message;
-        /**<summary>The velocity of the character blink.</summary>*/
-        public float velocity = 0.003f;
+        //**<summary>The velocity of the character blink.</summary>*/
+        //public float velocity = 0.003f;
+        /**<summary>The statusUI prefab for fighters.</summary>*/
+        public StatusUI statusUI;
+        
         
         /**<summary>The array with the fighter of the battle.</summary>*/
         private Fighter[] _fighters = {};
-        
-        /**<summary>The array with the experience gained [charThatGained, enemyFrom].</summary>*/
-        private int[,] _experienceGained;
-        
-        /**<summary>Current Character turn.</summary>*/
-        private int _currentTurn;
         /**<summary>The current state of the battle.</summary>*/
         private BattleState _state;
-
-        /**<summary>The current action of the character selected.</summary>*/
-        private ActionType _actionType;
-
         /**<summary>The scene where you returned.</summary>*/
         private string _scene = "RestSystemTest";
 
         #endregion
 
-        private void Start()
+        #region SYSTEM
+
+        private void Awake()
         {
+            abilitiesOf.velocity = 0.5f;
+            
             Message.SetExitsMessage();
             SavesFiles.CurrentSave = 0;
             TestSetUp();
@@ -81,6 +76,48 @@ namespace Core.Battle.BattleSystem
                     break;
                 case BattleState.Turn:
                     ChooseTurns();
+                    #region CheckStatus
+
+                    
+                    foreach (StatusOf of in CurrentTurn.Statuses)
+                    {
+                        of.Duration--;
+                        if(of.Duration==0) CurrentTurn.RemoveStatus(of.Status.ID);
+                    }
+                    
+                    int damageXTurn = Convert.ToInt32(CurrentTurn.MaxBloodPoints * CurrentTurn.Regeneration);
+                    
+                    if(damageXTurn != 0)
+                    {
+                        CurrentTurn.ReduceCurrentBlood(damageXTurn);
+                        DamageAnimation(FighterTurn, damageXTurn, AttackType.Blood);
+                        if (CurrentTurn.IsKo())
+                        {
+                            UpdateBattlefield();
+                            return;
+                        }
+                    }
+                    damageXTurn = Convert.ToInt32(CurrentTurn.MaxKarmaPoints * CurrentTurn.KarmaRegeneration);
+                    if(damageXTurn != 0)
+                    {
+                        CurrentTurn.ReduceCurrentKarma(damageXTurn);
+                        DamageAnimation(FighterTurn, damageXTurn, AttackType.Karma);
+                    }
+                    
+                    if(CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.DontMove)) return;
+                    
+                    /*if(CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.AttackRandom))
+                        UseAbility(Random.Range(0, 1).Equals(Random.Range(0, 1)));
+                    else if(CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.AttackRandomPartner))
+                        UseAbility(!FighterTurn.isEnemy);
+                    else if(CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.AttackRandomEnemy)) 
+                        UseAbility(FighterTurn.isEnemy);
+                    */
+                    
+                    #endregion
+                    
+                    UpdateBattlefield();
+                    
                     _state = BattleState.TurnAction;
                     break;
                 case BattleState.TurnAction:
@@ -88,23 +125,23 @@ namespace Core.Battle.BattleSystem
                     else CharacterTurn();
                     break;
                 case BattleState.Lose:
-                    if (_fighters.Any(f => !f.member.Equals(null)))
+                    if (AllParty.Any(f => !f.member.Equals(null)))
                     {
                         TextData[] lostMessage = {new TextData("You lost...")};
-                        foreach (Fighter fighter in _fighters)
+                        foreach (Fighter fighter in AllParty)
                         { 
                             Destroy(fighter.member.gameObject);
                         }
                         message.messages = lostMessage;
                         Instantiate(message, transform);
                     }
-                    else if(!Message.ThereAreMessage()) SceneManager.LoadScene("BattleSystemTest");
+                    else if(!Message.ThereAreMessage()) SceneManager.LoadScene("MainMenu");
                     break;
                 case BattleState.Win:
-                    if (PartyFighter.Any(f => !f.member.Equals(null)))
+                    if (AllParty.Any(f => !f.member.Equals(null)))
                     {
                         TextData[] gainMessage = {new TextData("You won!!!")};
-                        foreach (Fighter fighter in PartyFighter)
+                        foreach (Fighter fighter in AllParty)
                         {
                             Destroy(fighter.member.gameObject);
                         }
@@ -115,6 +152,8 @@ namespace Core.Battle.BattleSystem
                     break;
             }
         }
+
+        #endregion
         
         #region GETTERS
 
@@ -133,10 +172,10 @@ namespace Core.Battle.BattleSystem
         /**<summary>Get the character of current turn.</summary>*/
         public Character CurrentTurn => _fighters[_currentTurn].character;
         
-        /**<summary>Get all party members fighting.</summary>*/
+        /**<summary>Get all party members fighting (no dead).</summary>*/
         public Fighter[] PartyFighter => GetGroup();
 
-        /**<summary>Get all enemies fighting.</summary>*/
+        /**<summary>Get all enemies fighting (no dead).</summary>*/
         public Fighter[] EnemiesFighter => GetGroup(true);
 
         /**<summary>Get all party members fighting.</summary>*/
@@ -145,6 +184,12 @@ namespace Core.Battle.BattleSystem
         /**<summary>Get all enemies fighting.</summary>*/
         public Character[] Enemies => _fighters.Where(f => f.isEnemy).Select(f => f.character).ToArray();
 
+        /**<summary>Get all party members.</summary>*/
+        public Fighter[] AllParty => _fighters.Where(f => !f.isEnemy).ToArray();
+
+        /**<summary>Get all enemies members.</summary>*/
+        public Fighter[] AllEnemies => _fighters.Where(f => f.isEnemy).ToArray();
+        
         #endregion
 
     }

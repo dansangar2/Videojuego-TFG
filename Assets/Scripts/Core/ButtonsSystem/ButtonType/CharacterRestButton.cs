@@ -9,12 +9,12 @@ namespace Core.ButtonsSystem.ButtonType
         private Text _restPoints;
         private Image _image;
         
-        private new void Start()
+        private new void Awake()
         {
             _image = transform.GetChild(0).GetComponentInChildren<Image>();
             _restPoints = transform.GetChild(0).GetChild(0).GetComponentInChildren<Text>();
             _restPoints.text = 5.ToString();
-            base.Start();
+            base.Awake();
         }
 
         private new void Update()

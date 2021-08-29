@@ -12,7 +12,7 @@ namespace Core.RestSystem
         private RestButtonsList _restOptionList;
         private CharacterButtonsList _characterList;
 
-        public void Start()
+        public void Awake()
         {
             _characterList = GetComponentInChildren<CharacterButtonsList>();
             _restOptionList = GetComponentInChildren<RestButtonsList>();

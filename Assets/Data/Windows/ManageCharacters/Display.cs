@@ -182,15 +182,6 @@ namespace Data.Windows.ManageCharacters
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Max Level", Options);
             EditorGUILayout.EndHorizontal();
-            //EditorGUILayout.BeginHorizontal();
-            /*GUILayout.Label("Bases values for evolution", Options);
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Rate values for evolution", Options);
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Learning values for evolution", Options);
-            EditorGUILayout.EndHorizontal();*/
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("To add", Options);
             EditorGUILayout.EndHorizontal();
@@ -248,8 +239,7 @@ namespace Data.Windows.ManageCharacters
                 
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.EndVertical();
-                StatsGeneratorWindow.GenerateStats(abi);
-                if (GUILayout.Button("See Stats by Level") && (abi.MaxLevel - abi.Level)>1) AbilityByLevelHelp.Window(abi);
+                if (GUILayout.Button("See Stats by Level")) AbilityByLevelHelp.Window(abi.Ability, abi.Level, abi.MaxLevel);
             }
 
             #endregion
@@ -428,8 +418,8 @@ namespace Data.Windows.ManageCharacters
                 
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.EndVertical();
-                StatsGeneratorWindow.Display(abi);
-                if (GUILayout.Button("See Stats by Level") && (abi.MaxLevel - abi.Level)>1) AbilityByLevelHelp.Window(abi);
+                if (GUILayout.Button("See Stats by Level")) AbilityByLevelHelp.Window(abi.Ability, abi.Level, abi.MaxLevel);
+
             }
             
             #endregion

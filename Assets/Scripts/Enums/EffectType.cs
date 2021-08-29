@@ -3,6 +3,7 @@
     public enum EffectType
     {
         None,
+        Dead,
         DontMove,
         AttackRandom,
         AttackRandomPartner,

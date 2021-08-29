@@ -26,9 +26,6 @@ namespace Core.ButtonsSystem.ButtonData
 
         public int GetCharacterID() { return characterID; }
 
-        /*/**<summary>The ID of the button.</summary>*/
-        //public int ID => id;
-
         /**<summary>It get the character that the button represents.</summary>*/
         public Character Character => SavesFiles.GetSave().Characters[characterID];
 

@@ -774,7 +774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneRedirect: 
-  velocity: 0.005
+  velocity: 0.5
   itemName: {fileID: 9220052924321887982}
   window: {fileID: 0}
   quitGame: 0

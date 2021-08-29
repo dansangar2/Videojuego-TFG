@@ -5,7 +5,6 @@ using System.Linq;
 using Data;
 using Enums;
 using UnityEngine;
-using Utils;
 using Random = UnityEngine.Random;
 
 namespace Entities
@@ -13,7 +12,7 @@ namespace Entities
     
     /**<summary>The Ability that the character can use.</summary>*/
     [Serializable]
-    public class Ability : Base
+    public class Ability : AbilityStatsGenerator
     {
         
         #region ATTRIBUTES
@@ -32,7 +31,7 @@ namespace Entities
         [SerializeField] private float[] stats = {1f, 0.8f, 1.2f};
         [SerializeField] private bool canRepeatRandomTarget; 
         
-        [SerializeField] private SerializableDictionary<StatusOf, float> statusesToDo = new SerializableDictionary<StatusOf, float>();
+        [SerializeField] private StatusOf[] statusesToDo = {};
         
         private bool UseCharacterElement  => Element == null;
 
@@ -56,11 +55,23 @@ namespace Entities
             cost = ability.cost; 
             elementID = ability.elementID; 
             canRepeatRandomTarget = ability.canRepeatRandomTarget;
-            for (int i = 0; i < ability.statusesToDo.Count; i++)
+            statusesToDo = new StatusOf[ability.statusesToDo.Length];
+            for (int i = 0; i < ability.statusesToDo.Length; i++)
             {
-                statusesToDo.Add(ability.statusesToDo.Keys.ToArray()[i],
-                    ability.statusesToDo.Values.ToArray()[i]);
+                statusesToDo[i] = ability.statusesToDo[i];
             }
+        }
+
+        /**<summary>Ability clone constructor with level.
+        <para>The level change the "stats" values.</para></summary>*/ 
+        public Ability(Ability ability, int level = 1, int maxLevel = 10) : this(ability)
+        {
+            for (int i = 0; i < stats.Length; i++)
+            {
+                stats[i] = Calculate(i, level, maxLevel);
+            }
+            UpdateAllStatus(level);
+            UpdateExperience(level, maxLevel);
         }
         
         #endregion
@@ -103,7 +114,7 @@ namespace Entities
         public float[] Stats => stats;
 
         /**<summary>Get all statuses to do with the possibility.</summary>*/
-        public SerializableDictionary<StatusOf, float> Statuses => statusesToDo;
+        public StatusOf[] Statuses => statusesToDo;
 
 
         /**<summary>
@@ -120,6 +131,17 @@ namespace Entities
         #endregion
         
         #region METHODS
+        
+        /**<summary>Apply or not the Statuses of tha ability by level to the character "destiny".
+        <param name="destiny">Character that received the statuses.</param></summary>*/ 
+        public void ApplyAllStatusTo(Character destiny)
+        {
+            foreach (StatusOf s in Statuses)
+            {
+                s.ApplyStatusToCharacter(destiny);
+            }
+            
+        }
 
         /**<summary>
         Add Multiplicity has 2 functionalities:
@@ -129,23 +151,26 @@ namespace Entities
         <param name="possibility">Possibility of that the attack can do it.</param>
         <param name="toChange">Default yes. If it's true, it'll change the value of key if it exits</param>
         </summary>*/ 
-        public void AddStatusToDo(int statusID, float possibility, float[] incrementPowerPlus = null, bool toChange = true)
+        public void AddStatusToDo(int statusID, float possibility, int level, int duration, float[] intervalPlus = null, bool toChange = true)
         {
-            possibility = possibility < -1 ? -1 : possibility > 1 ? 1 : possibility;
-            if (statusesToDo.Select(s => s.Key.Status.ID).Contains(statusID))
+            if (statusesToDo.Select(s => s.Status.ID).Contains(statusID))
             {
-                StatusOf of = statusesToDo
-                    .First(s => s.Key.Status.ID == statusID).Key;
+                StatusOf of = statusesToDo.First(s => s.Status.ID == statusID);
                 if (!toChange) return;
-                statusesToDo[of] = possibility;
-                incrementPowerPlus ??= of.IncrementPowerPlus;
-                
-                of.SetIncrements(incrementPowerPlus); 
+                of.Possibility = possibility;
+                of.Level = level;
+                of.Duration = duration;
+                if (intervalPlus == null) return;
+                for (int i = 0; i < of.IncrementPowerPlus[i]; i++)
+                {
+                    of.IncrementPowerPlus[i] = intervalPlus[i];
+                }
             }
             else
             {
-                incrementPowerPlus ??= new []{1f,1f,1f,1f,1f,1f,1f,1f,1f,1f,1f,1f,1f,1f};
-                statusesToDo.Add(new StatusOf(statusID, incrementPowerPlus), possibility);
+                intervalPlus ??= new float[] {1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1};
+                Array.Resize(ref statusesToDo, statusesToDo.Length + 1);
+                statusesToDo[statusesToDo.Length-1] = new StatusOf(statusID, level, duration, possibility, intervalPlus);
             } 
         }
      
@@ -155,29 +180,28 @@ namespace Entities
         <param name="statusID">The ID of the status to remove</param>
         </summary>*/ 
         public void RemoveStatus(int statusID) 
-        { 
-            if (statusesToDo.Select(s => s.Key.Status.ID).Contains(statusID)) 
+        {
+            if (!statusesToDo.Select(s => s.Status.ID).Contains(statusID)) return;
+            for (int i = Array.IndexOf(statusesToDo, 
+                statusesToDo.First(s => s.Status.ID == statusID)); i < statusesToDo.Length-1; i++) 
             { 
-                statusesToDo.Remove(statusesToDo
-                    .First(s => s.Key.Status.ID == statusID).Key); 
+                statusesToDo[i] = statusesToDo[i+1]; 
             } 
+            Array.Resize(ref statusesToDo, statusesToDo.Length - 1);
+        }
+
+        public void UpdateAllStatus(int level)
+        {
+            foreach (StatusOf status in statusesToDo)
+            {
+                status.Level = level;
+            }
         }
         
         /**<summary>Obtain the statuses.</summary>*/ 
         public StatusOf[] GetAllStatuses()
         {
-            return statusesToDo.Keys.ToArray();
-        }
-        
-        /**<summary>Obtain the statuses.</summary>*/ 
-        public float GetPossibilityOfStatus(int statusID)
-        {
-            if (statusesToDo.Select(s => s.Key.Status.ID).Contains(statusID))
-            {
-                return statusesToDo[statusesToDo.First(s => s.Key.Status.ID == statusID).Key];
-            }
-
-            return 0;
+            return statusesToDo.ToArray();
         }
         
         /**<summary>Obtain the damage value without the intervals or power extra.
@@ -239,50 +263,49 @@ namespace Entities
 
             int finalDamage = Convert.ToInt32(dt.Compute(damage, ""));
 
-            //ToDoADamage(finalDamage, destiny, user);
-            
             return finalDamage;
 
         }
 
         /**<summary>Get and do the final damage to the character.
-        <param name="user">Character that to do the attack.</param>
-        <param name="destiny">Character that received the damage.</param>
-        <param name="extra">The 3 parameters that increment o decrement the intervals(1-2)
-        and power extra(0).</param></summary>*/ 
-        public int Damage(Character user, Character destiny, params float[] extra)
+        /*<param name="user">Character that to do the attack.</param>
+        <param name="destiny">Character that received the damage.</param></summary>*/ 
+        public int Damage(Character user, Character destiny)
         {
-            extra ??= new[] {1f, 1f, 1f};
-            extra = extra.Length < 3 ? new []{1f,1f,1f} : extra;
             int damage = Convert.ToInt32(BaseDamage(user, destiny)
-                                         *Random.Range(DownInterval*extra[1], 
-                                                      UpperInterval*extra[2])
-                                         *PowerIncrement*extra[0]);
+                                         *Random.Range(
+                                             DownInterval, 
+                                             UpperInterval)*
+                                         PowerIncrement);
             damage = damage < 999999999 ? damage > -999999999 ? damage : -999999999 : 999999999;
             ToDoADamage(damage, destiny, user);
             return damage;
         }
-
+            
         /**<summary>Apply the damage to the character.</summary>*/
         public void ToDoADamage(int damage, Character destiny, Character user)
         {
-            switch (type)
+            ApplyAllStatusTo(destiny);
+            destiny.Reduce(type, damage);
+            if(type == AttackType.AbsorbBlood || type == AttackType.AbsorbKarma)
             {
-                case AttackType.Blood:
-                    destiny.ReduceCurrentBlood(damage);
-                    break;
-                case AttackType.Karma:
-                    destiny.ReduceCurrentKarma(damage);
-                    break;
-                case AttackType.AbsorbBlood:
-                    destiny.ReduceCurrentBlood(damage);
-                    user.ReduceCurrentBlood(-damage);
-                    break;
-                case AttackType.AbsorbKarma:
-                    destiny.ReduceCurrentKarma(damage);
-                    user.ReduceCurrentKarma(-damage);
-                    break;
+                user.Reduce(type, Convert.ToInt32(-damage*0.5f));
             }
+        }
+        
+        /**<summary>Get the final value of parameter of "index". </summary>*/ 
+        public float Calculate(int index, int level, int maxLevel) 
+        {
+            return Stats[index]*Mathf.Pow(rate[index],level)*LearningRate(index, level, maxLevel);
+        }
+        
+        /**<summary>Get the learning rate.</summary>*/
+        private float LearningRate(int index, int level, int maxLevel)
+        { 
+            if (level <= 2) return 1; 
+            return learning[index] + (1 - learning[index]) * 
+                Mathf.Pow(level-1 - Convert.ToSingle((maxLevel-1) / 2), 2) / 
+                Mathf.Pow(Convert.ToSingle((maxLevel-1) / 2), 2);
         }
         
         #endregion

@@ -409,12 +409,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonsBlinks: 1
-  velocity: 0.005
+  velocity: 0.5
   buttonColor: {r: 0, g: 1, b: 0, a: 1}
   numsOfCol: 1
   position: 0
   buttonsData:
-  - buttonName: Finish and Rest
+  - buttonText: Rest and finish
     action: ToRest
     icon: {fileID: -4841785371778001956, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
   prefab: {fileID: 206955506, guid: 0fe4f45a7ab3664479a0fe51695799be, type: 3}

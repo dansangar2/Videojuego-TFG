@@ -15,7 +15,7 @@ namespace Core.ButtonsSystem.ButtonList
         /**<sumary>Marks if the buttons will blink.</sumary>*/
         public bool buttonsBlinks;
         /**<summary>If blink is marks, then it'll the velocity of the blinks.</summary>*/
-        public float velocity = 0.005f;
+        public float velocity = 0.5f;
         /**<summary>It marks The color when it's marked.</summary>*/
         public Color buttonColor = Color.green;
         /**<summary>It indicates the number of columns</summary>*/

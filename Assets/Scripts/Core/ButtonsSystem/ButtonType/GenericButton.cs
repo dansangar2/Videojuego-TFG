@@ -15,7 +15,7 @@ namespace Core.ButtonsSystem.ButtonType
         to another window. If it's empty, then the player isn't moving.</summary>*/
         public string sceneRedirect;
         /**<summary>If blink is marks, then it'll the velocity of the blinks.</summary>*/
-        public float velocity = 0.005f;
+        public float velocity = 0.5f;
         /**<summary>It's the name of the button.</summary>*/
         public Text itemName;
         /**<summary>This windows will appear when the button is pressing.</summary>*/
@@ -34,8 +34,14 @@ namespace Core.ButtonsSystem.ButtonType
         public static string Message = "";
         /**<summary>It decides if when it's marked, it'll blink</summary>*/
         public bool blink;
+        /**<summary>The colors that the buttons will have.</summary>*/
+        private Color[] _marksColors;
+        /**<summary>The color index that turn.</summary>*/
+        private int _i;
         
-        
+        /**<summary>The time that the color need to full change.</summary>*/
+        private const float Wait = 0.8f;
+
         /**<summary>It marks if the button is selected.</summary>*/
         public bool IsSelect { get; set; }
         
@@ -47,24 +53,24 @@ namespace Core.ButtonsSystem.ButtonType
         /**<summary>It decides if the blink return back or continue.</summary>*/
         [SerializeField]protected bool buttonChangeColor;
         
+        //Used for "cannot choose" color.
         protected const float C = 145f / 255f;
-
-        //public bool IsStopped { get; }
 
         #endregion
 
         #region SYSTEM
 
-        protected void Start() { IsBlink(); }
+        protected void Awake()
+        {
+            IsBlink();
+        }
 
         protected void Update()
         {
             if(blink) ToBlink();
             else buttonImage.color = IsSelect ? buttonColor : Color.white;
 
-
             if (!Input.GetKeyDown(ControlsKeys.Ok) || !IsSelect || !canPress) return;
-
 
             //Redirect to another scene if "sceneRedirect" != ""
             if (!sceneRedirect.Trim().Equals(""))
@@ -99,43 +105,52 @@ namespace Core.ButtonsSystem.ButtonType
             if (blink)
             {
                 buttonImage = transform.Find("Blink").GetComponent<Image>();
-                buttonImage.color = new Color(buttonColor.r,buttonColor.g,buttonColor.b,0.8f - velocity);
+                buttonImage.color = new Color(buttonColor.r,buttonColor.g,buttonColor.b,0.8f);
+                _lerp = 1 - Wait;
+                _marksColors = new[] {
+                    new Color(
+                        buttonImage.color.r, 
+                        buttonImage.color.g, 
+                        buttonImage.color.b,
+                        0f),
+                    new Color(
+                        buttonImage.color.r, 
+                        buttonImage.color.g, 
+                        buttonImage.color.b,
+                        0.9f) 
+                };
             }
             else buttonImage = transform.Find("NoBlink").GetComponent<Image>();
             buttonImage.gameObject.SetActive(true);
         }
         
+        private float _lerp;
+        
         /**<summary>Blink animation.</summary>*/
         private void ToBlink()
         {
+            //If it's selected, then the blink animation started.
             if (IsSelect)
             {
+                float vel = velocity / 60f;
                 buttonImage.enabled = true;
 
-                if (buttonImage.color.a > 0.8||buttonImage.color.a<0.1) buttonChangeColor = !buttonChangeColor;
+                buttonImage.color = Color.Lerp(buttonImage.color, _marksColors[_i], vel);
 
-                switch (buttonChangeColor)
-                {
-                    case true:
-                        buttonImage.color = new Color(
-                            buttonImage.color.r, 
-                            buttonImage.color.g, 
-                            buttonImage.color.b, 
-                            buttonImage.color.a - velocity);
-                        break;
-                    case false:
-                        buttonImage.color = new Color(
-                            buttonImage.color.r,
-                            buttonImage.color.g,
-                            buttonImage.color.b,
-                            buttonImage.color.a + velocity);
-                        break;
-                }
+                _lerp = Mathf.Lerp(_lerp, 1f, vel);
+                if (_lerp <= Wait) return;
+                _lerp = 1 - Wait;
+                _i++;
+                _i %= _marksColors.Length;
+                
             }
+            //If not, the color, index and _lerp time must init.
             else
             {
+                buttonImage.color = new Color(buttonColor.r,buttonColor.g,buttonColor.b,0.8f);
                 buttonImage.enabled = false;
-                buttonImage.color = new Color(buttonColor.r,buttonColor.g,buttonColor.b,0.8f - velocity);
+                _lerp = 1 - Wait;
+                _i = 0;
             }
         }
 

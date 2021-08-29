@@ -82,7 +82,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &5476017522848852576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,9 +178,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 153
+  m_Text: 94
   hitDirection: {x: 0, y: 1, z: 0}
-  posDirection: {x: 0.8695905, y: -0.06734852, z: -0.802242}
+  posDirection: {x: 1.0028076, y: -0.07766599, z: -0.92514163}
   fall: 1
   direction: 1
-  force: 1
+  force: 5

@@ -21,7 +21,7 @@ namespace Core.ButtonsSystem.ButtonType
         public void SetUp(int nId, bool can=true) 
         { 
             base.SetUp(nId);
-            Start();
+            Awake();
             UpdateUI();
             CanPress(can);
         }

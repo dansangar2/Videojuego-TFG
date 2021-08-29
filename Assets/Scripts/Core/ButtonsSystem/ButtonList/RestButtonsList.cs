@@ -20,7 +20,7 @@ namespace Core.ButtonsSystem.ButtonList
 
         public static string Option = "";
         
-        public void Start()
+        protected void Awake()
         {
             foreach (Character character in SavesFiles.GetParty())
             {

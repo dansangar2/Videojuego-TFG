@@ -12,7 +12,7 @@ namespace Data.Database
     {
         
         /**<summary>Array that save the Serialize data.</summary>*/ 
-        [SerializeField] private Status[] statuses = {};
+        [SerializeField] private Status[] statuses;
 
         
         /**<summary>Clone constructor.</summary>*/ 

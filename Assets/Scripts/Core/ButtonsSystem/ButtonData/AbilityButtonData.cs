@@ -9,7 +9,7 @@ namespace Core.ButtonsSystem.ButtonData
     public class AbilityButtonData
     {
         
-        #region MyRegion
+        #region ATTRIBUTES
 
         [SerializeField] private string buttonText;
         [SerializeField] private string action;

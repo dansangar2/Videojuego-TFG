@@ -58,9 +58,7 @@ namespace Data.Windows.ManageAbilities
             }
 
             #endregion
-            
-            //_res = _res || StatsGeneratorWindow.Validator(item);
-            
+
             GUILayout.Label(advice);
             return _res;
         }

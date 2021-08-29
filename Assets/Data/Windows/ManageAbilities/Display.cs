@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Data.Windows.ManageStats;
 using Entities;
 using Enums;
 using UnityEditor;
@@ -17,7 +18,10 @@ namespace Data.Windows.ManageAbilities
         private static int _key;
         private static int _status;
         private static float _possibility;
-        
+        private static int _level = 1;
+        private static int _max = 100;
+        private static int _duration = 10;
+
         public static void Window(EditorWindow window)
         {
             window.maxSize = new Vector2(450, 700);
@@ -84,6 +88,7 @@ namespace Data.Windows.ManageAbilities
             EditorGUILayout.BeginVertical();
             EditorGUILayout.BeginHorizontal();
             
+            /*
             #region Max Level
 
             EditorGUILayout.BeginHorizontal();
@@ -92,7 +97,18 @@ namespace Data.Windows.ManageAbilities
             EditorGUILayout.EndHorizontal();
 
             #endregion
+            */
+            
+            
+            #region Can Repeat Random Target?
 
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Can repeat random?: ", Options);
+            item.CanRepeatRandomTarget = EditorGUILayout.Toggle(item.CanRepeatRandomTarget, Options);
+            EditorGUILayout.EndHorizontal();
+
+            #endregion
+            
             #region Target
 
             EditorGUILayout.BeginHorizontal();
@@ -153,18 +169,6 @@ namespace Data.Windows.ManageAbilities
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
             
-            EditorGUILayout.BeginVertical();
-            EditorGUILayout.BeginHorizontal();
-
-            #region Can Repeat Random Target?
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Can repeat random?: ");
-            item.CanRepeatRandomTarget = EditorGUILayout.Toggle(item.CanRepeatRandomTarget, Options);
-            EditorGUILayout.EndHorizontal();
-
-            #endregion
-
             #region Have element?
 
             EditorGUILayout.BeginHorizontal();
@@ -185,10 +189,7 @@ namespace Data.Windows.ManageAbilities
             EditorGUILayout.EndHorizontal();
 
             #endregion
-            
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-            
+
             #region Description
 
             GUILayout.Label("Description: ");
@@ -240,6 +241,20 @@ namespace Data.Windows.ManageAbilities
 
             #endregion
 
+            StatsGeneratorWindow.GenerateStats(item);
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Example Init Level", Options);
+            _level = EditorGUILayout.IntField(_level, Options);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Example Max Level", Options);
+            _max = EditorGUILayout.IntField(_max, Options);
+            EditorGUILayout.EndHorizontal();
+            _level = _level < _max ? _level : _max;
+            _level = _level > 0 ? _level : 1;
+            _max = _max > 10 ? _max : 10;
+            if (GUILayout.Button("See Stats by Level")) AbilityByLevelHelp.Window(item, _level, _max);
+            
             #region Statuses
 
             EditorGUILayout.BeginVertical();
@@ -248,6 +263,7 @@ namespace Data.Windows.ManageAbilities
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Status To Do", Options);
             GUILayout.Label("Possibility", Options);
+            GUILayout.Label("Duration", Options);
             GUILayout.Label("To Add", Options);
             EditorGUILayout.EndHorizontal();
             
@@ -260,7 +276,8 @@ namespace Data.Windows.ManageAbilities
             EditorGUILayout.BeginHorizontal();
             _status = EditorGUILayout.Popup(_status, GameData.StatusDB.Names, Options);
             _possibility = EditorGUILayout.FloatField(_possibility, Options);
-            if(GUILayout.Button("+", Options)) item.AddStatusToDo(_status, _possibility, toChange:false);
+            _duration = EditorGUILayout.IntField(_duration, Options);
+            if(GUILayout.Button("+", Options)) item.AddStatusToDo(_status, _possibility, 1,_duration, toChange:false);
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.EndHorizontal();
@@ -271,7 +288,11 @@ namespace Data.Windows.ManageAbilities
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(of.Status.Name, Options);
-                item.AddStatusToDo(of.Status.ID, EditorGUILayout.FloatField(item.GetPossibilityOfStatus(of.Status.ID), Options));
+                item.AddStatusToDo(of.Status.ID, 
+                    EditorGUILayout.FloatField(of.Possibility, Options), 
+                    1, 
+                    EditorGUILayout.IntField(of.Duration, Options)
+                    );
                 if(GUILayout.Button("-", Options)) item.RemoveStatus(of.Status.ID);
                 EditorGUILayout.EndHorizontal();
 
@@ -354,16 +375,17 @@ namespace Data.Windows.ManageAbilities
              
             EditorGUILayout.BeginVertical(); 
             EditorGUILayout.BeginHorizontal();
-             
-            #region Max Level
+
+            #region Can Repeat Random Target?
              
             EditorGUILayout.BeginHorizontal(); 
-            GUILayout.Label("Max Level: ", Options); 
-            //GUILayout.Label(item.MaxLevel.ToString(), Options); 
+            GUILayout.Label("Can repeat random?: ", Options); 
+            GUILayout.Label(item.CanRepeatRandomTarget.ToString(), Options); 
             EditorGUILayout.EndHorizontal();
              
             #endregion
-             
+
+            
             #region Target
              
             EditorGUILayout.BeginHorizontal(); 
@@ -423,19 +445,7 @@ namespace Data.Windows.ManageAbilities
              
             EditorGUILayout.EndHorizontal(); 
             EditorGUILayout.EndVertical();
-             
-            EditorGUILayout.BeginVertical(); 
-            EditorGUILayout.BeginHorizontal();
-             
-            #region Can Repeat Random Target?
-             
-            EditorGUILayout.BeginHorizontal(); 
-            GUILayout.Label("Can repeat random?: ", Options); 
-            GUILayout.Label(item.CanRepeatRandomTarget.ToString(), Options); 
-            EditorGUILayout.EndHorizontal();
-             
-            #endregion
-             
+            
             #region Have element?
              
             EditorGUILayout.BeginHorizontal(); 
@@ -444,10 +454,7 @@ namespace Data.Windows.ManageAbilities
             EditorGUILayout.EndHorizontal();
              
             #endregion
-             
-            EditorGUILayout.EndHorizontal(); 
-            EditorGUILayout.EndVertical();
-             
+
             #region Description
              
             GUILayout.Label("Description: "); 
@@ -487,12 +494,7 @@ namespace Data.Windows.ManageAbilities
             
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
-            
-            #region Status
-            
-             
-            #endregion
-             
+
             #region Formula
              
             FormulaDescription();
@@ -503,6 +505,19 @@ namespace Data.Windows.ManageAbilities
             EditorGUILayout.EndHorizontal();
              
             #endregion
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Example Init Level", Options);
+            _level = EditorGUILayout.IntField(_level, Options);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Example Max Level", Options);
+            _max = EditorGUILayout.IntField(_max, Options);
+            EditorGUILayout.EndHorizontal();
+            _level = _level < _max ? _level : _max;
+            _level = _level > 0 ? _level : 1;
+            _max = _max > 10 ? _max : 10;
+            StatsGeneratorWindow.Display(item, _level, _max);
             
             #region Statuses
 
@@ -523,7 +538,8 @@ namespace Data.Windows.ManageAbilities
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(of.Status.Name, Options);
-                GUILayout.Label(item.GetPossibilityOfStatus(of.Status.ID).ToString(CultureInfo.InvariantCulture));
+                GUILayout.Label(of.Possibility.ToString(CultureInfo.InvariantCulture));
+                GUILayout.Label(of.Duration.ToString(), Options);
                 EditorGUILayout.EndHorizontal();
 
                 for (int i = 0; i < of.IncrementPowerPlus.Length; i+=2)

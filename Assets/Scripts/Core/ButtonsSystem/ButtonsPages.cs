@@ -8,7 +8,7 @@ namespace Core.ButtonsSystem
     public class ButtonsPages : BaseButtonsList
     {
 
-        #region MyRegion
+        #region ATTRIBUTES
 
         /**<sumary>Set the max item for pages of the list.</sumary>*/
         public int maxInPage = 4;

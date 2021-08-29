@@ -11,7 +11,7 @@ namespace Data.Database
     {
         
         /**<summary>Array that save the Serialize data.</summary>*/ 
-        [SerializeField] private Ability[] abilities = {};
+        [SerializeField] private Ability[] abilities;
 
         /**<summary>Clone constructor.</summary>*/ 
         public Abilities(Abilities abilities)

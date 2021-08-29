@@ -43,7 +43,7 @@ namespace Data.Windows.ManageCharacters
 
             #endregion
 
-            foreach (SpecialAbility ability in item.AllDataAbilities)
+            foreach (Ability ability in item.Abilities())
             {
                 _res = _res || StatsGeneratorWindow.Validator(ability);   
             }

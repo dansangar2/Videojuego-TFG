@@ -192,6 +192,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 818825308396173383, guid: 4ade4a2a937b5a04a8354acd3bb4e49d,
         type: 3}
+      propertyPath: statusUI
+      value: 
+      objectReference: {fileID: 6984753199024958466, guid: af1cf1e58077de547a727638ed48cfe5,
+        type: 3}
+    - target: {fileID: 818825308396173383, guid: 4ade4a2a937b5a04a8354acd3bb4e49d,
+        type: 3}
       propertyPath: damageText
       value: 
       objectReference: {fileID: 2123082361022019132, guid: e8183895a237a8e4787ce216d00325f6,

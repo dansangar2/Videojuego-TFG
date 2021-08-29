@@ -290,14 +290,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneRedirect: 
-  velocity: 0.005
+  velocity: 0.5
   itemName: {fileID: 8404368696322320044}
   window: {fileID: 0}
   quitGame: 0
   canSendMessage: 0
   messageToSend: 
   canPress: 1
-  buttonColor: {r: 0, g: 1, b: 0, a: 1}
   blink: 0
+  buttonColor: {r: 0, g: 1, b: 0, a: 1}
   buttonImage: {fileID: 0}
   buttonChangeColor: 0

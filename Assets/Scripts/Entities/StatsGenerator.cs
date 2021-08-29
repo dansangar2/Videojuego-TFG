@@ -107,10 +107,6 @@ namespace Entities
             }
             SetExperienceCurveParameters(nExp); 
             Update();
-            foreach (var VARIABLE in main)
-            {
-                Debug.Log(VARIABLE);
-            }
             main[7] = main[0]; 
             main[8] = main[1];
         }

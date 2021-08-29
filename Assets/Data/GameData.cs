@@ -1,5 +1,4 @@
 using Data.Database;
-using Entities;
 using UnityEditor;
 
 namespace Data

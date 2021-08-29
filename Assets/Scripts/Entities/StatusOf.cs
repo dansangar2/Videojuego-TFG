@@ -1,7 +1,4 @@
-﻿
-
-using System;
-using System.Linq;
+﻿using System;
 using Data;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -13,43 +10,78 @@ namespace Entities
     {
         #region ATTRIBUTES
 
-        [SerializeField] private int statusId;
-        [SerializeField] private float[] incrementPowerPlus = new float[14];
+        [SerializeField] private int statusID;
         [SerializeField] private int level;
+        [SerializeField] private int duration;
+        [SerializeField] private float possibility;
+        [SerializeField] protected float[] incrementPowerPlus = new float[14];
 
         #endregion
         
         #region CONSTRUCTORS
 
-        /**<summary>
-        Empty constructor.
-        </summary>*/ 
+        /**<summary>Empty constructor.</summary>*/ 
         public StatusOf(){}
         
-        /**<summary>
-        Set the status with the evolution parameters.
-        </summary>*/ 
-        public StatusOf(int statusId, float[] incrementPowerPlus)
+        /**<summary>Set the status with the evolution parameters.</summary>*/ 
+        public StatusOf(int statusID, int level, int duration, float possibility, float[] incrementStats)
         {
-            this.statusId = statusId;
-            for (int i=0; i < this.incrementPowerPlus.Length; i++) { this.incrementPowerPlus[i] = incrementPowerPlus[i]; }
+            for (int i = 0; i < incrementStats.Length; i++)
+            {
+                incrementPowerPlus[i] = incrementStats[i];
+                Debug.Log(incrementPowerPlus[i]);
+            }
+            this.statusID = statusID;
+            this.level = level;
+            this.duration = duration;
+            this.possibility = possibility;
         }
         
-        /**<summary>
-        Clone constructor.
-        </summary>*/ 
+        /**<summary>Clone constructor.</summary>*/ 
         public StatusOf(StatusOf status)
         {
-            statusId = status.statusId;
-            for (int i = 0; i < incrementPowerPlus.Length; i++) 
+            statusID = status.Status.ID;
+            level = status.level;
+            duration = status.duration;
+            possibility = status.possibility;
+            for (int i = 0; i < status.incrementPowerPlus.Length; i++)
             {
-                incrementPowerPlus[i] = status.incrementPowerPlus[i]; 
+                incrementPowerPlus[i] = status.incrementPowerPlus[i];
             }
         }
 
         #endregion
 
         #region GETTERS & SETTERS
+
+        /**<summary>Get the base status.</summary>*/ 
+        public Status Status => new Status(GameData.StatusDB.FindByID(statusID), level, incrementPowerPlus);
+        
+        /**<summary>The level of the status.</summary>*/ 
+        public int Level { get => level; set => level = value; }
+
+        /**<summary>The level of the status.</summary>*/
+        public float Possibility
+        {
+            get
+            {
+                possibility = Mathf.Min(1, possibility*Mathf.Pow(IncrementPowerPlus[13],level-1));
+                return Mathf.Max(-1, possibility);
+            }
+            set
+            {
+                possibility = Mathf.Min(1, value);
+                possibility = Mathf.Max(-1, possibility);
+            }
+        }
+
+        /**<summary>The status duration by turns. If it's "-1", then it's don't quit by turns.</summary>*/ 
+        public int Duration
+        {
+            get => Convert.ToInt32(duration*Mathf.Pow(incrementPowerPlus[11],level-1)) < -1 
+                ? -1 : Convert.ToInt32(duration*Mathf.Pow(incrementPowerPlus[11],level-1));
+            set => duration = value;
+        }
 
         /**<summary>It will uses for increments the "IncrementsPower" values by the level of the ability.
         <para>[mbp, mkp, atk, def, spi, men, agi, reb, rek, rxb, rxk, d, tlv, pos]</para>
@@ -69,54 +101,24 @@ namespace Entities
         13 -> pos = Possibility</summary>*/ 
         public float[] IncrementPowerPlus { get => incrementPowerPlus; set => incrementPowerPlus = value; }
 
-        /**<summary>Get the base status.</summary>*/ 
-        public Status Status => GameData.StatusDB.FindByID(statusId);
-
-        public float[] IncrementPower => incrementPowerPlus.Zip(Status.IncrementPower,
-            (x, y) => x * y).ToArray();
-        
-        /**<summary>It increments or decrements the level temporally.</summary>*/ 
-        public int TemporalLevelUp => Convert.ToInt32(Mathf.Round(Status.TemporalLevelUp*Calculate(12)));
-
-        /**<summary>The status duration by turns. If it's 0, then it's don't quit by turns.</summary>*/ 
-        public int Duration => Convert.ToInt32(Mathf.Round(Status.Duration*Calculate(12)));
-        
-        /**<summary>The level of the status.</summary>*/ 
-        public int Level { get => level; set => level = value; }
-
         #endregion
 
-        public void ApplyStatusToCharacter(Character character, float possibility, int nLevel = 1)
-        {
-            if (Random.Range(0f, 1f) > Mathf.Abs(possibility*Calculate(13))) return;
-            if (possibility < 0)
-            {
-                character.RemoveStatus(statusId);
-                return;
-            }
-            StatusOf of = new StatusOf(this) {level = nLevel};
-            character.AddStatus(of);
-            foreach (Status s in of.Status.StatusToQuit)
-            {
-                character.RemoveStatus(s.ID);
-            }
-        }
+        #region METHODS
 
-        public void SetIncrements(float[] nIncrementPowerPlus)
+        /**<summary>Add Status to Character.
+        <param name = "character">The character that will add this status.</param></summary>*/
+        public void ApplyStatusToCharacter(Character character)
         {
-            if(nIncrementPowerPlus != null)
+            bool quit = possibility < 0;
+            //float p = Mathf.Abs(possibility);
+            if (Random.Range(0f, 1f) > Mathf.Abs(possibility)) return;
+            if (quit)
             {
-                for (int i = 0; i < incrementPowerPlus.Length; i++)
-                {
-                    incrementPowerPlus[i] = nIncrementPowerPlus[i];
-                }
-            }
+                character.RemoveStatus(Status.ID);
+                return;
+            }character.AddStatus(this);
         }
         
-        /**<summary>Get the final value of parameter of "index". </summary>*/ 
-        private float Calculate(int index) 
-        {
-            return Status.IncrementPower[index]*Mathf.Pow(IncrementPowerPlus[index],level);
-        }
+        #endregion
     }
 }

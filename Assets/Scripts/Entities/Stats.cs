@@ -1,5 +1,6 @@
 ﻿using System;
 using Data;
+using Enums;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -35,9 +36,7 @@ namespace Entities
         /**<summary>Empty Stats constructor</summary>*/ 
         protected Stats(int id): base(id){ }
         
-        /**<summary>
-        Clone Stats constructor
-        </summary>*/ 
+        /**<summary>Clone Stats constructor</summary>*/ 
         protected Stats(Stats bases): base(bases) 
         { 
             level = bases.level; 
@@ -52,8 +51,6 @@ namespace Entities
                 special[i] = bases.special[0];
             }
             
-            //List<Affinity> afi;
-            //element = new Element(bases.element);
             elementID = bases.elementID;
             
             for (int i = 0; i < bases.expData.Length; i++) 
@@ -316,7 +313,7 @@ namespace Entities
         }
         
         /**<summary>
-        The blood that is reduced. If it is negative, the it recover
+        The blood that is reduced. If it is negative, then it recover
         </summary>*/ 
         public void ReduceCurrentBlood(int amount = -999999) 
         { 
@@ -326,13 +323,35 @@ namespace Entities
         }
         
         /**<summary>
-        The karma that is reduced. If it is negative, the it recover
+        The karma that is reduced. If it is negative, then it recover
         </summary>*/ 
         public void ReduceCurrentKarma(int amount = -999999) 
         { 
             Main[8] -= amount; 
             if (Main[8] > Main[1]) Main[8] = Main[1];
             else if(Main[8] < 0) Main[8] = 0;
+        }
+        
+        /**<summary>
+        The karma that is reduced. If it is negative, then it recover
+        </summary>*/ 
+        public void Reduce(AttackType type, int amount = -999999) 
+        {
+            switch (type)
+            {
+                case AttackType.Blood:
+                    ReduceCurrentBlood(amount);
+                    break;
+                case AttackType.Karma:
+                    ReduceCurrentKarma(amount);
+                    break;
+                case AttackType.AbsorbBlood:
+                    ReduceCurrentBlood(amount);
+                    break;
+                case AttackType.AbsorbKarma:
+                    ReduceCurrentKarma(amount);
+                    break;
+            }
         }
         
         /**<summary>
@@ -354,12 +373,12 @@ namespace Entities
         Update the experience from user, If actExp >= nedExp, nedExp is updated, using the current level.
         </summary>*/ 
         public void UpdateExperience() { nedExp = Level < MaxLevel ? MainFormulaExperience() : 0; }
-        
+
         /**<summary>
         Return true if the character has dead (if current blood is less than 0).
-        </summary>*/ 
+        </summary>*/
         public bool IsKo() { return 0 >= CurrentBloodPoints; }
-        
+
         public void ResetCharge() { Charge = 0; }
         
         #endregion

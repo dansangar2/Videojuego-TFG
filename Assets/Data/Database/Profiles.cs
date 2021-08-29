@@ -10,7 +10,7 @@ namespace Data.Database
     public class Profiles : ScriptableObject
     { 
         /**<summary>Array that save the Serialize data.</summary>*/ 
-        [SerializeField] private Profile[] profiles = {};
+        [SerializeField] private Profile[] profiles;
 
         /**<summary>Clone constructor.</summary>*/ 
         public Profiles(Profiles profiles)

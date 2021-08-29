@@ -8,15 +8,16 @@ namespace Core.ButtonsSystem.ButtonType
     /**<summary>Base button HUD that can use for items with two icons and IDs.</summary>*/
     public class BaseHUDButton : GenericButton
     {
+        /**<summary>The ID of the character.</summary>*/
         [SerializeField] protected int id;
         /**<summary>The main icon of the HUD.</summary>*/
         public Image itemIcon;
         /**<summary>The second icon of the HUD.</summary>*/
         public Image elementIcon;
 
-        public new void Start()
+        public new void Awake()
         {
-            base.Start();
+            base.Awake();
         }
 
         /**<summary>Set the ID.</summary>*/

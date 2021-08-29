@@ -14,13 +14,13 @@ namespace Data.Windows.ManageStatuses
         private Vector2 _scroll;
 
         
-        public static void Window(Statuses elementDB, Status element)
+        public static void Window(Statuses statusDB, Status status)
         {
-            _statusDB = elementDB;
+            _statusDB = statusDB;
             
             _window = GetWindow<Modifier>();
             Display.Window(_window);
-            _status = new Status(element);
+            _status = new Status(status);
             
         }
         

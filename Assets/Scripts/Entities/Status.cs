@@ -16,10 +16,9 @@ namespace Entities
         [SerializeField] private EffectType effect = EffectType.None;
         [SerializeField] private bool quitWhenFinish;
         [SerializeField] private int temporalLevelUp;
-        [SerializeField] private int duration;
         [SerializeField] private float quitByHitRate;
         
-        [SerializeField] private float[] incrementPower = {1,1,1,1,1,1,1,1,1,1,1};
+        [SerializeField] private float[] incrementPower = {1,1,1,1,1,1,1,0,0,0,0};
         [SerializeField] private int[] statusToQuit = {};
 
         #endregion
@@ -28,21 +27,35 @@ namespace Entities
 
         /**<summary>Empty Status constructor</summary>*/ 
         public Status(int id): base(id){ }
-                
-        /**<summary>Clone Status constructor</summary>*/ 
+        
+        /**<summary>Clone Status constructor.</summary>*/ 
         public Status(Status status): base(status) 
         { 
             icon = status.icon;
             effect = status.effect;
             quitWhenFinish = status.quitWhenFinish;
             temporalLevelUp = status.temporalLevelUp;
-            duration = status.duration;
             
             incrementPower = new float[status.incrementPower.Length];
-            for (int i=0; i < status.incrementPower.Length; i++) { incrementPower[i] = status.incrementPower[i]; }
+            for (int i = 0; i < status.incrementPower.Length; i++)
+            {
+                incrementPower[i] = status.incrementPower[i];
+            }
 
             statusToQuit = new int[status.statusToQuit.Length];
             for (int i=0; i < status.statusToQuit.Length; i++) { statusToQuit[i] = status.statusToQuit[i]; }
+        }
+        
+        /**<summary>Clone Status constructor with level.</summary>*/ 
+        public Status(Status status, int level = 1, float[] increments = null): this(status) 
+        { 
+            increments ??= new float[]{1,1,1,1,1,1,1,0,0,0,0,1,1,1};
+            temporalLevelUp = Convert.ToInt32(status.temporalLevelUp * Mathf.Pow(increments[12],level-1));
+            
+            for (int i = 0; i < status.incrementPower.Length; i++)
+            {
+                incrementPower[i] = status.incrementPower[i]*Mathf.Pow(increments[i],level-1);
+            }
         }
 
         #endregion
@@ -61,9 +74,6 @@ namespace Entities
         /**<summary>It increments or decrements the level temporally.</summary>*/ 
         public int TemporalLevelUp { get => temporalLevelUp; set => temporalLevelUp = value < 0 ? 0 : value; }
 
-        /**<summary>The status duration by turns. If it's 0, then it's don't quit by turns.</summary>*/ 
-        public int Duration { get => duration; set => duration = value < 0 ? 0 : value; }
-        
         /**<summary>The rate with the possibility to quit when someone is beat.</summary>*/ 
         public float QuitByHitRate { get => quitByHitRate; set => quitByHitRate = value < 0 ? 0 : value > 1 ? 1 : value; }
 
@@ -80,7 +90,8 @@ namespace Entities
         <para>8 -> rek = Recovery Karma Plus Rate</para>
         9 -> rxb = Regenerate Blood Rate
         <para>10 -> rxk = Regenerate Karma Rate</para>
-        </summary>*/ public float[] IncrementPower { get => incrementPower; set => incrementPower = value; }
+        </summary>*/ 
+        public float[] IncrementPower { get => incrementPower; set => incrementPower = value; }
 
         /**<summary>When the status is in some character, all this status that the character
         has that are in this array will remove. For to indicate that all statuses must remove, the array
@@ -113,6 +124,12 @@ namespace Entities
             }
             Array.Resize(ref statusToQuit, statusToQuit.Length - 1);
         }
+        
+        //**<summary>Get the final value of parameter of "index". </summary>*/ 
+        /*private float Calculate(int index, int level) 
+        {
+            return IncrementPower[index]*Mathf.Pow(increments[index],level);
+        }*/
         
         #endregion
     }

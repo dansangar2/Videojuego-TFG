@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data;
+using Enums;
 using UnityEngine;
 
 namespace Entities
@@ -112,10 +113,28 @@ namespace Entities
         }
         
         /**<summary>
-        Get the ability with specific ID.
+        Get the special ability by ID.
         <param name="abilityID">The id of the ability.</param> 
         </summary>*/ 
-        public Ability GetAbility(int abilityID) 
+        public SpecialAbility GetSpAbility(int abilityID)
+        {
+            return abilities.First(a => a.Ability.ID == abilityID);
+        }
+        
+        /**<summary>
+        Get the ability of special ability by ID.
+        <param name="abilityID">The id of the ability.</param> 
+        </summary>*/ 
+        public Ability GetAbility(int abilityID)
+        {
+            return abilities.Select(s => s.Ability).First(a => a.ID == abilityID);
+        }
+        
+        /**<summary>
+        Get the base ability by ID without level.
+        <param name="abilityID">The id of the ability.</param> 
+        </summary>*/ 
+        public Ability GetBaseAbility(int abilityID) 
         { 
             return abilities.Select(a => a.Ability).First(a => a.ID == abilityID);
         }
@@ -139,19 +158,20 @@ namespace Entities
         public void AddStatus(StatusOf status)
         {
             if(statuses.Select(s => s.Status.ID).Contains(status.Status.ID)) return;
-            if (statuses.First(s => s.Status.ID == status.Status.ID).Level < status.Level)
-            {
+            if (statuses.FirstOrDefault(s => s.Status.ID == status.Status.ID)?.Level < status.Level) 
+            { 
                 statuses[Array.IndexOf(statuses, 
-                    statuses.First(s => s.Status.ID == status.Status.ID))] = status;
+                    statuses.First(s => s.Status.ID == status.Status.ID))] = new StatusOf(status);
                 return;
             }
             Array.Resize(ref statuses, statuses.Length + 1); 
-            statuses[statuses.Length - 1] = status;
+            statuses[statuses.Length - 1] = new StatusOf(status);
         }
         
         /**<summary>Remove a status of the Character.</summary>*/ 
-        public void RemoveStatus(int statusId) 
-        { 
+        public void RemoveStatus(int statusId)
+        {
+            if (statuses.All(s => s.Status.ID != statusId)) return;
             for (int i = Array.IndexOf(statuses, 
                 statuses.First(s => s.Status.ID == statusId)); i < statuses.Length-1; i++) 
             { 
@@ -185,19 +205,19 @@ namespace Entities
 
         /**<summary>Get the Blood Recovery Plus Rate with the status increments.</summary>*/ 
         public new float BloodRecoveryPlus => base.BloodRecoveryPlus + 
-                                              Statuses.Sum(s => s.IncrementPower[7]);
+                                              Statuses.Sum(s => s.Status.IncrementPower[7]);
         
         /**<summary>Get the Karma Recovery Plus Rate with the status increments.</summary>*/ 
         public new float KarmaRecoveryPlus => base.KarmaRegeneration + 
-                                              Statuses.Sum(s => s.IncrementPower[8]);
+                                              Statuses.Sum(s => s.Status.IncrementPower[8]);
 
         /**<summary>Get the Regeneration Rate with the status increments.</summary>*/ 
         public new float Regeneration => base.Regeneration + 
-                                              Statuses.Sum(s => s.IncrementPower[9]);
+                                         Statuses.Sum(s => s.Status.IncrementPower[9]);
         
-        /**<summary>Get the Karma Regeneration Rate with the status increments.</summary>*/ 
-        public new float KarmaRegeneration => base.KarmaRegeneration + 
-                                              Statuses.Sum(s => s.IncrementPower[10]);
+        /**<summary>Get the Karma Regeneration Rate with the status increments.</summary>*/
+        public new float KarmaRegeneration => base.KarmaRegeneration +
+                                              Statuses.Sum(s => s.Status.IncrementPower[10]);
 
 
         #endregion
@@ -209,7 +229,7 @@ namespace Entities
         public float Calculate(int index)
         {
             if (Statuses.Length == 0) return 1;
-            return Statuses.Select(s => s.IncrementPower[index])
+            return Statuses.Select(s => s.Status.IncrementPower[index])
                 .Aggregate((x, y) => x * y);
         }
         
@@ -220,8 +240,7 @@ namespace Entities
         <param name="abilityLevel">The initial ability level.</param>
         </summary>*/ 
         public void AddAbility(int abilityID, int needLevel = -1, int abilityLevel = -1,
-            int aMaxLevel = -1, float[] aRate = null, 
-            float[] aLearning = null, int[] aExpData = null) 
+            int aMaxLevel = -1) 
         { 
             if (abilities.Any(a => a.Ability.ID == abilityID)) 
             { 
@@ -230,50 +249,23 @@ namespace Entities
                     a.Level = abilityLevel <= 0 ? a.Level : abilityLevel; 
                     a.NeedLevel = needLevel <= 0 ? a.NeedLevel : needLevel;
                     a.MaxLevel = aMaxLevel <= 0 ? a.MaxLevel : aMaxLevel;
-                    if (aRate != null)
-                    {
-                        for (int i = 0; i < aRate.Length; i++)
-                        {
-                            a.Rate[i] = aRate[i];
-                        }
-                    }
-                    if (aLearning != null)
-                    {
-                        for (int i = 0; i < aLearning.Length; i++)
-                        {
-                            a.Learning[i] = aLearning[i];
-                        }
-                    }
-                    if (aExpData != null)
-                    {
-                        for (int i = 0; i < aExpData.Length; i++)
-                        {
-                            a.ExpData[i] = aExpData[i];
-                        }
-                    }
                 }
             }
             else
             {
-                aRate ??= new[] {1f, 1, 1};
-                aLearning ??= new[] {1f, 1, 1};
-                aExpData ??= new[] {10, 5, 15, 10};
-                
                 AddSpAbility(abilityID, abilityLevel <= 0 ? 1 : abilityLevel, 
-                    needLevel <= 0 ? 1 : needLevel, aMaxLevel <= 0 ? 1 : aMaxLevel,
-                    aRate, aLearning, aExpData);
+                    needLevel <= 0 ? 1 : needLevel, aMaxLevel <= 0 ? 1 : aMaxLevel);
             }
         }
         
         /**<summary>
         Add a Special ability with the need level to unlock the ability and the current level of it.
         </summary>*/ 
-        private void AddSpAbility(int abilityID, int needLevel, int abilityLevel, int aMaxLevel,
-            float[] aRate, float[] aLearning, int[] aExpData) 
+        private void AddSpAbility(int abilityID, int needLevel, int abilityLevel, int aMaxLevel) 
         { 
             Array.Resize(ref abilities, abilities.Length + 1); 
-            abilities[abilities.Length - 1] = new SpecialAbility(abilityID, needLevel, abilityLevel, 
-                aMaxLevel, aRate, aLearning, aExpData);
+            abilities[abilities.Length - 1] = new SpecialAbility(abilityID, needLevel, 
+                abilityLevel, aMaxLevel);
         }
         
         /**<summary>
@@ -283,6 +275,46 @@ namespace Entities
         public void RemoveAbility(int abilityID) 
         { 
             abilities = abilities.Where(a => a.Ability.ID != abilityID).ToArray(); 
+        }
+        
+        /**<summary>Remove a Ability from the abilities list.</summary>*/ 
+        public void RestTurnsToStatuses() 
+        {
+            foreach (StatusOf status in Statuses)
+            {
+                if(status.Duration<0) continue;
+                status.Duration--;
+                if (status.Duration == 0)
+                {
+                    RemoveStatus(status.Status.ID);
+                }
+            } 
+        }
+
+        /**<summary>Return the rentability of the effects of the status.</summary>*/ 
+        public int StatusRentability()
+        {
+            int result = 0;
+            int statusResult = 0;
+
+            foreach (StatusOf status in Statuses)
+            {
+                statusResult += main.Select((m, i) => m * status.IncrementPowerPlus[i] < m ? -1 : 1).Sum();
+                statusResult += special.Select((s, i) => 
+                    s + status.IncrementPowerPlus[i + main.Length] < s ? -1 : 1).Sum();
+                statusResult += status.Status.Effect == EffectType.None ? 1 : -1;
+                statusResult += status.Status.TemporalLevelUp;
+                result += statusResult * status.Duration;
+            }
+
+            return result;
+        }
+        
+        /**<summary>Set the Character with BP = 0 and quit all status.</summary>*/
+        public void SetKo()
+        {
+            main[7] = 0;
+            statuses = new StatusOf[]{};
         }
         
         #endregion

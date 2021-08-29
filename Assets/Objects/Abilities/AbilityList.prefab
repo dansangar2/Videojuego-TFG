@@ -562,38 +562,80 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01e788d88901ba4489c6ca5ce447cb5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonsData: []
-  prefab: {fileID: 97925835174820496, guid: 68e145ea2e6b98e4bb94a35f481b5929, type: 3}
-  buttonsBlinks: 0
-  velocity: 0.005
+  buttonsBlinks: 1
+  velocity: 0.5
   buttonColor: {r: 0, g: 1, b: 0, a: 1}
   numsOfCol: 1
-  nprefab: {fileID: 97925835174820496, guid: 68e145ea2e6b98e4bb94a35f481b5929, type: 3}
+  position: 0
+  maxInPage: 4
+  prefab: {fileID: 97925835174820496, guid: 68e145ea2e6b98e4bb94a35f481b5929, type: 3}
   character:
-    id: 0
-    name: 
+    id: 3
+    name: C4
     description: 
     art: {fileID: 0}
-    level: 0
-    maxLevel: 0
-    main: 
-    special: []
-    expData: 
-    elementID: 0
+    level: 1
+    maxLevel: 99
+    main: c201000064000000330000002d00000028000000230000001e000000c201000064000000
+    special:
+    - 0.011
+    - 0.019
+    - 0
+    - 0
+    - 0.011
+    expData: 1e000000140000001e00000014000000
+    elementID: 1
     actExp: 0
-    nedExp: 0
-    bases: []
-    plus: 
-    rate: []
-    flat: 
-    learning: []
-    max: []
-    yes: 
-    face: {fileID: 0}
-    model: {fileID: 0}
+    nedExp: 50
+    bases:
+    - 50
+    - 30
+    - 6
+    - 5.5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    plus: 90010000460000002d00000028000000230000001e000000190000001e00000023000000230000001e000000
+    rate:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 6
+    - 4
+    - 15
+    - 15
+    flat: 00000000000000000000000000000000000000000000000000000000
+    learning:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    max:
+    - 0.5
+    - 0.5
+    yes: 0000
+    face: {fileID: -7869814277794165454, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    model: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
     meleeAttackID: 0
-    longAttackID: 0
-    abilities: []
+    longAttackID: 2
+    abilityPoints: 0
+    statuses: []
+    abilities:
+    - abilityID: 1
+      needLevel: 1
+      level: 1
+      maxLevel: 1
 --- !u!1 &7705889096844391700
 GameObject:
   m_ObjectHideFlags: 0

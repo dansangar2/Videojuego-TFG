@@ -34,7 +34,7 @@ namespace Core.Messages
         
         #region SYSTEM
         
-        private void Start() 
+        private void Awake() 
         { 
             IsSomeMessageOn = true;
             if (messages.Length == 0) messages = new []{new TextData("")}; 

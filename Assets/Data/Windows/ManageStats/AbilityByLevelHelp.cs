@@ -9,20 +9,23 @@ namespace Data.Windows.ManageStats
     {
         
         private static EditorWindow _window;
-        private static SpecialAbility _newAbi;
+        private static Ability _newAbi;
+        private static int _level;
+        private static int _max;
         
-        
-        public static void Window(SpecialAbility item)
+        public static void Window(Ability item, int level, int max)
         {
             _window = GetWindow<AbilityByLevelHelp>();
             _window.maxSize = new Vector2(1300, 300);
             _window.minSize = new Vector2(1100, 300);
             _newAbi = item;
+            _level = level;
+            _max = max;
         }
 
         public void OnGUI()
         {
-            StatsGeneratorWindow.Display(_newAbi);
+            StatsGeneratorWindow.Display(_newAbi, _level, _max);
             if (GUILayout.Button("Close")) _window.Close();
 
         }

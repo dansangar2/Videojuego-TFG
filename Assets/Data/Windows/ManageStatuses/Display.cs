@@ -76,31 +76,16 @@ namespace Data.Windows.ManageStatuses
             
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.BeginVertical();
-            EditorGUILayout.BeginHorizontal();
 
             #region Effect
 
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Range: ", Options);
+            GUILayout.Label("Effect: ", Options);
             item.Effect = (EffectType)EditorGUILayout.EnumPopup(item.Effect, Options);
             EditorGUILayout.EndHorizontal();
 
             #endregion
 
-            #region Duration
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Turns duration(0=inf.)", Options);
-            item.Duration = EditorGUILayout.IntField(item.Duration, Options);
-            EditorGUILayout.EndHorizontal();
-
-            #endregion
-            
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-            
             EditorGUILayout.BeginVertical();
             EditorGUILayout.BeginHorizontal();
 
@@ -257,31 +242,16 @@ namespace Data.Windows.ManageStatuses
             
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
-            
-            EditorGUILayout.BeginVertical();
-            EditorGUILayout.BeginHorizontal();
 
             #region Effect
 
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Range: ", Options);
+            GUILayout.Label("Effect: ", Options);
             GUILayout.Label(item.Effect.ToString(), Options);
             EditorGUILayout.EndHorizontal();
 
             #endregion
 
-            #region Duration
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Turns duration(0=inf.)", Options);
-            GUILayout.Label(item.Duration.ToString(), Options);
-            EditorGUILayout.EndHorizontal();
-
-            #endregion
-            
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-            
             EditorGUILayout.BeginVertical();
             EditorGUILayout.BeginHorizontal();
 

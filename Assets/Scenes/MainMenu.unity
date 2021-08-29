@@ -480,19 +480,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonsBlinks: 1
-  velocity: 0.005
+  velocity: 0.5
   buttonColor: {r: 1, g: 0, b: 0.040395737, a: 1}
   numsOfCol: 1
+  position: 0
   buttonsData:
-  - buttonName: Battle!
+  - buttonText: Battle!
     sceneRedirect: BattleSystemTest
     window: {fileID: 0}
     quitGame: 0
-  - buttonName: See text
+  - buttonText: Text Demo
     sceneRedirect: TextSystemTest
     window: {fileID: 0}
     quitGame: 0
-  - buttonName: Exit
+  - buttonText: Rest demo
     sceneRedirect: 
     window: {fileID: 0}
     quitGame: 1

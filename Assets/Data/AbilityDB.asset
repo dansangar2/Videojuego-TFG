@@ -16,10 +16,20 @@ MonoBehaviour:
   - id: 0
     name: Double Attack
     description: 
+    needPointsToLevelUp: 10
+    rate:
+    - 1
+    - 1
+    - 1
+    learning:
+    - 1.1
+    - 1.1
+    - 1
+    expData: 0a000000050000000f0000000a000000
     formula: '4*{a.atk} - 2*{a.def} < 0 ? 1 : 4*{a.atk} - 2*{a.def}'
     type: 0
     range: 0
-    target: 0
+    target: 1
     icon: {fileID: 3482900817474427321, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
     hits: 2
     numberOfTarget: 1
@@ -31,33 +41,42 @@ MonoBehaviour:
     - 1.2
     canRepeatRandomTarget: 0
     statusesToDo:
-      keys:
-      - statusId: 1
-        incrementPowerPlus:
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        level: 0
-      values:
-      - 0.6
+    - statusID: 0
+      level: 1
+      duration: 10
+      possibility: 1
+      incrementPowerPlus:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
   - id: 1
     name: Multi Karma Hit
     description: 
+    needPointsToLevelUp: 10
+    rate:
+    - 1
+    - 1
+    - 1
+    learning:
+    - 1.1
+    - 1.1
+    - 1
+    expData: 0a000000050000000f0000000a000000
     formula: '3*{a.atk} - 2*{a.def} < 0 ? 1 : 3*{a.atk} - 2*{a.def}'
     type: 1
     range: 0
-    target: 0
+    target: 1
     icon: {fileID: 3310009709851204272, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
     hits: 1
     numberOfTarget: 1
@@ -69,32 +88,41 @@ MonoBehaviour:
     - 1.2
     canRepeatRandomTarget: 0
     statusesToDo:
-      keys:
-      - statusId: 2
-        incrementPowerPlus:
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        level: 0
-      values:
-      - 0.7
+    - statusID: 1
+      level: 1
+      duration: 10
+      possibility: 1
+      incrementPowerPlus:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0.5
+      - 1
+      - 1
+      - 1
+      - 1
   - id: 2
     name: Absorb
     description: 
+    needPointsToLevelUp: 10
+    rate:
+    - 1
+    - 1
+    - 1
+    learning:
+    - 1.1
+    - 1.1
+    - 1
+    expData: 0a000000050000000f0000000a000000
     formula: '2*{a.atk} < 0 ? 1 : 2*{a.atk}'
     type: 2
-    range: 1
+    range: 0
     target: 0
     icon: {fileID: -2820936822283385303, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
     hits: 1
@@ -106,33 +134,23 @@ MonoBehaviour:
     - 0.8
     - 1.2
     canRepeatRandomTarget: 0
-    statusesToDo:
-      keys:
-      - statusId: 1
-        incrementPowerPlus:
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        - 1
-        level: 0
-      values:
-      - 0.1
+    statusesToDo: []
   - id: 3
     name: Absorb Karma
     description: 
+    needPointsToLevelUp: 10
+    rate:
+    - 1
+    - 1
+    - 1
+    learning:
+    - 1.1
+    - 1.1
+    - 1
+    expData: 0a000000050000000f0000000a000000
     formula: '4*{a.atk} - 2*{a.def} < 0 ? 1 : 4*{a.atk} - 2*{a.def}'
     type: 3
-    range: 3
+    range: 1
     target: 0
     icon: {fileID: 21300000, guid: c34f8b3cd8674f7fb507b2fddb548045, type: 3}
     hits: 1
@@ -144,6 +162,32 @@ MonoBehaviour:
     - 0.8
     - 1.2
     canRepeatRandomTarget: 1
-    statusesToDo:
-      keys: []
-      values: []
+    statusesToDo: []
+  - id: 4
+    name: NEW
+    description: 
+    needPointsToLevelUp: 10
+    rate:
+    - 1
+    - 1
+    - 1
+    learning:
+    - 1.1
+    - 1.1
+    - 1
+    expData: 0a000000050000000f0000000a000000
+    formula: '4*{a.atk} - 2*{a.def} < 0 ? 1 : 4*{a.atk} - 2*{a.def}'
+    type: 0
+    range: 0
+    target: 0
+    icon: {fileID: -4841785371778001956, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    hits: 1
+    numberOfTarget: 1
+    cost: 100
+    elementID: -1
+    stats:
+    - 1
+    - 0.8
+    - 1.2
+    canRepeatRandomTarget: 0
+    statusesToDo: []

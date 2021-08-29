@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Core.ButtonsSystem.ButtonType;
 using Core.Controls;
 using Core.Saves;
@@ -17,8 +18,8 @@ namespace Core.ButtonsSystem.ButtonList
 
         /**<sumary>The Character gets.</sumary>*/
         public static int Pos = -1;
-        
-        public void Start()
+
+        private void Awake()
         {
             TestSetUp();
             SetPages(SavesFiles.GetParty().Length);

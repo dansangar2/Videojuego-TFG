@@ -20,8 +20,8 @@ namespace Core.ButtonsSystem.ButtonList
         public Character character;
 
         #endregion
-        
-        private void Start()
+
+        private void Awake()
         {
             foreach (Ability ability in character.Abilities())
             {
@@ -47,6 +47,7 @@ namespace Core.ButtonsSystem.ButtonList
             }
             SetColumnsAndRows(_buttons);
             GenericButton.Message = "";
+            
         }
 
         private void Update()

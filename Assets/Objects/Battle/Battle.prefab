@@ -642,14 +642,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemiesId: 000000000100000002000000
   maxMembers: 3
-  memberBase: {fileID: 8018006849542304686, guid: 489be71fc4756e84cb2cab71ea78b638,
-    type: 3}
+  message: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb, type: 3}
+  statusUI: {fileID: 0}
   abilitiesOf: {fileID: 2787458007513356272, guid: 888750fb1ac05834eb25989a23aca759,
     type: 3}
-  message: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb, type: 3}
-  velocity: 0.003
-  damageText: {fileID: 4736745420395967615, guid: e8183895a237a8e4787ce216d00325f6,
+  memberBase: {fileID: 8018006849542304686, guid: 489be71fc4756e84cb2cab71ea78b638,
     type: 3}
+  enemyIsDefeat: 0
+  allieIsDefeat: 0
+  enemyDamage: 0
+  allieDamage: 0
+  enemyKarmaDamage: 0
+  allieKarmaDamage: 0
+  statusDoneToEnemy: 0
+  statusDoneToAllie: 0
+  enemyUnit: 0
+  allieUnit: 0
+  animatedText: {fileID: 0}
 --- !u!1 &818825308555366676
 GameObject:
   m_ObjectHideFlags: 0

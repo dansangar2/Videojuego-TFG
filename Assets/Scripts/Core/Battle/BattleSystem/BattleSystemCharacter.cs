@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
+using Core.ButtonsSystem.ButtonList;
 using Core.ButtonsSystem.ButtonType;
 using Core.Controls;
-using Data;
 using Entities;
 using Enums;
 using UnityEngine;
@@ -13,17 +13,25 @@ namespace Core.Battle.BattleSystem
     public partial class BattleSystem
     {
 
+        #region ATTRIBUTES
+
+        /**<summary>The ability list for the player party.</summary>*/
+        public AbilityButtonsList abilitiesOf;
+        /**<summary>The prefab for character HUBs.</summary>*/
+        public MemberHUDButton memberBase;
+        /**<summary>The ability that the character has selected.</summary>*/
         private Ability _abilityInUse;
 
+        /**<summary>The target that the character has selected.</summary>*/
         private int _target;
-        private int _posOfTarget;
-        private bool _lastActionSelectAbility;
+
+        #endregion
         
         #region CHOOSETARGET
         
+        /**<summary>Use the ability and check the possible targets.</summary>*/
         private void UseAbility(bool enemies)
         {
-            
             switch(_abilityInUse.Target)
             {
                 case TargetType.Enemy:
@@ -38,6 +46,9 @@ namespace Core.Battle.BattleSystem
             }
         }
 
+        /**<summary>Choose the range of the ability.
+        <param name="fighters">The fighters that the character can attack.</param>
+        </summary>*/
         private void AbilityRange(Fighter[] fighters)
         {
             
@@ -64,6 +75,8 @@ namespace Core.Battle.BattleSystem
             }
         }
         
+        /**<summary>Select the character that can select.
+        <param name="fighters">The possible targets.</param></summary>*/
         private void SelectTarget(Fighter[] fighters)
         {
             if (Input.GetKeyDown(ControlsKeys.MoveLeft) 
@@ -85,15 +98,20 @@ namespace Core.Battle.BattleSystem
 
             if (_target < 0 || _target >= fighters.Length) _target = 0;
             fighters[_target].CharacterBlink();
-            
-            if(Input.GetKeyDown(ControlsKeys.Ok)) DoAttack(FighterTurn, _fighters[fighters[_target].id]);
+
+            if(Input.GetKeyDown(ControlsKeys.Ok))
+            {
+                DoAttack(FighterTurn, _fighters[fighters[_target].id]);
+            }
         }
 
+        /**<summary>Attack all enemies.
+        <param name="fighters">The enemies to attack.</param></summary>*/
         private void AttackAll(Fighter[] fighters, bool random = false, int numberOfRandom = 1)
         {
             foreach (Fighter fighter in fighters)
             {
-                fighter.CharacterBlink(velocity);
+                fighter.CharacterBlink();
             }
 
             if (random)
@@ -118,10 +136,7 @@ namespace Core.Battle.BattleSystem
 
             if (!Input.GetKeyDown(ControlsKeys.Ok)) return;
             
-            foreach (Fighter fighter in _fighters)
-            { 
-                fighter.CharacterMark();
-            }
+            InitMark();
             DoAttack(FighterTurn, fighters);
         }
         
@@ -129,8 +144,9 @@ namespace Core.Battle.BattleSystem
         
         #region TURN
 
-        private void CharacterTurn()
+        private void CharacterTurn(bool enemy = false)
         {
+
             switch (_actionType)
             {
                 //Choose action
@@ -138,12 +154,9 @@ namespace Core.Battle.BattleSystem
                     _actionType = ActionType.Melee;
                     FighterTurn.CharacterMark();
                     break;
-                case ActionType.None when Input.GetKeyDown(ControlsKeys.ActionButton1) || _lastActionSelectAbility:
-                    _lastActionSelectAbility = false;
+                case ActionType.None when Input.GetKeyDown(ControlsKeys.ActionButton1):
                     abilitiesOf.character = FighterTurn.character;
                     _abilityList = Instantiate(abilitiesOf, transform.GetChild(0));
-                    //abilitiesOf.SetUp(_fighters[_currentTurn].character.ID,
-                    //    transform.GetChild(0).transform);
                     _actionType = ActionType.Ability;
                     FighterTurn.CharacterMark();
                     break;
@@ -158,50 +171,50 @@ namespace Core.Battle.BattleSystem
                 case ActionType.Melee:
                     _abilityInUse = FighterTurn.character.MeleeAttack;
                     _actionType = ActionType.Process;
-                    //UseAbility(false);
                     break;
                 //Long attack
                 case ActionType.Long:
                     _abilityInUse = FighterTurn.character.LongAttack;
                     _actionType = ActionType.Process;
-                    //UseAbility(false);
                     break;
                 //Use item
                 case ActionType.Item:
                     break;
                 //Use Ability
                 case ActionType.Ability:
-                    if (_abilityList.Equals(null))
-                    {
-                        _actionType = ActionType.None;
-                    }
-                    if(GenericButton.Message.Equals("")) return;
-                    _abilityInUse = GameData.AbilityDB.FindByID(Convert.ToInt32(GenericButton.Message));
-                    _lastActionSelectAbility = true;
+                    if(GenericButton.Message.Equals("")) break;
+                    _abilityInUse = CurrentTurn.GetAbility(Convert.ToInt32(GenericButton.Message));
                     _actionType = ActionType.Process;
-                    //Destroy(transform.parent.GetChild(transform.GetChild(0).childCount-1).gameObject);
-                    //Button.message = "";
-                    //_actionType = ActionType.Process;
                     break;
                 case ActionType.Process:
-                    
-                    UseAbility(false);
+                    UseAbility(enemy);
                     break;
                 default:
-                    FighterTurn.CharacterBlink(velocity);
+                    FighterTurn.CharacterBlink();
                     break;
                 
             }
 
-            if (_actionType!=ActionType.None && Input.GetKeyDown(ControlsKeys.Back))
+            switch (_actionType)
             {
-                foreach (Fighter f in _fighters) { f.CharacterMark(); } 
-                //Destroy(_abilityList.transform.gameObject);
-                //if(lastActionSelectAbility)
-                //else
-                _actionType = ActionType.None;
+                case ActionType.Process when Input.GetKeyDown(ControlsKeys.Back):
+                {
+                    InitMark();
+                    if (!GenericButton.Message.Equals(""))
+                    {
+                        _abilityList = Instantiate(abilitiesOf, transform.GetChild(0));
+                        _actionType = ActionType.Ability;
+                        _abilityInUse = null;
+                    }
+                    else _actionType = ActionType.None;
+
+                    break;
+                }
+                case ActionType.Ability when Input.GetKeyDown(ControlsKeys.Back):
+                    _actionType = ActionType.None;
+                    break;
             }
-            
+
         }
 
         #endregion

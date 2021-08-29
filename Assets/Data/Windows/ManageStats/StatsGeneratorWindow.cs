@@ -329,7 +329,7 @@ namespace Data.Windows.ManageStats
         #region Set
 
         /**<summary>It's makes a window for introduce the values for stats generator for Abilities.</summary>*/
-        public static void GenerateStats(SpecialAbility item, GUILayoutOption[] options = null)
+        public static void GenerateStats(Ability item, GUILayoutOption[] options = null)
         {
             options ??= Options;
 
@@ -405,7 +405,7 @@ namespace Data.Windows.ManageStats
         #region Validator
 
         /**<summary>It's validate the stats generator for Abilities.</summary>*/
-        public static bool Validator(SpecialAbility item)
+        public static bool Validator(Ability item)
         {
             float[] learning = item.Learning;
             float[] rate = item.Rate;
@@ -445,12 +445,15 @@ namespace Data.Windows.ManageStats
         #region Display
 
         /**<summary>It's display the stats evolution for Abilities using the stats generator value.</summary>*/
-        public static void Display(SpecialAbility item, GUILayoutOption[] options = null)
+        public static void Display(Ability item, int level, int maxLevel, GUILayoutOption[] options = null)
         {
             
-            SpecialAbility dummy = new SpecialAbility(item);
+            Ability dummy = new Ability(item);
             options ??= Options;
-            SpecialAbility[] abilities = new SpecialAbility[6];
+            float[] power = new float[6];
+            float[] down = new float[6];
+            float[] up = new float[6];
+            int[] exp = new int[6];
             int[] levels = new int[6];
             
             string[][] content =
@@ -462,33 +465,34 @@ namespace Data.Windows.ManageStats
                 new[] {"EXP","","","","","",""}
             };
             
-            int levelInterval = (dummy.MaxLevel - dummy.Level) / 5;
-            SpecialAbility item2;
+            int levelInterval = (maxLevel - level) / 4;
             int i = 1, j = 0;
             bool cont = true;
 
             while (cont)
             {
-                if (i >= dummy.MaxLevel || j==5)
+                if (i >= maxLevel || j==5)
                 {
-                    dummy.Level = dummy.MaxLevel;
+                    level = maxLevel;
                     cont = false;
                 }
-                //dummy.MaxLevel = item.MaxLevel;
-                item2 = new SpecialAbility(dummy);
-                abilities[j] = item2;
-                levels[j] = item2.Level;
-                dummy.Level += levelInterval;
+                power[j] = dummy.Calculate(0, level, maxLevel);
+                down[j] = dummy.Calculate(1, level, maxLevel);
+                up[j] = dummy.Calculate(2, level, maxLevel);
+                dummy.UpdateExperience(level, maxLevel);
+                exp[j] = dummy.NeedPointsToLevelUp;
+                levels[j] = level;
+                level += levelInterval;
                 j++;
             }
 
-            for (i = 1; i <=abilities.Length; i++)
+            for (i = 1; i <=power.Length; i++)
             {
                 content[0][i] = levels[i-1].ToString();
-                content[1][i] = abilities[i-1].PowerIncrement.ToString(CultureInfo.InvariantCulture);
-                content[2][i] = abilities[i-1].DownInterval.ToString(CultureInfo.InvariantCulture);
-                content[3][i] = abilities[i-1].UpperInterval.ToString(CultureInfo.InvariantCulture);
-                content[4][i] = abilities[i-1].NeedPointsToLevelUp.ToString();
+                content[1][i] = power[i-1].ToString(CultureInfo.InvariantCulture);
+                content[2][i] = down[i-1].ToString(CultureInfo.InvariantCulture);
+                content[3][i] = up[i-1].ToString(CultureInfo.InvariantCulture);
+                content[4][i] = exp[i-1].ToString();
             }
             
             EditorGUILayout.BeginHorizontal();

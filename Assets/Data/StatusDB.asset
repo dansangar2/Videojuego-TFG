@@ -17,7 +17,7 @@ MonoBehaviour:
     name: Dead
     description: 
     icon: {fileID: 8564915016675854182, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
-    effect: 1
+    effect: 4
     quitWhenFinish: 0
     temporalLevelUp: 0
     quitByHitRate: 0
@@ -29,11 +29,11 @@ MonoBehaviour:
     - 1
     - 1
     - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    statusToQuit: 0100000002000000
+    - 0
+    - 0
+    - 0
+    - 0
+    statusToQuit: 
   - id: 1
     name: Paralisis
     description: 
@@ -52,17 +52,17 @@ MonoBehaviour:
     - 1
     - 1
     - 1
-    - 0.2
-    - 0.2
+    - 0
+    - 0
     statusToQuit: 00000000
   - id: 2
     name: Confusion
     description: 
     icon: {fileID: 2145951238131660284, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
-    effect: 2
+    effect: 3
     quitWhenFinish: 0
     temporalLevelUp: 0
-    quitByHitRate: 0.4
+    quitByHitRate: 0
     incrementPower:
     - 1
     - 1
@@ -71,10 +71,10 @@ MonoBehaviour:
     - 1
     - 1
     - 1
-    - 1
-    - 1
-    - 1
-    - 1
+    - 0
+    - 0
+    - 0
+    - 0
     statusToQuit: 01000000
   - id: 3
     name: Example1
@@ -97,3 +97,24 @@ MonoBehaviour:
     - 1
     - 1
     statusToQuit: 0000000002000000
+  - id: 4
+    name: Paralisis 2
+    description: Hola
+    icon: {fileID: -2062809505517833526, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    effect: 0
+    quitWhenFinish: 1
+    temporalLevelUp: 0
+    quitByHitRate: 0
+    incrementPower:
+    - 1.2
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 0
+    - 0
+    - 0
+    - 0
+    statusToQuit: 01000000

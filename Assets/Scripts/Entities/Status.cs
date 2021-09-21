@@ -10,6 +10,7 @@ namespace Entities
     [Serializable]
     public class Status : Base
     {
+        
         #region ATTRIBUTES
 
         [SerializeField] private Sprite icon;
@@ -132,5 +133,6 @@ namespace Entities
         }*/
         
         #endregion
+        
     }
 }

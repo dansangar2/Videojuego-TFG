@@ -50,10 +50,10 @@ namespace Core.ButtonsSystem.ButtonList
         protected void SetColumnsAndRows(GenericButton[] buttons)
         {
             _numsOfRows = buttons.Where(b => b
-                                  .gameObject.activeInHierarchy).ToArray()
+                                  .gameObject.activeInHierarchy && b.enabled).ToArray()
                               .Length/numsOfCol 
                           + buttons.Where(b => b
-                                  .gameObject.activeInHierarchy).ToArray()
+                                  .gameObject.activeInHierarchy && b.enabled).ToArray()
                               .Length%numsOfCol;
             _currentNumOfRows = _numsOfRows;
             _currentRow = position;
@@ -118,6 +118,7 @@ namespace Core.ButtonsSystem.ButtonList
         /**<sumary>Select the current position button.</sumary>*/
         protected void SelectCurrent(GenericButton[] buttons)
         {
+            SetColumnsAndRows(buttons);
             buttons[position].IsSelect = true;
         }
 

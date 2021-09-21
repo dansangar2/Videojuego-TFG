@@ -11,6 +11,7 @@ using Entities;
 using Enums;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Core.Battle.BattleSystem
 {
@@ -44,10 +45,10 @@ namespace Core.Battle.BattleSystem
         {
             
             Dictionary<int, int> results = new Dictionary<int, int>();
-            foreach (int id in enemiesId)
+            foreach (int id in EnemiesId)
             {
                 if(results.ContainsKey(id)) continue;
-                int i = enemiesId.Count(n => n==id);
+                int i = EnemiesId.Count(n => n==id);
                 results.Add(id, i);
             }
 
@@ -82,37 +83,40 @@ namespace Core.Battle.BattleSystem
         /**<summary>Init the character and enemies model, HUDs, renders, etc...</summary>*/
         private void InitFighters()
         {
-            int members = maxMembers > SavesFiles.GetSave().Party.Length
-                ? SavesFiles.GetSave().Party.Length : maxMembers;
 
-            _fighters = new Fighter[members+enemiesId.Length];
+            _fighters = new Fighter[MaxMembers+EnemiesId.Length];
             
             MeshRenderer[] fighterRenderers = GetComponentsInChildren<MeshRenderer>();
             MeshCollider[] fightersColliders = GetComponentsInChildren<MeshCollider>();
             MeshFilter[] fightersFilters = GetComponentsInChildren<MeshFilter>();
 
-            for (int i = 0; i<maxMembers ;i++)
+            for (int i = 0; i<3 ;i++)
             {
-                try
+                if(i< MaxMembers)
                 {
                     _fighters[i] = gameObject.AddComponent<Fighter>();
                     _fighters[i].SetData(i, statusUI, memberBase, GetComponentInChildren<GridLayoutGroup>(),
                         fightersFilters, fighterRenderers, fightersColliders);
                     _fighters[i].character.ResetCharge();
                     _fighters[i].CharacterMark();
-                }
-                catch (Exception e)
+                }else
                 {
-                    Debug.Log(e);
                     Destroy(fightersFilters[i].gameObject);
                 }
 
             }
             
-            for (int i = members; i<_fighters.Length ;i++)
+            for (int i = 0; i < 3; i++)
+            {
+                fighterRenderers[MaxMembers + i] = fighterRenderers[3 + i];
+                fightersColliders[MaxMembers + i] = fightersColliders[3 + i];
+                fightersFilters[MaxMembers + i] = fightersFilters[3 + i];
+            }
+
+            for (int i = MaxMembers; i<_fighters.Length ;i++)
             {
                 _fighters[i] = gameObject.AddComponent<Fighter>();
-                _fighters[i].SetData(i, enemiesId, statusUI, fightersFilters, fighterRenderers, fightersColliders);
+                _fighters[i].SetData(i, EnemiesId, statusUI, fightersFilters, fighterRenderers, fightersColliders);
                 _fighters[i].character.ResetCharge();
                 _fighters[i].CharacterMark();
             }
@@ -145,6 +149,19 @@ namespace Core.Battle.BattleSystem
                 }
             }
         }
+
+        /**<summary>Select a random attack.</summary>*/
+        public void RandomAttack(bool enemies)
+        {
+            int abi = Random.Range(-2, CurrentTurn.Abilities().Count(a => a.Cost<= CurrentTurn.CurrentKarmaPoints));
+            _abilityInUse = abi switch
+            {
+                -2 => CurrentTurn.LongAttack,
+                -1 => CurrentTurn.MeleeAttack,
+                _ => CurrentTurn.Abilities().Where(a => a.Cost<= CurrentTurn.CurrentKarmaPoints).ToArray()[abi]
+            };
+            UseAbility(enemies, true);
+        }
         
         #endregion
 
@@ -170,6 +187,7 @@ namespace Core.Battle.BattleSystem
                 DamageAnimation(attacker,Convert.ToInt32(-recovery*0.4f));
             _actionType = ActionType.None;
             UpdateBattlefield();
+            _secondsToWait = 0;
             GenericButton.Message = "";
         }
 
@@ -188,8 +206,9 @@ namespace Core.Battle.BattleSystem
             int[] ids = { };
             foreach (Fighter f in _fighters)
             {
-                if (f.character.Statuses
-                    .Any(s => s.Status.Effect == EffectType.Dead) || f.character.IsKo())
+                if (//f.character.Statuses
+                   //.Any(s => s.Status.Effect == EffectType.Dead) || 
+                    f.character.IsKo())
                 {
                     f.SetKo();
                     if (!f.isEnemy) continue;
@@ -245,18 +264,19 @@ namespace Core.Battle.BattleSystem
             {
                 int exp = 0;
                 //Check if the character is in the battlefield. If not his experience is 80%.
-                float played = i < maxMembers ? 1 : 0.8f;
+                float played = i < MaxMembers ? 1 : 0.8f;
 
                 foreach (int id in ids)
                 {
-                    exp += Convert.ToInt32(Mathf.Max(1, Mathf.Floor(
-                        _experienceGained[character.ID, id - maxMembers]*played)));
+                    exp += Convert.ToInt32(Mathf.Max(0, Mathf.Floor(
+                        _experienceGained[character.ID, id - MaxMembers]*played)));
+                    _experienceGained[character.ID, id - MaxMembers] = 0;
                 }
-
+                
                 character.GainExperience(exp);
                 
-                //Print the exp. gained upper the character.
-                if (i<maxMembers) _animatedText.GainExp(exp, _fighters[i]);
+                //Print the exp. gained on left of the character if not is 0.
+                if (i<MaxMembers && exp != 0) _animatedText.GainExp(exp, _fighters[i]);
                 i++;
             }
         }

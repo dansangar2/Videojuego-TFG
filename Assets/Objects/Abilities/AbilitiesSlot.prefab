@@ -153,7 +153,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Multi Karma Hit
+  m_Text: Attack 2
 --- !u!1 &1532847506858629861
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,8 +374,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3310009709851204272, guid: 30cb94ee74b94d469da91d1111b33b92,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: c34f8b3cd8674f7fb507b2fddb548045, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -681,13 +680,13 @@ MonoBehaviour:
   window: {fileID: 0}
   quitGame: 0
   canSendMessage: 1
-  messageToSend: 1
+  messageToSend: 3
   canPress: 1
   blink: 1
   buttonColor: {r: 0, g: 1, b: 0, a: 1}
   buttonImage: {fileID: 6794172332773643278}
   buttonChangeColor: 0
-  id: 1
+  id: 3
   itemIcon: {fileID: 7965614526681649499}
   elementIcon: {fileID: 3359374660838223679}
   necessaryKp: {fileID: 5008688931485799076}

@@ -13,7 +13,7 @@ namespace Core.ButtonsSystem
         /**<sumary>Set the max item for pages of the list.</sumary>*/
         public int maxInPage = 4;
 
-        private int _numberOfPages;
+        protected int NumberOfPages;
         protected int CurrentPage;
 
         #endregion
@@ -21,8 +21,8 @@ namespace Core.ButtonsSystem
         /**<sumary>Generate the pages for "items" items.</sumary>*/
         protected void SetPages(int items)
         {
-            _numberOfPages = items / maxInPage;
-            _numberOfPages = items % maxInPage == 0 ? _numberOfPages : _numberOfPages + 1;
+            NumberOfPages = items / maxInPage;
+            NumberOfPages = items % maxInPage == 0 ? NumberOfPages : NumberOfPages + 1;
             CurrentPage = 0;
         }
 
@@ -34,8 +34,18 @@ namespace Core.ButtonsSystem
         {
             CurrentPage = CurrentPage + Convert.ToInt32(Input.GetKeyDown(next))
                           - Convert.ToInt32(Input.GetKeyDown(back));
-            if (CurrentPage < 0) CurrentPage = _numberOfPages-1;
-            CurrentPage %= _numberOfPages;
+            if (CurrentPage < 0) CurrentPage = NumberOfPages-1;
+            CurrentPage %= NumberOfPages;
+        }
+        
+        /**<sumary>Move of page when you go next in the end or begin of the page.</sumary>*/
+        protected void ChangePage()
+        {
+            if(maxInPage*CurrentPage > position) CurrentPage++;
+            else if (maxInPage * CurrentPage < position) CurrentPage--;
+            
+            if (CurrentPage < 0) CurrentPage = NumberOfPages-1;
+            CurrentPage %= NumberOfPages;
         }
         
     }

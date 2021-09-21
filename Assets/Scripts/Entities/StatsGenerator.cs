@@ -7,6 +7,7 @@ namespace Entities
     [Serializable]
     public class StatsGenerator : Stats
     {
+        
         #region ATTRIBUTES
 
         /**<summary>

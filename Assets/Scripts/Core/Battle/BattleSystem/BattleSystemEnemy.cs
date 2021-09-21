@@ -1,12 +1,16 @@
-﻿namespace Core.Battle.BattleSystem
+﻿
+
+using UnityEngine;
+
+namespace Core.Battle.BattleSystem 
 {
     public partial class BattleSystem
     {
 
-        private void EnemyTurn()
+        public void EnemyTurn()
         {
-            _state = BattleState.Turn;
+            RandomAttack(true);
         }
-        
+
     }
 }

@@ -20,7 +20,6 @@ namespace Entities
         [SerializeField] private int longAttackID; 
         [SerializeField] private int abilityPoints;
         [SerializeField] private StatusOf[] statuses = { };
-        //<Ability, int[abilityLevel, neededLevel]>
         [SerializeField] private SpecialAbility[] abilities = {};
 
         public int RestPoints { get; set; } = 5;
@@ -157,13 +156,36 @@ namespace Entities
         /**<summary>Add a status to the character.</summary>*/ 
         public void AddStatus(StatusOf status)
         {
-            if(statuses.Select(s => s.Status.ID).Contains(status.Status.ID)) return;
-            if (statuses.FirstOrDefault(s => s.Status.ID == status.Status.ID)?.Level < status.Level) 
-            { 
-                statuses[Array.IndexOf(statuses, 
-                    statuses.First(s => s.Status.ID == status.Status.ID))] = new StatusOf(status);
+            if (statuses.Select(s => s.Status.ID).Contains(status.Status.ID))
+            {
+                StatusOf statusExits = statuses.FirstOrDefault(s => s.Status.ID == status.Status.ID);
+
+                if(statusExits==null) return;
+                
+                //Get the highest level status.
+                if (statusExits.Level < status.Level) 
+                { 
+                    statuses[Array.IndexOf(statuses, 
+                        statuses.First(s => s.Status.ID == status.Status.ID))] = new StatusOf(status);
+                }
+                //Set the duration of the status with the highest value (between old and new).
+                //Except with effect "Dead", that get the lowest value.
+                if(statusExits.Status.Effect == EffectType.Dead)
+                {
+                    if(statusExits.Duration <= status.Duration) 
+                        statuses[Array.IndexOf(statuses, 
+                            statuses.First(s => s.Status.ID == status.Status.ID))].Duration = statusExits.Duration;
+                }
+                else if(statusExits.Status.Effect != EffectType.Dead)
+                {
+                    if(statusExits.Duration <= status.Duration) 
+                        statuses[Array.IndexOf(statuses, 
+                            statuses.First(s => s.Status.ID == status.Status.ID))].Duration = status.Duration;
+                }
+                
                 return;
             }
+            
             Array.Resize(ref statuses, statuses.Length + 1); 
             statuses[statuses.Length - 1] = new StatusOf(status);
         }
@@ -314,6 +336,14 @@ namespace Entities
         public void SetKo()
         {
             main[7] = 0;
+            statuses = new StatusOf[]{};
+        }
+
+        /**<summary>Quit all statuses, and recovery BP and KP.</summary>*/
+        public void RecoveryAll()
+        {
+            ReduceCurrentBlood();
+            ReduceCurrentKarma();
             statuses = new StatusOf[]{};
         }
         

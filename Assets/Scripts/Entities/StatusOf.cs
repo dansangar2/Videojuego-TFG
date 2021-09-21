@@ -8,6 +8,7 @@ namespace Entities
     [Serializable]
     public class StatusOf
     {
+        
         #region ATTRIBUTES
 
         [SerializeField] private int statusID;
@@ -120,5 +121,6 @@ namespace Entities
         }
         
         #endregion
+        
     }
 }

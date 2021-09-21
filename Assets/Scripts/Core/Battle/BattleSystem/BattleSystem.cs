@@ -6,9 +6,9 @@ using Core.Messages;
 using Core.Saves;
 using Entities;
 using Enums;
-//using Unity.MLAgents;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 namespace Core.Battle.BattleSystem
 {
@@ -18,9 +18,9 @@ namespace Core.Battle.BattleSystem
         #region ATTRIBUTES
 
         /**<summary>The array with the enemies.</summary>*/
-        public int[] enemiesId;
+        public static int[] EnemiesId = {0,1,2};
         /**<summary>The max member party.</summary>*/
-        public int maxMembers = 3;
+        public static int MaxMembers = 3;
         /**<summary>The prefab message text.</summary>*/
         public Message message;
         //**<summary>The velocity of the character blink.</summary>*/
@@ -35,6 +35,9 @@ namespace Core.Battle.BattleSystem
         private BattleState _state;
         /**<summary>The scene where you returned.</summary>*/
         private string _scene = "RestSystemTest";
+
+        /**<summary>Seconds to wait for next turn.</summary>*/
+        private float _secondsToWait;
 
         #endregion
 
@@ -67,7 +70,8 @@ namespace Core.Battle.BattleSystem
         
         private void Update()
         {
-            if (Message.ThereAreMessage()) return;
+            _secondsToWait += Time.deltaTime;
+            if (Message.ThereAreMessage() || _secondsToWait<1) return;
             switch (_state)
             {
                 case BattleState.Start:
@@ -75,29 +79,40 @@ namespace Core.Battle.BattleSystem
                     _state = BattleState.Turn;
                     break;
                 case BattleState.Turn:
+                    UpdateBattlefield();
                     ChooseTurns();
+                    
                     #region CheckStatus
 
                     
                     foreach (StatusOf of in CurrentTurn.Statuses)
                     {
                         of.Duration--;
-                        if(of.Duration==0) CurrentTurn.RemoveStatus(of.Status.ID);
+                        switch (of.Duration)
+                        {
+                            case 0 when of.Status.Effect == EffectType.Dead:
+                                FighterTurn.SetKo();
+                                UpdateBattlefield();
+                                return;
+                            case 0:
+                                CurrentTurn.RemoveStatus(of.Status.ID);
+                                break;
+                        }
                     }
                     
-                    int damageXTurn = Convert.ToInt32(CurrentTurn.MaxBloodPoints * CurrentTurn.Regeneration);
+                    int damageXTurn = -Convert.ToInt32(CurrentTurn.MaxBloodPoints * CurrentTurn.Regeneration);
                     
                     if(damageXTurn != 0)
                     {
-                        CurrentTurn.ReduceCurrentBlood(damageXTurn);
-                        DamageAnimation(FighterTurn, damageXTurn, AttackType.Blood);
+                        CurrentTurn.ReduceCurrentBlood(-damageXTurn);
+                        DamageAnimation(FighterTurn, -damageXTurn, AttackType.Blood);
                         if (CurrentTurn.IsKo())
                         {
                             UpdateBattlefield();
                             return;
                         }
                     }
-                    damageXTurn = Convert.ToInt32(CurrentTurn.MaxKarmaPoints * CurrentTurn.KarmaRegeneration);
+                    damageXTurn = -Convert.ToInt32(CurrentTurn.MaxKarmaPoints * CurrentTurn.KarmaRegeneration);
                     if(damageXTurn != 0)
                     {
                         CurrentTurn.ReduceCurrentKarma(damageXTurn);
@@ -105,19 +120,26 @@ namespace Core.Battle.BattleSystem
                     }
                     
                     if(CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.DontMove)) return;
-                    
-                    /*if(CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.AttackRandom))
-                        UseAbility(Random.Range(0, 1).Equals(Random.Range(0, 1)));
-                    else if(CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.AttackRandomPartner))
-                        UseAbility(!FighterTurn.isEnemy);
-                    else if(CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.AttackRandomEnemy)) 
-                        UseAbility(FighterTurn.isEnemy);
-                    */
+
+                    if (CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.AttackRandom))
+                    {
+                        int i = Random.Range(0, 2);
+                        RandomAttack(Convert.ToBoolean(i));
+                        return;
+                    }
+                    if (CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.AttackRandomEnemy))
+                    {
+                        RandomAttack(FighterTurn.isEnemy);
+                        return;
+                    } 
+                    if (CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.AttackRandomPartner))
+                    {
+                        RandomAttack(!FighterTurn.isEnemy);
+                        return;
+                    }
                     
                     #endregion
-                    
-                    UpdateBattlefield();
-                    
+
                     _state = BattleState.TurnAction;
                     break;
                 case BattleState.TurnAction:
@@ -136,6 +158,8 @@ namespace Core.Battle.BattleSystem
                         Instantiate(message, transform);
                     }
                     else if(!Message.ThereAreMessage()) SceneManager.LoadScene("MainMenu");
+
+                    MaxMembers = 3;
                     break;
                 case BattleState.Win:
                     if (AllParty.Any(f => !f.member.Equals(null)))
@@ -169,6 +193,9 @@ namespace Core.Battle.BattleSystem
         private Fighter FighterTurn => _fighters[_currentTurn];
         //private Fighter GetFighterTarget() { return _fighters[_posOfTarget]; }
 
+        /**<summary>Get all enemies members.</summary>*/
+        public Fighter[] FighterFighting => _fighters.Where(f => !f.character.IsKo()).ToArray();
+        
         /**<summary>Get the character of current turn.</summary>*/
         public Character CurrentTurn => _fighters[_currentTurn].character;
         

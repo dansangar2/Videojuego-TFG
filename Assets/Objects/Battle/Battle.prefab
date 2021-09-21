@@ -643,10 +643,11 @@ MonoBehaviour:
   enemiesId: 000000000100000002000000
   maxMembers: 3
   message: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb, type: 3}
-  statusUI: {fileID: 0}
-  abilitiesOf: {fileID: 2787458007513356272, guid: 888750fb1ac05834eb25989a23aca759,
+  statusUI: {fileID: 6984753199024958466, guid: af1cf1e58077de547a727638ed48cfe5,
     type: 3}
-  memberBase: {fileID: 8018006849542304686, guid: 489be71fc4756e84cb2cab71ea78b638,
+  abilitiesOf: {fileID: 1790422310945053354, guid: 01f7de8fe9d302341a60c61c30f7e25e,
+    type: 3}
+  memberBase: {fileID: 4086999918755183962, guid: b7295692de379a14abc1c25aa489c424,
     type: 3}
   enemyIsDefeat: 0
   allieIsDefeat: 0
@@ -658,7 +659,8 @@ MonoBehaviour:
   statusDoneToAllie: 0
   enemyUnit: 0
   allieUnit: 0
-  animatedText: {fileID: 0}
+  animatedText: {fileID: 2123082361022019132, guid: e8183895a237a8e4787ce216d00325f6,
+    type: 3}
 --- !u!1 &818825308555366676
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,13 +686,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 818825308555366676}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -285, z: -593}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 25, y: 450, z: 355}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 818825309554353775}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!20 &818825308555366665
 Camera:
   m_ObjectHideFlags: 0
@@ -701,7 +703,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 1, g: 0.043181278, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

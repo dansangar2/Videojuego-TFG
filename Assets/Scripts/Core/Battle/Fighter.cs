@@ -105,9 +105,9 @@ namespace Core.Battle
             character = new Character(GameData.EnemyDB.FindByID(enemiesId[pos % enemiesId.Length]));
             statuses.SetUp(this);
             Instantiate(statuses, new Vector3(
-                meshFilters[pos].transform.position.x,
-                meshFilters[pos].transform.position.y + (pos % (meshFilters.Length-enemiesId.Length))*100, 
-                meshFilters[pos].transform.position.z), Quaternion.identity);
+                meshFilters[pos].transform.position.x + 300,//- (pos % (meshFilters.Length-enemiesId.Length))*100,
+                meshFilters[pos].transform.position.y, 
+                meshFilters[pos].transform.position.z - 100), Quaternion.identity);
             meshFilter = meshFilters[pos];
             meshRenderer = meshRenderers[pos];
             meshCollider = meshColliders[pos];
@@ -124,9 +124,9 @@ namespace Core.Battle
             member.gameObject.SetActive(false);
             statuses.SetUp(this);
             Instantiate(statuses, new Vector3(
-                meshFilters[pos].transform.position.x,
-                meshFilters[pos].transform.position.y + (pos % 3)*100, 
-                meshFilters[pos].transform.position.z), Quaternion.identity);
+                meshFilters[pos].transform.position.x - 300,//+ (pos % 3)*100,
+                meshFilters[pos].transform.position.y, 
+                meshFilters[pos].transform.position.z - 100), Quaternion.identity);
             meshFilter = meshFilters[pos];
             meshRenderer = meshRenderers[pos];
             meshCollider = meshColliders[pos];

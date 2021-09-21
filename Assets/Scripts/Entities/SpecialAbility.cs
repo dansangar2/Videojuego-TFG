@@ -7,14 +7,19 @@ namespace Entities
     [Serializable]
     public class SpecialAbility
     {
+        
+        #region ATTRIBUTES
+
         [SerializeField] private int abilityID; 
         [SerializeField] private int needLevel; 
         [SerializeField] private int level;
         [SerializeField] private int maxLevel;
 
-        /**<summary>
-        Set the special ability with the current level and need level (1 by default).
-        </summary>*/ 
+        #endregion
+
+        #region CONSTRUCTOR
+
+        /**<summary>Set the special ability with the current level and need level (1 by default).</summary>*/ 
         public SpecialAbility(int abilityID, int level = 1, int needLevel = 1, int maxLevel = 10)
         {
             this.abilityID = abilityID;
@@ -23,9 +28,7 @@ namespace Entities
             this.maxLevel = maxLevel;
         }
         
-        /**<summary>
-        Clone constructor.
-        </summary>*/ 
+        /**<summary>Clone constructor.</summary>*/ 
         public SpecialAbility(SpecialAbility spAbility)
         {
             abilityID = spAbility.abilityID; 
@@ -33,7 +36,11 @@ namespace Entities
             level = spAbility.level;
             maxLevel = spAbility.maxLevel;
         }
-        
+
+        #endregion
+
+        #region ATTRIBUTES
+
         /**<summary>The ability of the character with the level of the "Special Ability".</summary>*/ 
         public Ability Ability => new Ability(GameData.AbilityDB.FindByID(abilityID), Level, MaxLevel);
         
@@ -46,7 +53,10 @@ namespace Entities
         /**<summary>Max Level of the ability.</summary>*/
         public int MaxLevel { get => maxLevel; set => maxLevel = value > 0 ? value > 15 ? 15 : value : 1; }
 
+        #endregion
         
+        #region METHODS
+
         /**<summary>Update All parameters of ability, using the current level.</summary>*/ 
         public void UpdateLv(Character character) 
         {
@@ -63,6 +73,7 @@ namespace Entities
             Ability.UpdateExperience(Level, MaxLevel);
         }
 
-        
+        #endregion
+
     }
 }

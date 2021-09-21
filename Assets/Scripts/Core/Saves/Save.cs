@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Core.Battle;
 using Data;
 using Data.Database;
 using Entities;
@@ -24,8 +25,12 @@ namespace Core.Saves
         /**<summary>The current scene where the character is.</summary>*/
         [SerializeField] private string currentScene;
         
-        [SerializeField] private bool isEmpty;
+        /**<summary>The level where the player is.</summary>*/
+        [SerializeField] private int level = 1;
         
+        /**<summary>It marks if it's empty.</summary>*/
+        [SerializeField] private bool isEmpty;
+
         /**<summary>Init the save file.</summary>*/
         public Save()
         {
@@ -112,11 +117,26 @@ namespace Core.Saves
             charactersInParty[character2] = c;
         }
 
+        public void MoveCharacter(int character, int position)
+        {
+            position = position < Party.Length ? position : Party.Length - 1;
+            for (int i = Array.IndexOf(charactersInParty, character); i < position; i++)
+            {
+                charactersInParty[i] = charactersInParty[i + 1];
+            }
+
+            charactersInParty[position] = character;
+
+        }
+
         #endregion
         
         #endregion
 
         #region GAME DATA
+
+        /**<summary>The level where the player is.</summary>*/
+        public int Level { get => level; set => level = value; }
 
         /**<summary>It mark if the save data is empty.</summary>*/
         public bool IsEmpty { get => isEmpty; set => isEmpty = value; }
@@ -150,5 +170,6 @@ namespace Core.Saves
         }
 
         #endregion
+        
     }
 }

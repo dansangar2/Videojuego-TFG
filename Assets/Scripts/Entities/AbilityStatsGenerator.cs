@@ -11,7 +11,7 @@ namespace Entities
         
         #region ATTRIBUTES
         
-        [SerializeField] private int needPointsToLevelUp = 10;
+        [SerializeField] private int needPointsToLevelUp;
         /**<summary>rate for = {pic, div, uiv}</summary>*/ 
         [SerializeField] protected float[] rate = {1, 1, 1};
         /**<summary>learning for = {pic, div, uiv}</summary>*/ 

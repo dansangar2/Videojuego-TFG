@@ -30,18 +30,18 @@ namespace Core.Battle.BattleSystem
         #region CHOOSETARGET
         
         /**<summary>Use the ability and check the possible targets.</summary>*/
-        private void UseAbility(bool enemies)
+        private void UseAbility(bool enemies, bool auto = false)
         {
             switch(_abilityInUse.Target)
             {
                 case TargetType.Enemy:
-                    AbilityRange(GetGroup(!enemies));
+                    AbilityRange(GetGroup(!enemies), auto);
                     break;
                 case TargetType.Group:
-                    AbilityRange(GetGroup(enemies));
+                    AbilityRange(GetGroup(enemies), auto);
                     break;
                 case TargetType.Both:
-                    AbilityRange(_fighters);
+                    AbilityRange(FighterFighting, auto);
                     break;
             }
         }
@@ -49,22 +49,27 @@ namespace Core.Battle.BattleSystem
         /**<summary>Choose the range of the ability.
         <param name="fighters">The fighters that the character can attack.</param>
         </summary>*/
-        private void AbilityRange(Fighter[] fighters)
+        private void AbilityRange(Fighter[] fighters, bool auto = false)
         {
-            
             switch (_abilityInUse.Range)
             {
+                case TargetRange.One when auto:
+                    AttackAll(fighters, true, confused: true);
+                    break;
                 case TargetRange.One:
                     SelectTarget(fighters);
                     break;
                 case TargetRange.All:
-                    AttackAll(fighters);
+                    AttackAll(fighters, confused:auto);
                     break;
-                case TargetRange.MoreThanOne:
+                /*case TargetRange.MoreThanOne:
                     AttackAll(fighters, false, _abilityInUse.NumberOfTarget);
-                    break;
+                    break;*/
                 case TargetRange.Random:
-                    AttackAll(fighters, true, _abilityInUse.NumberOfTarget);
+                    AttackAll(fighters, true, _abilityInUse.NumberOfTarget, auto);
+                    break;
+                case TargetRange.Himself when auto:
+                    AttackAll(new [] {FighterTurn}, confused:true);
                     break;
                 case TargetRange.Himself:
                     SelectTarget(new [] {FighterTurn});
@@ -107,7 +112,7 @@ namespace Core.Battle.BattleSystem
 
         /**<summary>Attack all enemies.
         <param name="fighters">The enemies to attack.</param></summary>*/
-        private void AttackAll(Fighter[] fighters, bool random = false, int numberOfRandom = 1)
+        private void AttackAll(Fighter[] fighters, bool random = false, int numberOfRandom = 1, bool confused = false)
         {
             foreach (Fighter fighter in fighters)
             {
@@ -119,22 +124,29 @@ namespace Core.Battle.BattleSystem
                 int[] targets = new int[numberOfRandom];
                 int pos = 0;
 
+                numberOfRandom = numberOfRandom > fighters.Length ? fighters.Length : numberOfRandom;
+
                 while (pos<numberOfRandom)
                 {
-                    int numberToChoose = fighters[Random.Range(0, fighters.Length)].id;
-                    if (!targets.Contains(numberToChoose) || _abilityInUse.CanRepeatRandomTarget)
+                    if (!_abilityInUse.CanRepeatRandomTarget)
                     {
-                        targets[pos] = numberToChoose;
-                        pos++;
+                        int numberToChoose = Random.Range(0, fighters.Length);
                         
-                    }else if (_abilityInUse.CanRepeatRandomTarget) pos++;
+                        targets[pos] = fighters[numberToChoose].id;
+                        for (int i = numberToChoose; i < fighters.Length-1; i++)
+                        {
+                            fighters[i] = fighters[i + 1];
+                            Array.Resize(ref fighters, fighters.Length-1);
+                        }
+                    }
+                    pos++;
                 }
 
                 fighters = targets.Select(t => _fighters[t]).ToArray();
 
             }
 
-            if (!Input.GetKeyDown(ControlsKeys.Ok)) return;
+            if (!(Input.GetKeyDown(ControlsKeys.Ok) || confused)) return;
             
             InitMark();
             DoAttack(FighterTurn, fighters);

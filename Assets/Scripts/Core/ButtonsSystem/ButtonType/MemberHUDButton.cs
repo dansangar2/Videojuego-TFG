@@ -33,6 +33,18 @@ namespace Core.ButtonsSystem.ButtonType
 
         private new void Update()
         {
+            Character character = SavesFiles.GetSave().Characters[id]; 
+            
+            bloodPoints.text = character.CurrentBloodPoints.ToString();
+            bloodMax.text = character.MaxBloodPoints.ToString();
+            karmaPoints.text = character.CurrentKarmaPoints.ToString();
+            karmaMax.text = character.MaxKarmaPoints.ToString();
+            
+            bp.maxValue = character.MaxBloodPoints;
+            bp.value = character.CurrentBloodPoints;
+
+            kp.maxValue = character.MaxKarmaPoints;
+            kp.value = character.CurrentKarmaPoints;
             if (onlyHUD) return;
             base.Update();
         }

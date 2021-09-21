@@ -123,24 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &258476991 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6873420378826529370, guid: 7f5282a984c30874faae724590d7791e,
-    type: 3}
-  m_PrefabInstance: {fileID: 6873420378907336641}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &258476993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 258476991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64824b0604bb4ffcbb7e1318e78340bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &958906665
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,71 +196,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1737064344767845835, guid: 7f5282a984c30874faae724590d7791e,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1737064344767845835, guid: 7f5282a984c30874faae724590d7791e,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1737064344767845835, guid: 7f5282a984c30874faae724590d7791e,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1737064344767845835, guid: 7f5282a984c30874faae724590d7791e,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1737064344767845835, guid: 7f5282a984c30874faae724590d7791e,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6873420377553022512, guid: 7f5282a984c30874faae724590d7791e,
-        type: 3}
-      propertyPath: m_CellSize.x
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 6873420377553022512, guid: 7f5282a984c30874faae724590d7791e,
-        type: 3}
-      propertyPath: m_Padding.m_Left
-      value: 70
-      objectReference: {fileID: 0}
-    - target: {fileID: 6873420377553022513, guid: 7f5282a984c30874faae724590d7791e,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.4
-      objectReference: {fileID: 0}
     - target: {fileID: 6873420377553022517, guid: 7f5282a984c30874faae724590d7791e,
         type: 3}
       propertyPath: buttonsData.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6873420377553022517, guid: 7f5282a984c30874faae724590d7791e,
         type: 3}
       propertyPath: buttonsData.Array.data[1].icon
       value: 
-      objectReference: {fileID: -4841785371778001956, guid: 30cb94ee74b94d469da91d1111b33b92,
+      objectReference: {fileID: -3166525754326677502, guid: 30cb94ee74b94d469da91d1111b33b92,
         type: 3}
     - target: {fileID: 6873420377553022517, guid: 7f5282a984c30874faae724590d7791e,
         type: 3}
       propertyPath: buttonsData.Array.data[1].action
-      value: ToRest
+      value: ToHospital
       objectReference: {fileID: 0}
     - target: {fileID: 6873420377553022517, guid: 7f5282a984c30874faae724590d7791e,
         type: 3}
-      propertyPath: buttonsData.Array.data[0].buttonText
-      value: Rest and finish
-      objectReference: {fileID: 0}
-    - target: {fileID: 6873420377553022517, guid: 7f5282a984c30874faae724590d7791e,
-        type: 3}
-      propertyPath: buttonsData.Array.data[1].buttonName
-      value: Finish and Rest 2
+      propertyPath: buttonsData.Array.data[1].buttonText
+      value: Go to the hospital
       objectReference: {fileID: 0}
     - target: {fileID: 6873420378826529370, guid: 7f5282a984c30874faae724590d7791e,
         type: 3}
@@ -342,52 +279,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f5282a984c30874faae724590d7791e, type: 3}
---- !u!1 &6873420378907336643 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8762883233408748237, guid: 7f5282a984c30874faae724590d7791e,
-    type: 3}
-  m_PrefabInstance: {fileID: 6873420378907336641}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6873420378907336644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6873420378907336643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 20
-    m_Right: 0
-    m_Top: 50
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 1
-  m_CellSize: {x: 725, y: 168}
-  m_Spacing: {x: 50, y: 40}
-  m_Constraint: 0
-  m_ConstraintCount: 2
---- !u!114 &6873420378907336647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6873420378907336643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 271fa3218f4f4646a2ac4b90370de3a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buttonsBlinks: 0
-  velocity: 0.005
-  buttonColor: {r: 0, g: 1, b: 0, a: 1}
-  numsOfCol: 1
-  position: 0
-  maxInPage: 4
-  prefab: {fileID: 197179662, guid: 2b066c88632f0524ab5377e6817cd43c, type: 3}

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Core.ButtonsSystem.ButtonType;
 using Core.Controls;
 using Core.Saves;
@@ -14,7 +13,7 @@ namespace Core.ButtonsSystem.ButtonList
         <para>It'll get all entity Button.</para></sumary>*/ 
         private CharacterRestButton[] _buttons;
         /**<sumary>The button prefab.</sumary>*/
-        public MemberHUDButton prefab;
+        public CharacterRestButton prefab;
 
         /**<sumary>The Character gets.</sumary>*/
         public static int Pos = -1;
@@ -23,7 +22,6 @@ namespace Core.ButtonsSystem.ButtonList
         {
             TestSetUp();
             SetPages(SavesFiles.GetParty().Length);
-            prefab.onlyHUD = false;
             for (int i = 0; i < Mathf.Min(maxInPage, SavesFiles.GetParty().Length); i++)
             {
                 prefab.SetUp(SavesFiles.GetCharacterOfParty(i).ID);
@@ -42,17 +40,21 @@ namespace Core.ButtonsSystem.ButtonList
             if(Input.GetKeyDown(ControlsKeys.Ok) && Selected.canPress) Pos = Selected.MemberID;
         }
 
-
+        public void UpdateUI(int max)
+        {
+            for (int i = CurrentPage*maxInPage; i < Mathf.Min(SavesFiles.GetParty().Length, (CurrentPage + 1)*maxInPage); i++)
+            {
+                _buttons[i-CurrentPage*maxInPage].SetUp(SavesFiles.GetParty()[i].ID);
+            }
+        }
+        
         /**<sumary>Change the page.</sumary>*/
         private void ChangePage(KeyCode back, KeyCode next, bool condition = true)
         {
-            if ((condition && (Input.GetKeyDown(next) || Input.GetKeyDown(back))) && 
-                (_buttons.Length >= maxInPage))
+            if (condition && (Input.GetKeyDown(next) || Input.GetKeyDown(back)) && 
+                _buttons.Length >= maxInPage)
             {
                 base.ChangePage(back, next);
-                /*int rest = (currentPage + 1) % numberOfPages == 0
-                    ? SavesFiles.GetParty().Length % maxInPage
-                    : maxInPage;*/
                 for (int i = CurrentPage * maxInPage; i < (CurrentPage + 1) * maxInPage; i++)
                 {
                     if (i >= SavesFiles.GetParty().Length)
@@ -105,13 +107,14 @@ namespace Core.ButtonsSystem.ButtonList
             TestDelete();
             TestInit1();
             TestLoad();
+            DamageParty();
             TestParty();
         }
         
         [ContextMenu("Init Party1")]
         public void TestInit1()
         {
-            SavesFiles.GetSave().AddCharacter(4, 1, 2, 3, 0);
+            SavesFiles.GetSave().AddCharacter(4, 1, 2, 3, 0, 5);
             SavesFiles.SaveData();
         }
         
@@ -141,6 +144,15 @@ namespace Core.ButtonsSystem.ButtonList
             foreach (Character cha in SavesFiles.GetSave().Party)
             {
                 Debug.Log(cha);
+            }
+        }
+        
+        [ContextMenu("Damage Party")]
+        public void DamageParty()
+        {
+            foreach (Character cha in SavesFiles.GetSave().Party)
+            {
+                cha.ReduceCurrentBlood(100);
             }
         }
 

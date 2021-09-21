@@ -64,11 +64,15 @@ namespace Core.Battle.DamageText
             Vector3 position1 = transform.position;
             //It move the text
             position1 = Vector3.MoveTowards(position1,
-                position1 + hitDirection*_pos + posDirection, 1000*Time.deltaTime);
+                position1 + hitDirection * (_pos * direction) + posDirection, 1000*Time.deltaTime);
             transform.position = position1;
             // 5 FixedUpdate = 1s
             _t += 0.02f;
-            if (fall || _pos > 0) _pos = _a * Mathf.Pow(_t, 2)* (-1f / 2) + _v * force + _t + _initPos;
+            if (fall || _pos > 0)
+            {
+                _pos = _a * Mathf.Pow(_t, 2) * (-1f / 2) + _v * force + _t + _initPos;
+                if (_pos < 0f) hitDirection = transform.up;
+            }
             //else if (_pos > 0) _pos = _a * Mathf.Pow(_t, 2)* (-1f / 2) + _v * force + _t + _initPos;
             else _pos =0;
             
@@ -81,7 +85,8 @@ namespace Core.Battle.DamageText
         {
             Transform transform1 = fighter.meshFilter.transform;
             Vector3 position = transform1.position;
-            hitDirection = transform1.up;
+            //hitDirection = transform1.up;
+            hitDirection = transform1.right;
             
             fall = damage >= 0;
     
@@ -108,7 +113,8 @@ namespace Core.Battle.DamageText
         {
             Transform transform1 = fighter.meshFilter.transform;
             Vector3 position = transform1.position;
-            hitDirection = transform1.up;
+            //hitDirection = transform1.up;
+            hitDirection = -transform1.right;
             
             fall = false;
 

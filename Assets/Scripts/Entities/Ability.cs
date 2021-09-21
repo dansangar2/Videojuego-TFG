@@ -296,7 +296,7 @@ namespace Entities
         /**<summary>Get the final value of parameter of "index". </summary>*/ 
         public float Calculate(int index, int level, int maxLevel) 
         {
-            return Stats[index]*Mathf.Pow(rate[index],level)*LearningRate(index, level, maxLevel);
+            return Stats[index]*Mathf.Pow(rate[index],level-1)*LearningRate(index, level, maxLevel);
         }
         
         /**<summary>Get the learning rate.</summary>*/

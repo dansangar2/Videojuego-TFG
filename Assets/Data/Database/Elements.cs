@@ -16,7 +16,7 @@ namespace Data.Database
 
         
         /**<summary>Clone constructor.</summary>*/ 
-        public Elements(Elements elements)
+        public void Clone(Elements elements)
         {
             this.elements = new Element[elements.Count];
             for (int i = 0; i < elements.Count; i++)

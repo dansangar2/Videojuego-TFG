@@ -1,5 +1,8 @@
-﻿using Core.Saves;
+﻿using System;
+using System.Linq;
+using Core.Saves;
 using Entities;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Core.ButtonsSystem.ButtonType
@@ -18,8 +21,16 @@ namespace Core.ButtonsSystem.ButtonType
         public Text level;
         public Slider bp;
         public Slider kp;
+        public Image status1;
+        public Image status2;
         /**<summary>It indicates if is a button or only a HUD.</summary>*/
         public bool onlyHUD;
+        
+        private int _j;
+        private float _seconds;
+
+        private Image _imageBarBP;
+        private Image _imageBarKP;
 
         #endregion
 
@@ -27,6 +38,8 @@ namespace Core.ButtonsSystem.ButtonType
 
         private new void Awake()
         {
+            _imageBarBP = bp.fillRect.GetComponent<Image>();
+            _imageBarKP = kp.fillRect.GetComponent<Image>();
             if (onlyHUD) return;
             base.Awake();
         }
@@ -34,6 +47,9 @@ namespace Core.ButtonsSystem.ButtonType
         private new void Update()
         {
             Character character = SavesFiles.GetSave().Characters[id]; 
+            
+            level.text = character.Level.ToString();
+            next.text = (character.NedExp - character.ActExp).ToString();
             
             bloodPoints.text = character.CurrentBloodPoints.ToString();
             bloodMax.text = character.MaxBloodPoints.ToString();
@@ -45,6 +61,34 @@ namespace Core.ButtonsSystem.ButtonType
 
             kp.maxValue = character.MaxKarmaPoints;
             kp.value = character.CurrentKarmaPoints;
+            
+            Sprite[] sprites = Character.Statuses.Select(s => s.Status.Icon).ToArray();
+            try
+            {
+                status1.sprite = sprites[_j];
+                status1.gameObject.SetActive(true);
+            }
+            catch(Exception) 
+            { 
+                status1.gameObject.SetActive(false);
+            }
+            try 
+            { 
+                status2.sprite = sprites[_j+1];
+                status2.gameObject.SetActive(true);
+            }
+            catch(Exception) 
+            { 
+                if(sprites.Length<1) status2.gameObject.SetActive(false);
+            }
+            
+            _seconds += Time.deltaTime;
+            if (_seconds <= 1) return;
+
+            _j += 2; 
+            if (_j >= sprites.Length) _j = 0;
+            _seconds = 0;
+            
             if (onlyHUD) return;
             base.Update();
         }
@@ -79,6 +123,13 @@ namespace Core.ButtonsSystem.ButtonType
             kp.value = character.CurrentKarmaPoints;
 
         }
-        
+
+        /**<summary>Get the bar image of the BP slider</summary>*/
+        public Image SliderBarBP => _imageBarBP;
+
+        /**<summary>Get the bar image of the KP slider</summary>*/
+        public Image SliderBarKP => _imageBarKP;
+
+
     }
 }

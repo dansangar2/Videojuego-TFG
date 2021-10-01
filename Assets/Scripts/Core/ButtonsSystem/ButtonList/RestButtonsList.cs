@@ -42,5 +42,8 @@ namespace Core.ButtonsSystem.ButtonList
             Move(_restButtons);
             if(Input.GetKeyDown(ControlsKeys.Ok)) Option = _restButtons[position].messageToSend;
         }
+
+        /**<summary>Get the current button.</summary>*/
+        public RestButton Selected => _restButtons[position];
     }
 }

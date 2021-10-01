@@ -44,7 +44,7 @@ namespace Entities
       
         /**<summary>Ability clone constructor</summary>*/ 
         public Ability(Ability ability): base(ability)
-        { 
+        {
             formula = ability.formula; 
             type = ability.type; 
             icon = ability.icon; 
@@ -91,11 +91,11 @@ namespace Entities
         /**<summary>It indicates who you can attack.</summary>*/
         public TargetType Target { get => target; set => target = value; }
         /**<summary>The max interval of the attack.</summary>*/
-        public float UpperInterval { get => stats[2]; set => stats[2] = value; }
+        public float UpperInterval { get => Mathf.Round(stats[2]*100f)/100f; set => stats[2] = value; }
         /**<summary>The min interval of the attack.</summary>*/
-        public float DownInterval { get => stats[1]; set => stats[1] = value; }
+        public float DownInterval { get => Mathf.Round(stats[1]*100f)/100f; set => stats[1] = value; }
         /**<summary>The power up of the attack (extra power).</summary>*/
-        public float PowerIncrement { get => stats[0]; set => stats[0] = value; }
+        public float PowerIncrement { get => Mathf.Round(stats[0]*100f)/100f; set => stats[0] = value; }
         /**<summary>Set the element.</summary>*/
         public int ElementID { set => elementID = value; }
         /**<summary>Set the element of the ability. If it's null,

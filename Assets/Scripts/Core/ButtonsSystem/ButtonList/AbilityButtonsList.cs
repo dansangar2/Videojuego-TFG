@@ -3,6 +3,7 @@ using Core.ButtonsSystem.ButtonType;
 using Core.Controls;
 using Entities;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Core.ButtonsSystem.ButtonList
 {
@@ -18,33 +19,36 @@ namespace Core.ButtonsSystem.ButtonList
         public AbilityButton prefab;
         /**<sumary>The character that will use the ability.</sumary>*/
         public Character character;
+        /**<sumary>The panel where the slots will generated.</sumary>*/
+        public Transform panel;
+
+        public bool keepTheList;
+        
+        public Text cost;
+
+        public Text[] levelData;
+        
+        public Text characterPoints;
+
+        private string[] _legend = {"Before", "After"};
 
         #endregion
 
-        private void Awake()
+        private void OnEnable()
         {
-            maxInPage = 10;
+            numsOfCol = numsOfCol > maxInPage ? maxInPage : numsOfCol;
             prefab.gameObject.SetActive(true);
             for (int i = 0; i < maxInPage; i++)
-            { 
-                Instantiate(prefab, transform.GetChild(2).transform);
+            {
+                if (panel.childCount != maxInPage) Instantiate(prefab, panel.transform);
+                else panel.GetChild(i).gameObject.SetActive(true);
             }
             
-            /*for (int i = maxInPage*CurrentPage; i < character.Abilities().Length; i++)
-            {
-                Instantiate(prefab, transform.GetChild(2).transform);
-                //if(i >= maxInPage*(CurrentPage+1)) break;
-                Ability ability = character.Abilities()[i];
-                prefab.canSendMessage = true;
-                prefab.messageToSend = ability.ID.ToString();
-                prefab.elementIcon.sprite = character.Element.Icon;
-                prefab.SetUp(ability.ID, character.CurrentKarmaPoints >= ability.Cost);
-                Instantiate(prefab, transform.GetChild(2).transform);
-            }*/
+            _buttons = panel.GetComponentsInChildren<AbilityButton>();
             
-            _buttons = gameObject.transform.GetChild(2).GetComponentsInChildren<AbilityButton>();
-
-            SetPages(character.Abilities().Length);//_buttons.Length);
+            SelectNone();
+            
+            SetPages(character.Abilities().Length);
 
             if (int.TryParse(GenericButton.Message, out _))
             {
@@ -53,7 +57,6 @@ namespace Core.ButtonsSystem.ButtonList
                 {
                     SetCurrentAbilities();
                     position = _buttons.ToList().FindIndex(a => a.messageToSend==GenericButton.Message);
-                    Debug.Log(position);
                     if (position != -1 || CurrentPage == NumberOfPages - 1) break;
                     CurrentPage++;
                 }
@@ -70,37 +73,58 @@ namespace Core.ButtonsSystem.ButtonList
             SetColumnsAndRows(_buttons);
 
             GenericButton.Message = "";
+        }
+
+        public void Update()
+        {
+            if(cost) cost.text = CurrentAbility.Ability.NeedPointsToLevelUp.ToString();
+            if (characterPoints) characterPoints.text = character.Name + ": " + 
+                                                        character.AbilityPoints + " points.";
+            for (int i = 0; i < levelData.Length; i++)
+            {
+                SpecialAbility sp = new SpecialAbility(Selected.MemberID, 
+                    CurrentAbility.Level + i, 
+                    CurrentAbility.NeedLevel, 
+                    CurrentAbility.MaxLevel);
+                if (sp.Level <= sp.MaxLevel)
+                    levelData[i].text = _legend[i] + "\n" + sp.Level + "\n" +
+                                        sp.Ability.DownInterval + "\n" +
+                                        sp.Ability.UpperInterval + "\n" +
+                                        sp.Ability.PowerIncrement;
+                else levelData[i].text = _legend[i] + "\n-\n-\n-\n-";
+            }
+
+            if ((position >= numsOfCol* (CurrentNumOfRows-1) || position == character.Abilities().Length - maxInPage * CurrentPage - 1) && Input.GetKeyDown(ControlsKeys.MoveDown))
+            {
+                Move(_buttons);
+                CurrentPage++;
+                CurrentPage %= NumberOfPages;
+                SetCurrentAbilities();
+                SelectCurrent();
+            }
+            else if(position < numsOfCol && Input.GetKeyDown(ControlsKeys.MoveUp))
+            {
+                
+                CurrentPage--;
+                CurrentPage = CurrentPage < 0 ? NumberOfPages-1 : CurrentPage;
+                SetCurrentAbilities();
+                SelectCurrent();
+                Move(_buttons);
+            }
+            else Move(_buttons);
+            
+            if (!GenericButton.Message.Equals("")
+                && gameObject.activeInHierarchy)
+            {
+                transform.gameObject.SetActive(keepTheList);
+                if(keepTheList) character.UpdateAbility(Selected.MemberID);
+                GenericButton.Message = "";
+            }
+            else if(Input.GetKeyDown(ControlsKeys.Back)) transform.gameObject.SetActive(false);
             
         }
 
-        private void Update()
-        {
-            //ChangePage(ControlsKeys.CameraLeft, ControlsKeys.CameraRight);
-            //ChangePage();
-            if ((position == maxInPage-1 || position == character.Abilities().Length - maxInPage * CurrentPage - 1) && Input.GetKeyDown(ControlsKeys.MoveDown))
-            {
-                CurrentPage++;
-                CurrentPage %= NumberOfPages;
-                position = 0;
-                SetCurrentAbilities();
-                SelectCurrent();
-            }
-            else if(position <= 0 && Input.GetKeyDown(ControlsKeys.MoveUp))
-            {
-                CurrentPage--;
-                CurrentPage = CurrentPage < 0 ? NumberOfPages-1 : CurrentPage;
-                position = CurrentPage == NumberOfPages-1 ? character.Abilities().Length % maxInPage-1 : maxInPage - 1;
-                SetCurrentAbilities();
-                SelectCurrent();
-            }
-            else
-            {
-                Move(_buttons);
-            }
-            if(Input.GetKeyDown(ControlsKeys.Back) || 
-               !GenericButton.Message.Equals("")) Destroy(transform.gameObject);
-        }
-
+        /**<summary>Get the abilities of the current page.</summary>*/
         public void SetCurrentAbilities()
         {
             for (int i = 0; i < maxInPage; i++)
@@ -115,8 +139,7 @@ namespace Core.ButtonsSystem.ButtonList
                 _buttons[i].canSendMessage = true;
                 _buttons[i].messageToSend = ability.ID.ToString();
                 _buttons[i].elementIcon.sprite = character.Element.Icon;
-                _buttons[i].SetUp(ability.ID, character.CurrentKarmaPoints >= ability.Cost);
-                //Instantiate(prefab, transform.GetChild(2).transform);
+                _buttons[i].SetUp(ability.ID, character, character.CurrentKarmaPoints >= ability.Cost);
             }
         }
         
@@ -137,7 +160,10 @@ namespace Core.ButtonsSystem.ButtonList
 
         /**<sumary>Get the selected button.</sumary>*/
         public AbilityButton Selected => _buttons[position];
-
+        
+        /**<summary>Get the current ability.</summary>*/
+        public SpecialAbility CurrentAbility => character.GetSpAbility(Selected.MemberID);
+        
         #endregion
 
     }

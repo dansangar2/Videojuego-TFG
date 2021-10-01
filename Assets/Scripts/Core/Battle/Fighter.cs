@@ -1,4 +1,5 @@
-﻿using Core.Battle.StatusesUI;
+﻿using System.Linq;
+using Core.Battle.StatusesUI;
 using Core.ButtonsSystem.ButtonType;
 using Core.Saves;
 using Data;
@@ -49,7 +50,7 @@ namespace Core.Battle
         public Fighter(int enemyId, MeshFilter meshFilter, MeshRenderer meshRenderer, MeshCollider meshCollider)
         {
             isEnemy = true;
-            character = GameData.EnemyDB.FindByID(enemyId);
+            character = SavesFiles.GetSave().GetEnemy(enemyId);
             this.meshFilter = meshFilter;
             this.meshRenderer = meshRenderer;
             this.meshCollider = meshCollider;
@@ -60,7 +61,7 @@ namespace Core.Battle
         {
             id = pos;
             isEnemy = true;
-            character = GameData.EnemyDB.FindByID(enemiesId[pos % enemiesId.Length]);
+            character = SavesFiles.GetSave().GetEnemy(enemiesId[pos % enemiesId.Length]);
             meshFilter = meshFilters[pos];
             meshRenderer = meshRenderers[pos];
             meshCollider = meshColliders[pos];
@@ -102,7 +103,7 @@ namespace Core.Battle
         {
             id = pos;
             isEnemy = true;
-            character = new Character(GameData.EnemyDB.FindByID(enemiesId[pos % enemiesId.Length]));
+            character = new Character(SavesFiles.GetSave().GetEnemy(enemiesId[pos % enemiesId.Length]));
             statuses.SetUp(this);
             Instantiate(statuses, new Vector3(
                 meshFilters[pos].transform.position.x + 300,//- (pos % (meshFilters.Length-enemiesId.Length))*100,

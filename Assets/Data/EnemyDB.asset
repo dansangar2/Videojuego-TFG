@@ -26,10 +26,10 @@ MonoBehaviour:
     - 0
     - 0
     - 0.011
-    expData: 1e000000140000001e00000014000000
+    expData: e8030000140000001e00000014000000
     elementID: 0
     actExp: 0
-    nedExp: 50
+    nedExp: 1019
     bases:
     - 50
     - 30
@@ -79,16 +79,6 @@ MonoBehaviour:
       needLevel: 1
       level: 1
       maxLevel: 1
-      needPointsToLevelUp: 0
-      rate:
-      - 1
-      - 1
-      - 1
-      learning:
-      - 1
-      - 1
-      - 1
-      expData: 0a000000050000000f0000000a000000
   - id: 1
     name: En2
     description: 
@@ -217,27 +207,193 @@ MonoBehaviour:
       needLevel: 1
       level: 1
       maxLevel: 1
-      needPointsToLevelUp: 0
-      rate:
-      - 1
-      - 1
-      - 1
-      learning:
-      - 1
-      - 1
-      - 1
-      expData: 0a000000050000000f0000000a000000
     - abilityID: 3
       needLevel: 1
       level: 1
       maxLevel: 1
-      needPointsToLevelUp: 0
-      rate:
-      - 1
-      - 1
-      - 1
-      learning:
-      - 1
-      - 1
-      - 1
-      expData: 0a000000050000000f0000000a000000
+  - id: 3
+    name: En4
+    description: 
+    art: {fileID: 0}
+    level: 1
+    maxLevel: 99
+    main: c201000064000000330000002d00000028000000230000001e000000c201000064000000
+    special:
+    - 0.011
+    - 0.019
+    - 0
+    - 0
+    - 0
+    expData: 1e000000140000001e00000014000000
+    elementID: 0
+    actExp: 0
+    nedExp: 50
+    bases:
+    - 50
+    - 30
+    - 6
+    - 5.5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    plus: 90010000460000002d00000028000000230000001e000000190000001e00000023000000230000001e000000
+    rate:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 6
+    - 4
+    - 15
+    - 15
+    flat: 00000000000000000000000000000000000000000000000000000000
+    learning:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    max:
+    - 0.5
+    - 0.5
+    yes: 0000
+    face: {fileID: 7422639164033526231, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    model: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    meleeAttackID: 0
+    longAttackID: 0
+    abilityPoints: 0
+    statuses: []
+    abilities: []
+  - id: 4
+    name: En5
+    description: 
+    art: {fileID: 0}
+    level: 1
+    maxLevel: 99
+    main: c201000064000000330000002d00000028000000230000001e000000c201000064000000
+    special:
+    - 0.011
+    - 0.019
+    - 0
+    - 0
+    - 0
+    expData: 1e000000140000001e00000014000000
+    elementID: 0
+    actExp: 0
+    nedExp: 50
+    bases:
+    - 50
+    - 30
+    - 6
+    - 5.5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    plus: 90010000460000002d00000028000000230000001e000000190000001e00000023000000230000001e000000
+    rate:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 6
+    - 4
+    - 15
+    - 15
+    flat: 00000000000000000000000000000000000000000000000000000000
+    learning:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    max:
+    - 0.5
+    - 0.5
+    yes: 0000
+    face: {fileID: 9137585843811180033, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    model: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+    meleeAttackID: 0
+    longAttackID: 0
+    abilityPoints: 0
+    statuses: []
+    abilities: []
+  - id: 5
+    name: En6
+    description: 
+    art: {fileID: 0}
+    level: 1
+    maxLevel: 99
+    main: c201000064000000330000002d00000028000000230000001e000000c201000064000000
+    special:
+    - 0.011
+    - 0.019
+    - 0
+    - 0
+    - 0
+    expData: 1e000000140000001e00000014000000
+    elementID: 0
+    actExp: 0
+    nedExp: 50
+    bases:
+    - 50
+    - 30
+    - 6
+    - 5.5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    - 5
+    plus: 90010000460000002d00000028000000230000001e000000190000001e00000023000000230000001e000000
+    rate:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 6
+    - 4
+    - 15
+    - 15
+    flat: 00000000000000000000000000000000000000000000000000000000
+    learning:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    max:
+    - 0.5
+    - 0.5
+    yes: 0000
+    face: {fileID: -3714112297922690383, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    model: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+    meleeAttackID: 0
+    longAttackID: 0
+    abilityPoints: 0
+    statuses: []
+    abilities: []

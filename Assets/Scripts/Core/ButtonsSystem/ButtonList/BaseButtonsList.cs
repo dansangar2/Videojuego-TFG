@@ -25,9 +25,9 @@ namespace Core.ButtonsSystem.ButtonList
 
         /**<summary>It depends of the nums of columns value.
         <para>It indicates the number of rows</para></summary>*/
-        private int _numsOfRows = 1;
+        protected int NumsOfRows = 1;
         /**<summary>It indicates the number of row at the moment it's generating</summary>*/
-        private int _currentNumOfRows;
+        protected int CurrentNumOfRows;
 
         #endregion
 
@@ -36,9 +36,9 @@ namespace Core.ButtonsSystem.ButtonList
         /**<sumary>The current position.</sumary>*/
         public int position;
         /**<summary>The current column index.</summary>*/
-        private int _currentColumn;
+        protected int CurrentColumn;
         /**<summary>The current row index.</summary>*/
-        private int _currentRow;
+        protected int CurrentRow;
 
         #endregion
         
@@ -49,15 +49,18 @@ namespace Core.ButtonsSystem.ButtonList
         /**<sumary>Set the columns and rows.</sumary>*/
         protected void SetColumnsAndRows(GenericButton[] buttons)
         {
-            _numsOfRows = buttons.Where(b => b
-                                  .gameObject.activeInHierarchy && b.enabled).ToArray()
-                              .Length/numsOfCol 
-                          + buttons.Where(b => b
-                                  .gameObject.activeInHierarchy && b.enabled).ToArray()
-                              .Length%numsOfCol;
-            _currentNumOfRows = _numsOfRows;
-            _currentRow = position;
-            
+            NumsOfRows = buttons.Count(b => b
+                    .gameObject.activeInHierarchy && b.enabled) / numsOfCol + 
+                          (buttons.Count(b => b
+                                                  .gameObject.activeInHierarchy 
+                          ) % numsOfCol == 0 ? 0 : 1);
+            CurrentRow = position/numsOfCol;
+            CurrentColumn = position % Mathf.Min(numsOfCol, buttons.Count(b => b.gameObject.activeInHierarchy));
+            if ((NumsOfRows-1) * numsOfCol + CurrentColumn >= 
+                buttons.Count(b => b.gameObject.activeInHierarchy)) 
+                CurrentNumOfRows = NumsOfRows - 1;
+            else CurrentNumOfRows = NumsOfRows;
+            position = CurrentRow * numsOfCol + CurrentColumn;
         }
         
         /**<sumary>The button directional movement.</sumary>*/
@@ -71,37 +74,38 @@ namespace Core.ButtonsSystem.ButtonList
             buttons[position].IsSelect = false;
             
             //Check the current Column of the button list
-            _currentColumn = _currentColumn 
+            CurrentColumn = CurrentColumn 
                              + Convert.ToInt32(Input.GetKeyDown(ControlsKeys.MoveRight))
                              - Convert.ToInt32(Input.GetKeyDown(ControlsKeys.MoveLeft));
 
-            _currentColumn %= numsOfCol;
-            if (_currentColumn < 0) _currentColumn = numsOfCol-1;
+            CurrentColumn %= Mathf.Min(numsOfCol, buttons.Count(b => b.gameObject.activeInHierarchy));
+            if (CurrentColumn < 0) CurrentColumn = Mathf.Min(numsOfCol-1, buttons.Count(b => b.gameObject.activeInHierarchy)-1);
 
-            //Update the column size with the number of the values that it have
-            if (_currentColumn == numsOfCol-1) _currentNumOfRows =
-                _numsOfRows - buttons.Where(b => b
-                    .gameObject.activeInHierarchy).ToArray().Length % numsOfCol;
-            else _currentNumOfRows = _numsOfRows;
-
+            //Update the row size with the number of the buttons
+            if ((NumsOfRows-1) * numsOfCol + CurrentColumn >= 
+                buttons.Count(b => b.gameObject.activeInHierarchy)) 
+                CurrentNumOfRows = NumsOfRows - 1;
+            else CurrentNumOfRows = NumsOfRows;
+            
             //Check the current Column of the button list
-            if (_currentRow >= _currentNumOfRows) _currentRow = _currentNumOfRows-1;
+            if (CurrentRow >= CurrentNumOfRows) CurrentRow = CurrentNumOfRows-1;
             
             //Check the current row of the button list
-            _currentRow = _currentRow + Convert.ToInt32(Input.GetKeyDown(ControlsKeys.MoveDown))
+            CurrentRow = CurrentRow 
+                          + Convert.ToInt32(Input.GetKeyDown(ControlsKeys.MoveDown))
                           - Convert.ToInt32(Input.GetKeyDown(ControlsKeys.MoveUp));
 
-            _currentRow %= _currentNumOfRows;
-            if (_currentRow < 0) _currentRow = _currentNumOfRows-1;
+            if (CurrentNumOfRows != 0) CurrentRow %= CurrentNumOfRows;
+            else CurrentRow = buttons.Count(b => b.gameObject.activeInHierarchy) - 1;
+            if (CurrentRow < 0) CurrentRow = CurrentNumOfRows-1;
             
             //With the row and column pos I get the position. I mean where is the button now. 
-            position = _currentRow + _numsOfRows * _currentColumn;
-            
+            position = CurrentRow * numsOfCol + CurrentColumn;
             
             buttons[position].IsSelect = true;
 
         }
-
+        
         #endregion
 
         #region SELECT OPTIONS

@@ -567,7 +567,7 @@ MonoBehaviour:
   buttonColor: {r: 0, g: 1, b: 0, a: 1}
   numsOfCol: 1
   position: 0
-  maxInPage: 4
+  maxInPage: 10
   prefab: {fileID: 97925835174820496, guid: 68e145ea2e6b98e4bb94a35f481b5929, type: 3}
   character:
     id: 3
@@ -636,6 +636,7 @@ MonoBehaviour:
       needLevel: 1
       level: 1
       maxLevel: 1
+  panel: {fileID: 2736862875220539857}
 --- !u!1 &7705889096844391700
 GameObject:
   m_ObjectHideFlags: 0

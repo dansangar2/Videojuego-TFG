@@ -25,6 +25,19 @@ namespace Core.Controls
                    || Input.GetKeyDown(MoveUp);
         }
 
+        /**<summary>
+        0 -> MoveUp
+        <para>1 -> MoveLeft</para>
+        2 -> MoveRight
+        <para>3 -> MoveDown</para>
+        4 -> Ok
+        <para>5 -> Back</para>
+        6 -> Pause
+        <para>7 -> ActionButton1</para>
+        8 -> ActionButton2
+        <para>9 -> CameraLeft</para>
+        10 -> CameraRight
+        </summary>*/
         public static KeyCode? GetKey(int index)
         {
             switch (index)

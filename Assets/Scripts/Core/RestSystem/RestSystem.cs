@@ -1,28 +1,39 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Core.Battle.BattleSystem;
 using Core.ButtonsSystem.ButtonList;
+using Core.ButtonsSystem.ButtonType;
 using Core.Controls;
 using Core.RestSystem.Actions;
 using Core.Saves;
+using Data;
 using Entities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Core.RestSystem
 {
     public class RestSystem : MonoBehaviour
     {
         public BattleSystem nextBattle;
-        
+        public UseRestPointsInterface pointsToUse;
+        public Text description;
+
         private RestButtonsList _restOptionList;
         private CharacterButtonsList _characterList;
-
-        private bool _finish = true;
-
+        private AbilityButtonsList _abilityButtonsList;
+        private int _characterToChangeID = -1;
+        private static List<int> _cannotMove = new List<int>();
+        private bool _isMark;
+        
         public void Awake()
         {
+            _cannotMove = new List<int>();
             _characterList = GetComponentInChildren<CharacterButtonsList>();
             _restOptionList = GetComponentInChildren<RestButtonsList>();
+            _abilityButtonsList = transform.GetChild(0).Find("AbilityPanel").GetComponentInChildren<AbilityButtonsList>();
             BattleSystem.MaxMembers = 3;
             RestButtonsList.Option = "";
             foreach (Character character in SavesFiles.GetParty())
@@ -34,46 +45,84 @@ namespace Core.RestSystem
 
         public void Update()
         {
-            
+            if (_abilityButtonsList.gameObject.activeInHierarchy)
+            {
+                _restOptionList.enabled = false;
+                _characterList.enabled = false;
+                if(GenericButton.Message.Equals("") || !int.TryParse(GenericButton.Message, out _)) return;
+                GenericButton.Message = "";
+                return;
+                
+            }
+            if (pointsToUse.transform.parent.gameObject.activeInHierarchy) return;
+            description.text = _restOptionList.Selected.description;
+
             if (Option.Equals(""))
             {
                 _restOptionList.enabled = true;
                 _characterList.enabled = false;
                 _characterList.SelectNone();
+                _characterToChangeID = -1;
+                CharacterID = -1;
                 return;
             }
 
             _restOptionList.enabled = false;
             _characterList.enabled = true;
-            if (Input.GetKeyDown(ControlsKeys.Back))
+            //Go back if the character is selected to switch.
+            if (Input.GetKeyDown(ControlsKeys.Back) && CharacterID<0)
             {
                 _characterList.Selected.IsSelect = false;
+                _characterList.Selected.ToMark(false);
                 Option = "";
             }
             else
             {
                 _characterList.SelectCurrent();
             }
-            if (!Option.Equals("") && CharacterID>-1) ToDoAction();
-            if (_finish) return;
-            BattleSystem.MaxMembers = Mathf.Min(3, SavesFiles.GetParty().Length - HospitalAction.PeopleInHospital);
-            HospitalAction.PeopleInHospital = 0;
-            BattleSystem.EnemiesId = new[]
+
+            //Prepare to switch characters
+            if (Option.Equals("Party") && CharacterID>-1 && !_cannotMove.Contains(CharacterID))
             {
-                (SavesFiles.GetSave().Level - 1)*3,
-                (SavesFiles.GetSave().Level - 1)*3 + 1,
-                (SavesFiles.GetSave().Level - 1)*3 + 2
-            };
-            for (int i = 0; i < nextBattle.AllEnemies.Length; i++)
-            {
-                nextBattle.AllEnemies[i].character.Level = SavesFiles.GetSave().Level;
+                if(_characterToChangeID!=CharacterID && _characterToChangeID>=0)
+                {
+                    
+                    SavesFiles.GetSave().SwitchCharactersByID(_characterToChangeID, CharacterID);
+                    _characterList.UpdateUI();
+                    _characterToChangeID = -1;
+                    CharacterID = -1;
+                    _isMark = false;
+                    _characterList.DontMarkAny();
+                }
+                else
+                {
+                    if(!_isMark)
+                    {
+                        _isMark = true;
+                        _characterList.ToMark(_isMark);
+                    }
+                    _characterToChangeID = CharacterID;
+                }
+                return;
             }
 
+            _characterToChangeID = -1;
+            _isMark = false;
+
+            if (!Option.Equals("") && CharacterID>-1) ToDoAction();
+            
+            if (SavesFiles.GetParty().Select(s => s.RestPoints).Sum() != 0) return;
+            
+            BattleSystem.MaxMembers = Mathf.Min(3, SavesFiles.GetParty().Length - HospitalAction.PeopleInHospital);
+            HospitalAction.PeopleInHospital = 0;
+
+            GenerateEnemies();
+            
             SceneManager.LoadScene("BattleSystemTest");
 
         }
 
-        
+        /**<summary>It do the action.</summary>*/
         public void ToDoAction()
         {
             switch (Option)
@@ -87,12 +136,57 @@ namespace Core.RestSystem
                                            || Character.MaxKarmaPoints > Character.CurrentKarmaPoints
                                            || Character.Statuses.Length > 0):
                     HospitalAction.ToHospital(Character);
-                    _characterList.UpdateUI(4);
+                    _cannotMove.Add(CharacterID);
+                    _characterList.UpdateUI();
+                    break;
+                case "Training":
+                    pointsToUse.SetUp(Character.ID);
+                    pointsToUse.transform.parent.gameObject.SetActive(true);
+                    _characterList.enabled = false;
+                    break;
+                case "Nursing":
+                    pointsToUse.SetUp(Character.ID);
+                    pointsToUse.transform.parent.gameObject.SetActive(true);
+                    _characterList.enabled = false;
                     break;
             }
-
-            _finish = SavesFiles.GetParty().Select(s => s.RestPoints).Sum() != 0;
             CharacterID = -1;
+        }
+
+        /**<summary>Prepare the enemies for the next battle and level up the current.</summary>*/
+        public void GenerateEnemies()
+        {
+            int[] enemiesCanGet = {};
+            int difference = 1;
+            while (enemiesCanGet.Length<3)
+            {
+                enemiesCanGet = SavesFiles.GetSave().Enemies
+                    .Where(e => !BattleSystem.EnemiesId.Contains(e.ID) && 
+                                e.Level>=SavesFiles.GetSave().Level-difference && e.Level<=SavesFiles.GetSave().Level 
+                                + Mathf.Min(difference,3))
+                    .Select(e => e.ID).ToArray();
+                difference++;
+            }
+            
+            SavesFiles.GetSave().Level++;
+            for (int i = 0; i < BattleSystem.EnemiesId.Length; i++)
+            {
+                SavesFiles.GetSave().Enemies.First(c => c.ID==BattleSystem.EnemiesId[i]).Level = SavesFiles.GetSave().Level;
+            }
+            
+            int enemy1 = Random.Range(0, enemiesCanGet.Length);
+            int enemy2 = Random.Range(0, enemiesCanGet.Length);
+            int enemy3 = Random.Range(0, enemiesCanGet.Length);
+            BattleSystem.EnemiesId = new[]
+            {
+                //(SavesFiles.GetSave().Level - 1)*3,
+                //(SavesFiles.GetSave().Level - 1)*3 + 1,
+                //(SavesFiles.GetSave().Level - 1)*3 + 2
+                enemiesCanGet[enemy1],
+                enemiesCanGet[enemy2],
+                enemiesCanGet[enemy3]
+            };
+
         }
 
         /**<summary>Get the rest option.</summary>*/
@@ -104,6 +198,7 @@ namespace Core.RestSystem
         /**<summary>Get the character selected.</summary>*/
         public Character Character => SavesFiles.GetSave().GetCharacter(_characterList.Selected.prefab.MemberID);
 
-        
+        public static bool ToChange(int id) => RestButtonsList.Option.Equals("Party") && !_cannotMove.Contains(id);
+
     }
 }

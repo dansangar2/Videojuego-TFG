@@ -69,7 +69,7 @@ namespace Entities
         /**<summary>
         Melee Attack of the character. 
         </summary>*/ 
-        public Ability MeleeAttack => GameData.AbilityDB.FindByID(meleeAttackID);
+        public Ability MeleeAttack => new Ability(GameData.AbilityDB.FindByID(meleeAttackID));
         
         /**<summary>
         Set the Melee Attack of the character. 
@@ -79,7 +79,7 @@ namespace Entities
         /**<summary>
         Long Attack of the character. 
         </summary>*/ 
-        public Ability LongAttack => GameData.AbilityDB.FindByID(longAttackID);
+        public Ability LongAttack => new Ability(GameData.AbilityDB.FindByID(longAttackID));
         
         /**<summary>
         Set the Long Attack of the character. 
@@ -98,7 +98,18 @@ namespace Entities
         /**<summary>
         All abilities with current level and need to unlock. 
         </summary>*/ 
-        public SpecialAbility[] AllDataAbilities  => abilities;
+        public SpecialAbility[] SpecialAbilities
+        {
+            get => abilities;
+            set
+            {
+                abilities = new SpecialAbility[value.Length];
+                for (int i = 0; i < value.Length; i++)
+                {
+                    abilities[i] = new SpecialAbility(value[i]);
+                }
+            }
+        }
         
         /**<summary>
         Get all secondary abilities of the character.
@@ -117,7 +128,7 @@ namespace Entities
         </summary>*/ 
         public SpecialAbility GetSpAbility(int abilityID)
         {
-            return abilities.First(a => a.Ability.ID == abilityID);
+            return abilities.FirstOrDefault(a => a.Ability.ID == abilityID);
         }
         
         /**<summary>
@@ -150,8 +161,15 @@ namespace Entities
                     b => b.Level); 
         }
     
-        /*/**<summary>The points that the character has to use in the rest zone.</summary>*/ 
-        //public int RestPoints { get => restPoints; set => restPoints = value; }
+        /**<summary>
+        Update the level of the ability.
+        <param name="abilityID">The id of the ability.</param> 
+        </summary>*/ 
+        public void UpdateAbility(int abilityID)
+        {
+            SpecialAbility sp = GetSpAbility(abilityID);
+            sp.UpdateLv(this);
+        }
         
         /**<summary>Add a status to the character.</summary>*/ 
         public void AddStatus(StatusOf status)
@@ -325,18 +343,20 @@ namespace Entities
                 statusResult += special.Select((s, i) => 
                     s + status.IncrementPowerPlus[i + main.Length] < s ? -1 : 1).Sum();
                 statusResult += status.Status.Effect == EffectType.None ? 1 : -1;
-                statusResult += status.Status.TemporalLevelUp;
                 result += statusResult * status.Duration;
             }
 
             return result;
         }
-        
+
+        /**<summary>Clear all status of the Character.</summary>*/
+        public void ClearStatuses() => statuses = new StatusOf[]{};
+
         /**<summary>Set the Character with BP = 0 and quit all status.</summary>*/
         public void SetKo()
         {
             main[7] = 0;
-            statuses = new StatusOf[]{};
+            ClearStatuses();
         }
 
         /**<summary>Quit all statuses, and recovery BP and KP.</summary>*/

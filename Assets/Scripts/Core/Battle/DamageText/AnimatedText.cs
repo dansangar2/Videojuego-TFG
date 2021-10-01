@@ -85,7 +85,6 @@ namespace Core.Battle.DamageText
         {
             Transform transform1 = fighter.meshFilter.transform;
             Vector3 position = transform1.position;
-            //hitDirection = transform1.up;
             hitDirection = transform1.right;
             
             fall = damage >= 0;
@@ -113,7 +112,6 @@ namespace Core.Battle.DamageText
         {
             Transform transform1 = fighter.meshFilter.transform;
             Vector3 position = transform1.position;
-            //hitDirection = transform1.up;
             hitDirection = -transform1.right;
             
             fall = false;
@@ -129,13 +127,7 @@ namespace Core.Battle.DamageText
 
         #region METHODS
 
-        public void SetVelocity(float velocity = 0.1f, float acceleration = 0.1f)
-        {
-            _t = 0;
-            _v = velocity;
-            _a = acceleration;
-        }
-
+        /**<summary>Get the throw force.</summary>*/
         private float GetThrow(float fighter, float damage)
         {
             return Mathf.Max(Mathf.Min(fighter / (fighter - damage), 5f), 1f);

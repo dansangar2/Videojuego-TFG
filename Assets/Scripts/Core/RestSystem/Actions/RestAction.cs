@@ -6,6 +6,7 @@ namespace Core.RestSystem.Actions
 {
     public static class RestAction
     {
+        /**<summary>Rest action.</summary>*/
         public static void ToRest(Character character)
         {
             float percentage = 0f;
@@ -37,8 +38,8 @@ namespace Core.RestSystem.Actions
             character.ReduceCurrentBlood(-Convert.ToInt32(
                 Mathf.Floor(character.MaxBloodPoints*percentage)));
             
-            character.ReduceCurrentKarma(-Convert.ToInt32(
-                Mathf.Floor(character.MaxKarmaPoints*percentage)));
+            //character.ReduceCurrentKarma(-Convert.ToInt32(
+            //    Mathf.Floor(character.MaxKarmaPoints*percentage)));
             
         }
     }

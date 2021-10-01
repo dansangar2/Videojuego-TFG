@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Core.Battle;
 using Data;
 using Data.Database;
 using Entities;
@@ -14,8 +13,11 @@ namespace Core.Saves
     {
 
         /**<summary>The Character status in this save file.</summary>*/
-        [SerializeField] private Characters characters = new Characters(GameData.CharacterDB);
+        [SerializeField] private Characters characters = ScriptableObject.CreateInstance<Characters>();
 
+        /**<summary>The Character status in this save file.</summary>*/
+        [SerializeField] private Characters enemies = ScriptableObject.CreateInstance<Characters>();
+        
         /**<summary>The current party of the player.</summary>*/
         [SerializeField] private int[] charactersInParty = {};
 
@@ -34,21 +36,27 @@ namespace Core.Saves
         /**<summary>Init the save file.</summary>*/
         public Save()
         {
+            characters.Clone(GameData.CharacterDB);
+            enemies.Clone(GameData.EnemyDB);
             IsEmpty = true;
-            // ReSharper disable once Unity.IncorrectScriptableObjectInstantiation
-            //characters = new Characters(GameData.CharacterDB);
         }
         
         #region CHARACTERS
 
         /**<summary>Get all character status of the file.</summary>*/
         public Character[] Characters => characters.All;
+        /**<summary>Get all enemies of the file.</summary>*/
+        public Character[] Enemies => enemies.All;
         /**<summary>Get all character in the party of the player.</summary>*/
         public Character[] Party => charactersInParty.Select(c => characters.FindByID(c)).ToArray();// .All.Where(c => charactersInParty.Contains(c.ID)).ToArray();
-        /**<summary>Get all character status of the file.</summary>*/
+        /**<summary>Get the character with the ID.</summary>*/
         public Character GetCharacter(int id) => characters.FindByID(id);
+        /**<summary>Get the enemy with the ID.</summary>*/
+        public Character GetEnemy(int id) => enemies.FindByID(id);
+        /**<summary>Get the character with the ID.</summary>*/
+        public Ability AbilityOf(int idChar, int idAbi) => characters.FindByID(idChar).GetAbility(idAbi);
 
-        
+
         #region Add
 
         /**<summary>Add character to the party.</summary>*/
@@ -104,8 +112,18 @@ namespace Core.Saves
         
         #region Switch
         
+        /**<summary>Switch two members of the by character ID.</summary>*/
+        public void SwitchCharactersByID(int character1, int character2)
+        {
+            if(character1==character2) return;
+            int i = Array.IndexOf(charactersInParty, character1);
+            int j = Array.IndexOf(charactersInParty, character2);
+            charactersInParty[i] = character2;
+            charactersInParty[j] = character1;
+        }
+        
         /**<summary>Switch two members of the by position.</summary>*/
-        public void SwitchCharacters(int character1, int character2)
+        public void SwitchCharactersByPosition(int character1, int character2)
         {
             if (charactersInParty.Length < Mathf.Max(character1, character2) + 1)
             {

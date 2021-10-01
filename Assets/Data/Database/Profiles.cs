@@ -12,8 +12,8 @@ namespace Data.Database
         /**<summary>Array that save the Serialize data.</summary>*/ 
         [SerializeField] private Profile[] profiles;
 
-        /**<summary>Clone constructor.</summary>*/ 
-        public Profiles(Profiles profiles)
+        /**<summary>Clone.</summary>*/ 
+        public void Clone(Profiles profiles)
         {
             this.profiles = new Profile[profiles.Count];
             for (int i = 0; i < profiles.Count; i++)

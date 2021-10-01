@@ -12,7 +12,7 @@ namespace Data.Windows.ManageAbilities
         private static readonly GUILayoutOption[] Options = { GUILayout.MaxWidth(150f), GUILayout.MinWidth(20f) };
         private static readonly GUIStyle TextAreaStyle = new GUIStyle(GUI.skin.textArea) {wordWrap = true};
         private static readonly string[] Elements = GameData.ElementDB.Names;
-        private static readonly string[] Stats = { "mbp", "mkp", "atk", "def", "spi", "men", "agi", "reb", "rek", "rxb", "rxk","d", "tlv", "pos" };
+        private static readonly string[] Stats = { "mbp", "mkp", "atk", "def", "spi", "men", "agi", "reb", "rek", "rxb", "rxk","d", "tlv(unused)", "pos" };
         private static bool _haveElement;
         private static int _index;
         private static int _key;

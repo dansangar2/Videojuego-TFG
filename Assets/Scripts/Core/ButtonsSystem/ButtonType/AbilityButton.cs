@@ -1,5 +1,4 @@
 ﻿using System;
-using Data;
 using Entities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +10,8 @@ namespace Core.ButtonsSystem.ButtonType
         /**<summary>Set the necessary KP for the ability.</summary>*/
         public Text necessaryKp;
 
+        /**<summary>Set the character.</summary>*/
+        private Character _character;
         
         public new void Update()
         {
@@ -18,10 +19,10 @@ namespace Core.ButtonsSystem.ButtonType
         }
         
         /**<summary>Set up the data of the button by abilityID, and it can set if can select or not.</summary>*/
-        public void SetUp(int nId, bool can=true) 
+        public void SetUp(int nId, Character character, bool can=true) 
         { 
             base.SetUp(nId);
-            //Awake();
+            _character = character;
             UpdateUI();
             CanPress(can);
         }
@@ -29,7 +30,7 @@ namespace Core.ButtonsSystem.ButtonType
         /**<summary>Update the data of the character ID.</summary>*/
         private void UpdateUI()
         {
-            Ability ability = GameData.AbilityDB.FindByID(id);
+            Ability ability = _character.GetAbility(id);
             itemName.text = ability.Name;
             necessaryKp.text = ability.Cost.ToString();
             

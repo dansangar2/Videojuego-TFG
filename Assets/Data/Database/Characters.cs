@@ -13,13 +13,17 @@ namespace Data.Database
         /**<summary>Array that save the Serialize data.</summary>*/
         [SerializeField] private Character[] characters;
 
-        /**<summary>Clone constructor.</summary>*/ 
-        public Characters(Characters characters)
+        /**<summary>Clone.</summary>*/ 
+        public void Clone(Characters characters)
         {
             this.characters = new Character[characters.Count];
             for (int i = 0; i < characters.Count; i++)
             {
-                this.characters[i] = new Character(characters.characters[i]);
+                this.characters[i] = new Character(characters.characters[i])
+                {  
+                    //Clone the abilities too.
+                    SpecialAbilities = characters.characters[i].SpecialAbilities
+                };
             }
         }
         

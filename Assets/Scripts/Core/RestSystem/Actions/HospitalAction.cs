@@ -1,14 +1,15 @@
 ﻿using System;
 using Core.Saves;
 using Entities;
-using UnityEngine;
 
 namespace Core.RestSystem.Actions
 {
     public static class HospitalAction
     {
-        public static int PeopleInHospital = 0;
+        /**<summary>Check the characters in the hospital.</summary>*/
+        public static int PeopleInHospital;
         
+        /**<summary>Go to the hospital.</summary>*/
         public static void ToHospital(Character character)
         {
 

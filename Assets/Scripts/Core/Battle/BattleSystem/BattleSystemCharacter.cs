@@ -62,9 +62,6 @@ namespace Core.Battle.BattleSystem
                 case TargetRange.All:
                     AttackAll(fighters, confused:auto);
                     break;
-                /*case TargetRange.MoreThanOne:
-                    AttackAll(fighters, false, _abilityInUse.NumberOfTarget);
-                    break;*/
                 case TargetRange.Random:
                     AttackAll(fighters, true, _abilityInUse.NumberOfTarget, auto);
                     break;
@@ -156,6 +153,7 @@ namespace Core.Battle.BattleSystem
         
         #region TURN
 
+        /**<summary>It manage the character action.</summary>*/
         private void CharacterTurn(bool enemy = false)
         {
 
@@ -168,14 +166,11 @@ namespace Core.Battle.BattleSystem
                     break;
                 case ActionType.None when Input.GetKeyDown(ControlsKeys.ActionButton1):
                     abilitiesOf.character = FighterTurn.character;
-                    _abilityList = Instantiate(abilitiesOf, transform.GetChild(0));
+                    abilitiesOf.transform.gameObject.SetActive(true);
                     _actionType = ActionType.Ability;
                     FighterTurn.CharacterMark();
                     break;
                 case ActionType.None when Input.GetKeyDown(ControlsKeys.ActionButton2):
-                    //_actionType = ActionType.Item;
-                    break;
-                case ActionType.None when Input.GetKeyDown(ControlsKeys.Back):
                     _actionType = ActionType.Long;
                     FighterTurn.CharacterMark();
                     break;
@@ -189,10 +184,7 @@ namespace Core.Battle.BattleSystem
                     _abilityInUse = FighterTurn.character.LongAttack;
                     _actionType = ActionType.Process;
                     break;
-                //Use item
-                case ActionType.Item:
-                    break;
-                //Use Ability
+                //Ability
                 case ActionType.Ability:
                     if(GenericButton.Message.Equals("")) break;
                     _abilityInUse = CurrentTurn.GetAbility(Convert.ToInt32(GenericButton.Message));
@@ -214,7 +206,7 @@ namespace Core.Battle.BattleSystem
                     InitMark();
                     if (!GenericButton.Message.Equals(""))
                     {
-                        _abilityList = Instantiate(abilitiesOf, transform.GetChild(0));
+                        abilitiesOf.gameObject.SetActive(true);
                         _actionType = ActionType.Ability;
                         _abilityInUse = null;
                     }

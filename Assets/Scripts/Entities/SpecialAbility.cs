@@ -58,11 +58,13 @@ namespace Entities
         #region METHODS
 
         /**<summary>Update All parameters of ability, using the current level.</summary>*/ 
-        public void UpdateLv(Character character) 
+        public void UpdateLv(Character character, int nLevel = -1)
         {
-            if(!Ability.CanLevelUp(character)) return;
-            level++;
-            Ability.UpdateExperience(Level, MaxLevel);
+            if (nLevel==-1) nLevel = level;
+            if(!Ability.CanLevelUp(character) || nLevel>=maxLevel) return;
+            character.AbilityPoints -= Ability.NeedPointsToLevelUp;
+            level = nLevel + 1;
+            Ability.UpdateExperience(level, MaxLevel);
         }
 
         /**<summary>

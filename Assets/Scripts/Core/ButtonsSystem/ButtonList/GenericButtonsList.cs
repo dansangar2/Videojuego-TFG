@@ -25,7 +25,7 @@ namespace Core.ButtonsSystem.ButtonList
             SetColumnsAndRows(_buttons);
             _buttons[0].IsSelect = true;
         }
-
+        
         protected void Update()
         {
             Move(_buttons);

@@ -17,6 +17,7 @@ namespace Core.ButtonsSystem.ButtonData
 
         #endregion
 
+        /**<summary>Clone constructor.</summary>*/
         public GenericButtonData(GenericButtonData data)
         {
             sceneRedirect = data.sceneRedirect;

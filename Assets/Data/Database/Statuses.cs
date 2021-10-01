@@ -15,8 +15,8 @@ namespace Data.Database
         [SerializeField] private Status[] statuses;
 
         
-        /**<summary>Clone constructor.</summary>*/ 
-        public Statuses(Statuses statuses)
+        /**<summary>Clone.</summary>*/ 
+        public void Clone(Statuses statuses)
         {
             this.statuses = new Status[statuses.Count];
             for (int i = 0; i < statuses.Count; i++)

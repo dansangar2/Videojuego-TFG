@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Battle.DamageText;
-using Core.ButtonsSystem.ButtonList;
 using Core.ButtonsSystem.ButtonType;
 using Core.Messages;
 using Core.Saves;
-using Data;
 using Entities;
 using Enums;
 using UnityEngine;
@@ -31,8 +29,6 @@ namespace Core.Battle.BattleSystem
         private int[] _orderBySpeed;
         /**<summary>The current animated text.</summary>*/
         private AnimatedText _animatedText;
-        /**<summary>List of abilities of the characters.</summary>*/
-        private AbilityButtonsList _abilityList;
         /**<summary>The array with the experience gained [charThatGained, enemyFrom].</summary>*/
         private int[,] _experienceGained;
         
@@ -54,10 +50,10 @@ namespace Core.Battle.BattleSystem
 
             string messages = results.Select(i 
                     => (i.Value.ToString().Equals("1") ? "" : i.Value.ToString()) + " " +
-                       GameData.EnemyDB.FindByID(i.Key).Name)
+                       SavesFiles.GetSave().GetEnemy(i.Key).Name)
                 .Aggregate((i, j) => i + ", " + j) + " was detected!";
             
-            messages = messages.Substring(0, messages.LastIndexOf(','))
+            if(messages.Contains(',')) messages = messages.Substring(0, messages.LastIndexOf(','))
                 + " and" + messages.Substring(messages.LastIndexOf(',')+1);
 
             TextData data = new TextData(messages) {speed = speed};
@@ -68,7 +64,7 @@ namespace Core.Battle.BattleSystem
 
         #region ORDER
 
-        /**<summary>Set the order by speed array with the ids of the characters.</summary>*/
+        /**<summary>Order by speed array with the ids of the characters.</summary>*/
         private void OrderBySpeed()
         {
             _orderBySpeed = _fighters.OrderByDescending(m => m.character.Agility)
@@ -227,6 +223,7 @@ namespace Core.Battle.BattleSystem
 
         #region EXPERIENCE
 
+        /**<summary>Get the experience that the character will gain after defeat a enemy.</summary>*/
         private void GetExperienceFor()
         {
             int[,] experienceGained = new int[SavesFiles.GetParty().Length, GetGroup(true).Length];
@@ -239,11 +236,17 @@ namespace Core.Battle.BattleSystem
                     //character level is lower o upper than the enemy.
                     int exp = Convert.ToInt32(
                         //The experience gained is reduced if the character isn't in the battlefield.
-                        Mathf.Round(EnemiesFighter[j].character.NedExp * 
+                        Mathf.Round(EnemiesFighter[j].character.NedExp *
                                     //The max increment of experience is x2 if the enemy it's 20 level upper.
                                     (1 + Convert.ToSingle(
                                         EnemiesFighter[j].character.Level 
-                                        - SavesFiles.GetSave().GetCharacter(i).Level)/20)));
+                                        - SavesFiles.GetParty()[i].Level)/20)));
+                    Debug.Log("Percentage LvC " + SavesFiles.GetParty()[i].Level + " LvE " + 
+                              EnemiesFighter[j].character.Level + " perc " + Convert.ToSingle(
+                        EnemiesFighter[j].character.Level 
+                        - SavesFiles.GetParty()[i].Level)/20);
+                    Debug.Log("Init "+ EnemiesFighter[j].character.NedExp);
+                    Debug.Log("Final " + exp);
                     // The min is 1.
                     exp = Mathf.Min(exp, EnemiesFighter[j].character.NedExp*2);
                     exp = Mathf.Max(1, exp);
@@ -255,6 +258,7 @@ namespace Core.Battle.BattleSystem
             _experienceGained = experienceGained;
         }
 
+        /**<summary>Add the experience to the characters when the enemy is defeated.</summary>*/
         private void AddExperience(params int[] ids)
         {
             if(ids.Length == 0) return;
@@ -285,6 +289,7 @@ namespace Core.Battle.BattleSystem
 
         #region RESSET COLOR
 
+        /**<summary>Set the character color to default.</summary>*/
         public void InitMark()
         {
             foreach (Fighter f in _fighters.Where(f => !f.character.IsKo()))

@@ -15,12 +15,16 @@ namespace Core.Battle.StatusesUI
         /**<summary>Image on the right.</summary>*/
         public Image image3;
 
+        /**<summary>The list of sprites of the statuses of the character.</summary>*/
         [SerializeField] private Sprite[] sprites = {};
 
+        /**<summary>The character that has the statuses.</summary>*/
         [SerializeField] private Fighter character;
 
+        /**<summary>The fragment of the statuses list that will show.</summary>*/
         private int _i;
 
+        /**<summary>The seconds for the next 3 statuses.</summary>*/
         private float _seconds;
 
         private void Awake()
@@ -37,7 +41,6 @@ namespace Core.Battle.StatusesUI
         public void Update()
         {
             UpdateUI();
-
             
             try
             {
@@ -59,11 +62,10 @@ namespace Core.Battle.StatusesUI
             }
             
             try 
-            { 
-                image2.sprite = sprites[_i+2];
+            {
+                image3.sprite = sprites[_i+2];
                 image3.gameObject.SetActive(true);
             }
-            
             catch(Exception) 
             { 
                 if(sprites.Length<2) image3.gameObject.SetActive(false);
@@ -73,17 +75,19 @@ namespace Core.Battle.StatusesUI
             if (_seconds <= 1) return;
             
             _i += 3; 
-            if (_i > sprites.Length) _i = 0;
+            if (_i >= sprites.Length) _i = 0;
             _seconds = 0;
 
         }
 
+        /**<summary>Set the character who will get the statuses.</summary>*/
         public void SetUp(Fighter fighter)
         {
             character = fighter;
             UpdateUI();
         }
 
+        /**<summary>Update the UI.</summary>*/
         public void UpdateUI()
         {
             if (character?.character.Statuses == null) return;

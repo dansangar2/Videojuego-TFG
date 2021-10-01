@@ -9,6 +9,8 @@ namespace Core.ButtonsSystem.ButtonType
         /**<summary>Set the image of the rest action.</summary>*/
         public Image icon;
 
+        public string description;
+
         /**<summary>Set the data of this button with the data passed.</summary>*/
         public void SetUp(AbilityButtonData data)
         {
@@ -18,6 +20,7 @@ namespace Core.ButtonsSystem.ButtonType
             itemName.text = data.ButtonText;
             messageToSend = data.Action;
             icon.sprite = data.Icon;
+            description = data.Description;
         }
         
     }

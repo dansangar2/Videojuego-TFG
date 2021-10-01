@@ -17,6 +17,7 @@ namespace Core.ButtonsSystem.ButtonData
 
         #endregion
         
+        /**<summary>Clone constructor.</summary>*/
         public MemberButtonData(int id) { this.id = id; }
 
         public void SetMember(int characterId)

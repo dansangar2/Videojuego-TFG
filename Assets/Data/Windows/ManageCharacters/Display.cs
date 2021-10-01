@@ -159,7 +159,7 @@ namespace Data.Windows.ManageCharacters
             #endregion
             
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Total of abilities: " + item.AllDataAbilities.Length);
+            GUILayout.Label("Total of abilities: " + item.SpecialAbilities.Length);
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.EndHorizontal();
@@ -213,7 +213,7 @@ namespace Data.Windows.ManageCharacters
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
             
-            foreach (SpecialAbility abi in item.AllDataAbilities)
+            foreach (SpecialAbility abi in item.SpecialAbilities)
             {
                 EditorGUILayout.BeginVertical();
                 EditorGUILayout.BeginHorizontal();
@@ -370,7 +370,7 @@ namespace Data.Windows.ManageCharacters
             #endregion
             
             EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Total of abilities: " + item.AllDataAbilities.Length);
+            GUILayout.Label("Total of abilities: " + item.SpecialAbilities.Length);
             EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.EndHorizontal();
@@ -398,7 +398,7 @@ namespace Data.Windows.ManageCharacters
             EditorGUILayout.EndVertical();
             
             
-            foreach (SpecialAbility abi in item.AllDataAbilities)
+            foreach (SpecialAbility abi in item.SpecialAbilities)
             {
                 EditorGUILayout.BeginVertical();
                 EditorGUILayout.BeginHorizontal();

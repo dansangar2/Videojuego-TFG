@@ -164,12 +164,12 @@ namespace Entities
         </summary>*/ 
         public void GainExperience(int experience) 
         { 
-            if(!IsKo()) return;
-            
-            if ((actExp += experience) < 999999999) actExp += experience;
-            else actExp = 999999999; 
-            if (ActExp < NedExp ) return; 
+            if(IsKo()) return;
+
+            if (!((actExp += experience) < 999999999)) actExp = 999999999; 
+            if (ActExp < NedExp ) return;
             Leveling();
+            GainExperience(0);
         }
         
         /**<summary>Increment in 1 the level and update stats.</summary>*/ 

@@ -14,9 +14,11 @@ namespace Core.ButtonsSystem.ButtonData
         [SerializeField] private string buttonText;
         [SerializeField] private string action;
         [SerializeField] private Sprite icon;
+        [TextArea][SerializeField] private string description;
 
         #endregion
 
+        /**<summary>Clone constructor.</summary>*/
         public AbilityButtonData(AbilityButtonData data)
         {
             action = data.action;
@@ -33,5 +35,8 @@ namespace Core.ButtonsSystem.ButtonData
 
         /**<summary>The icon that will show in the the rest section.</summary>*/
         public Sprite Icon => icon;
+        
+        /**<summary>The icon that will show in the the rest section.</summary>*/
+        public string Description => description;
     }
 }

@@ -39,7 +39,7 @@ MonoBehaviour:
     description: 
     icon: {fileID: 8997866966031257783, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
     effect: 2
-    quitWhenFinish: 0
+    quitWhenFinish: 1
     temporalLevelUp: 0
     quitByHitRate: 0
     incrementPower:
@@ -60,7 +60,7 @@ MonoBehaviour:
     description: 
     icon: {fileID: 2145951238131660284, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
     effect: 3
-    quitWhenFinish: 0
+    quitWhenFinish: 1
     temporalLevelUp: 0
     quitByHitRate: 0
     incrementPower:
@@ -81,9 +81,9 @@ MonoBehaviour:
     description: 
     icon: {fileID: -4841785371778001956, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
     effect: 0
-    quitWhenFinish: 1
+    quitWhenFinish: 0
     temporalLevelUp: 0
-    quitByHitRate: 0.6
+    quitByHitRate: 0
     incrementPower:
     - 1
     - 1

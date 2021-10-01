@@ -12,7 +12,7 @@ using Random = UnityEngine.Random;
 
 namespace Core.Battle.BattleSystem
 {
-    public partial class BattleSystem : MonoBehaviour//Agent
+    public partial class BattleSystem : MonoBehaviour
     {
 
         #region ATTRIBUTES
@@ -21,10 +21,9 @@ namespace Core.Battle.BattleSystem
         public static int[] EnemiesId = {0,1,2};
         /**<summary>The max member party.</summary>*/
         public static int MaxMembers = 3;
+        
         /**<summary>The prefab message text.</summary>*/
         public Message message;
-        //**<summary>The velocity of the character blink.</summary>*/
-        //public float velocity = 0.003f;
         /**<summary>The statusUI prefab for fighters.</summary>*/
         public StatusUI statusUI;
         
@@ -36,7 +35,7 @@ namespace Core.Battle.BattleSystem
         /**<summary>The scene where you returned.</summary>*/
         private string _scene = "RestSystemTest";
 
-        /**<summary>Seconds to wait for next turn.</summary>*/
+        /**<summary>Seconds to wait between turns (finish one and start next).</summary>*/
         private float _secondsToWait;
 
         #endregion
@@ -48,8 +47,13 @@ namespace Core.Battle.BattleSystem
             abilitiesOf.velocity = 0.5f;
             
             Message.SetExitsMessage();
-            SavesFiles.CurrentSave = 0;
-            TestSetUp();
+            
+            //For testing.
+            if(SavesFiles.GetParty().Length == 0) 
+            {
+                SavesFiles.CurrentSave = 0;
+                TestSetUp();
+            }
             
             message.type = TextBoxType.Message;
             message.up = true;
@@ -84,7 +88,7 @@ namespace Core.Battle.BattleSystem
                     
                     #region CheckStatus
 
-                    
+                    //Check the statuses and update the duration.
                     foreach (StatusOf of in CurrentTurn.Statuses)
                     {
                         of.Duration--;
@@ -100,6 +104,7 @@ namespace Core.Battle.BattleSystem
                         }
                     }
                     
+                    //The damage that the character received by turn.
                     int damageXTurn = -Convert.ToInt32(CurrentTurn.MaxBloodPoints * CurrentTurn.Regeneration);
                     
                     if(damageXTurn != 0)
@@ -112,15 +117,20 @@ namespace Core.Battle.BattleSystem
                             return;
                         }
                     }
+                    
+                    //The karma damage that the character received by turn.
                     damageXTurn = -Convert.ToInt32(CurrentTurn.MaxKarmaPoints * CurrentTurn.KarmaRegeneration);
+                    
                     if(damageXTurn != 0)
                     {
                         CurrentTurn.ReduceCurrentKarma(damageXTurn);
                         DamageAnimation(FighterTurn, damageXTurn, AttackType.Karma);
                     }
                     
+                    //Don't move.
                     if(CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.DontMove)) return;
 
+                    //Confused.
                     if (CurrentTurn.Statuses.Any(s => s.Status.Effect == EffectType.AttackRandom))
                     {
                         int i = Random.Range(0, 2);
@@ -172,7 +182,17 @@ namespace Core.Battle.BattleSystem
                         message.messages = gainMessage;
                         Instantiate(message, transform);
                     }
-                    else if(!Message.ThereAreMessage()) SceneManager.LoadScene(_scene);
+                    else if(!Message.ThereAreMessage())
+                    {
+                        for(int i = 0; i < Party.Length; i++)
+                        {
+                            foreach (StatusOf o in Party[i].Statuses)
+                            {
+                                if(o.Status.QuitWhenFinish) Party[i].RemoveStatus(o.Status.ID);
+                            }
+                        }
+                        SceneManager.LoadScene(_scene);
+                    }
                     break;
             }
         }

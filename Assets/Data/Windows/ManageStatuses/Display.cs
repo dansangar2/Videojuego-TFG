@@ -65,18 +65,6 @@ namespace Data.Windows.ManageStatuses
 
             #endregion
 
-            #region Temporal Level Up
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Temporal LV UP", Options);
-            item.TemporalLevelUp = EditorGUILayout.IntField(item.TemporalLevelUp, Options);
-            EditorGUILayout.EndHorizontal();
-
-            #endregion
-            
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-
             #region Effect
 
             EditorGUILayout.BeginHorizontal();
@@ -231,15 +219,6 @@ namespace Data.Windows.ManageStatuses
 
             #endregion
 
-            #region Temporal Level Up
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Temporal LV UP", Options);
-            GUILayout.Label(item.TemporalLevelUp.ToString(), Options);
-            EditorGUILayout.EndHorizontal();
-
-            #endregion
-            
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
 

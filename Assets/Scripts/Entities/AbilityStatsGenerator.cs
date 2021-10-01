@@ -118,7 +118,7 @@ namespace Entities
         </summary>*/ 
         public bool CanLevelUp(Character character) 
         { 
-            return (needPointsToLevelUp <= character.AbilityPoints) && (needPointsToLevelUp != 0);
+            return needPointsToLevelUp <= character.AbilityPoints && needPointsToLevelUp != 0;
         }
         
         /**<summary>

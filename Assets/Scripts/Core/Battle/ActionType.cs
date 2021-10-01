@@ -5,7 +5,6 @@
         None,
         Melee,
         Long,
-        Item,
         Ability,
         Process
     }

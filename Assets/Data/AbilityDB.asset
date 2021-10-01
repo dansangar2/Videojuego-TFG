@@ -19,8 +19,8 @@ MonoBehaviour:
     needPointsToLevelUp: 0
     rate:
     - 1
-    - 1
-    - 1
+    - 1.05
+    - 1.1
     learning:
     - 1.1
     - 1.1
@@ -42,7 +42,7 @@ MonoBehaviour:
     canRepeatRandomTarget: 1
     statusesToDo:
     - statusID: 2
-      level: 1
+      level: 2
       duration: 10
       possibility: 1
       incrementPowerPlus:
@@ -73,10 +73,10 @@ MonoBehaviour:
     - 1.1
     - 1
     expData: 0a000000050000000f0000000a000000
-    formula: 100
+    formula: -1
     type: 1
-    range: 1
-    target: 0
+    range: 0
+    target: 1
     icon: {fileID: 3310009709851204272, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
     hits: 1
     numberOfTarget: 1
@@ -107,14 +107,71 @@ MonoBehaviour:
       - 1
       - 1
       - 1
+    - statusID: 2
+      level: 1
+      duration: 10
+      possibility: 1
+      incrementPowerPlus:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 0
+      - 0
+      - 0
+      - 1
+      - 1
+      - 1
+    - statusID: 3
+      level: 1
+      duration: 10
+      possibility: 1
+      incrementPowerPlus:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 0
+      - 0
+      - 0
+      - 1
+      - 1
+      - 1
+    - statusID: 4
+      level: 1
+      duration: 10
+      possibility: 1
+      incrementPowerPlus:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 0
+      - 0
+      - 0
+      - 1
+      - 1
+      - 1
   - id: 2
     name: Attack 1
     description: 
     needPointsToLevelUp: 0
     rate:
-    - 1
-    - 1
-    - 1
+    - 1.05
+    - 1.05
+    - 1.1
     learning:
     - 1.1
     - 1.1
@@ -390,6 +447,34 @@ MonoBehaviour:
   - id: 12
     name: Attack 11
     description: 
+    needPointsToLevelUp: 0
+    rate:
+    - 1
+    - 1
+    - 1
+    learning:
+    - 1
+    - 1
+    - 1
+    expData: 0a000000050000000f0000000a000000
+    formula: '4*{a.atk} - 2*{a.def} < 0 ? 1 : 4*{a.atk} - 2*{a.def}'
+    type: 0
+    range: 0
+    target: 0
+    icon: {fileID: -3714112297922690383, guid: 30cb94ee74b94d469da91d1111b33b92, type: 3}
+    hits: 1
+    numberOfTarget: 1
+    cost: 100
+    elementID: -1
+    stats:
+    - 1
+    - 0.8
+    - 1.2
+    canRepeatRandomTarget: 0
+    statusesToDo: []
+  - id: 13
+    name: 13
+    description: sad
     needPointsToLevelUp: 0
     rate:
     - 1

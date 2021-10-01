@@ -16,7 +16,6 @@ namespace Entities
         [SerializeField] private Sprite icon;
         [SerializeField] private EffectType effect = EffectType.None;
         [SerializeField] private bool quitWhenFinish;
-        [SerializeField] private int temporalLevelUp;
         [SerializeField] private float quitByHitRate;
         
         [SerializeField] private float[] incrementPower = {1,1,1,1,1,1,1,0,0,0,0};
@@ -35,7 +34,6 @@ namespace Entities
             icon = status.icon;
             effect = status.effect;
             quitWhenFinish = status.quitWhenFinish;
-            temporalLevelUp = status.temporalLevelUp;
             
             incrementPower = new float[status.incrementPower.Length];
             for (int i = 0; i < status.incrementPower.Length; i++)
@@ -51,7 +49,6 @@ namespace Entities
         public Status(Status status, int level = 1, float[] increments = null): this(status) 
         { 
             increments ??= new float[]{1,1,1,1,1,1,1,0,0,0,0,1,1,1};
-            temporalLevelUp = Convert.ToInt32(status.temporalLevelUp * Mathf.Pow(increments[12],level-1));
             
             for (int i = 0; i < status.incrementPower.Length; i++)
             {
@@ -71,9 +68,6 @@ namespace Entities
 
         /**<summary>It indicates if when the character end the battle the state will dead.</summary>*/ 
         public bool QuitWhenFinish { get => quitWhenFinish; set => quitWhenFinish = value; }
-
-        /**<summary>It increments or decrements the level temporally.</summary>*/ 
-        public int TemporalLevelUp { get => temporalLevelUp; set => temporalLevelUp = value < 0 ? 0 : value; }
 
         /**<summary>The rate with the possibility to quit when someone is beat.</summary>*/ 
         public float QuitByHitRate { get => quitByHitRate; set => quitByHitRate = value < 0 ? 0 : value > 1 ? 1 : value; }
@@ -125,12 +119,6 @@ namespace Entities
             }
             Array.Resize(ref statusToQuit, statusToQuit.Length - 1);
         }
-        
-        //**<summary>Get the final value of parameter of "index". </summary>*/ 
-        /*private float Calculate(int index, int level) 
-        {
-            return IncrementPower[index]*Mathf.Pow(increments[index],level);
-        }*/
         
         #endregion
         

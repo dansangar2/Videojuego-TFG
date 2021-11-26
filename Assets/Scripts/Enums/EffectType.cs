@@ -1,5 +1,6 @@
 ﻿namespace Enums
 {
+    /**<summary>The effects of the statuses.</summary>*/
     public enum EffectType
     {
         None,

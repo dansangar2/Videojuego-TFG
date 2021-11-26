@@ -20,20 +20,23 @@ namespace Core.ButtonsSystem.ButtonList
         public Color buttonColor = Color.green;
         /**<summary>It indicates the number of columns</summary>*/
         public int numsOfCol = 1;
+
+        /**<summary>The buttons of the list.</summary>*/
+        public GenericButton[] baseButtons;
         
         #region Size
 
         /**<summary>It depends of the nums of columns value.
         <para>It indicates the number of rows</para></summary>*/
         protected int NumsOfRows = 1;
-        /**<summary>It indicates the number of row at the moment it's generating</summary>*/
+        /**<summary>It indicates the number of row at the moment.</summary>*/
         protected int CurrentNumOfRows;
 
         #endregion
 
         #region Position
 
-        /**<sumary>The current position.</sumary>*/
+        /**<sumary>The current position of the list.</sumary>*/
         public int position;
         /**<summary>The current column index.</summary>*/
         protected int CurrentColumn;
@@ -41,9 +44,37 @@ namespace Core.ButtonsSystem.ButtonList
         protected int CurrentRow;
 
         #endregion
+
+        #region Colliders
+
+        /**<summary>Show in a text, what key must press for one action.</summary>*/
+        public ControlsToShow controls;
+        /**<summary>The main camera in use.</summary>*/
+        protected Camera Camera;
+
+        /**<summary>Buttons that can click.</summary>*/
+        protected ClickButton[] ButtonsCanClick;
+        /**<summary>Get the ID of the button that have been clicked of the buttons that can click.</summary>*/
+        protected int Select = -1;
+        /**<summary>Get the ID of the button that have been selected, after pressed.</summary>*/
+        protected int Press = -1;
+
+        #endregion
         
         #endregion
 
+        protected void OnEnable()
+        {
+            baseButtons = transform.GetComponentsInChildren<GenericButton>()
+                .Where(b => b.GetComponentsInParent<GenericButton>()
+                    .Where(c => b.transform!=c.transform).ToArray()
+                    .Length==0).ToArray();
+            //baseButtons = transform.GetComponentsInChildren<GenericButton>()
+                //.GroupBy(x => x.itemName.text)
+                //.Select(y => y.First())
+            //    .ToArray();
+        }
+        
         #region MOVEMENT
 
         /**<sumary>Set the columns and rows.</sumary>*/
@@ -110,8 +141,8 @@ namespace Core.ButtonsSystem.ButtonList
 
         #region SELECT OPTIONS
 
-        /**<sumary>Quit all Select.</sumary>*/
-        protected void SelectNone(GenericButton[] buttons)
+        /**<sumary>Quit all Selected buttons.</sumary>*/
+        public void SelectNone(GenericButton[] buttons)
         {
             foreach (GenericButton button in buttons)
             {
@@ -120,7 +151,7 @@ namespace Core.ButtonsSystem.ButtonList
         }
 
         /**<sumary>Select the current position button.</sumary>*/
-        protected void SelectCurrent(GenericButton[] buttons)
+        public void SelectCurrent(GenericButton[] buttons)
         {
             SetColumnsAndRows(buttons);
             buttons[position].IsSelect = true;

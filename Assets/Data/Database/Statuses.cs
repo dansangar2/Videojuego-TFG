@@ -16,12 +16,12 @@ namespace Data.Database
 
         
         /**<summary>Clone.</summary>*/ 
-        public void Clone(Statuses statuses)
+        public void Clone(Statuses database)
         {
-            this.statuses = new Status[statuses.Count];
-            for (int i = 0; i < statuses.Count; i++)
+            this.statuses = new Status[database.Count];
+            for (int i = 0; i < database.Count; i++)
             {
-                this.statuses[i] = new Status(statuses.statuses[i]);
+                this.statuses[i] = new Status(database.statuses[i]);
             }
         }
 

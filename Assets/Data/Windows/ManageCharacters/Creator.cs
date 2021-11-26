@@ -5,16 +5,22 @@ using UnityEngine;
 
 namespace Data.Windows.ManageCharacters
 {
+    /**<summary>System that generates a new window to create.</summary>*/
     public class Creator : EditorWindow
     {
         
+        /**<summary>The new window to generate.</summary>*/
         private static EditorWindow _window;
 
+        /**<summary>Empty item.</summary>*/
         private static Character _character;
+        /**<summary>Item DB.</summary>*/
         private static Characters _characterDB;
         
+        /**<summary>For move the list with the DB items.</summary>*/
         private Vector2 _scroll;
         
+        /**<summary>Create the window.</summary>*/
         public static void Window(Characters characterDB)
         {
             _characterDB = characterDB;
@@ -25,6 +31,7 @@ namespace Data.Windows.ManageCharacters
             _character = new Character(_characterDB.Count);
         }
 
+        /**<summary>Show the window.</summary>*/
         public void OnGUI()
         {
             
@@ -42,6 +49,7 @@ namespace Data.Windows.ManageCharacters
 
         }
 
+        /**<summary>Add a item.</summary>*/
         private static void Add()
         {
             Undo.RecordObject(_characterDB, "Character Modify");

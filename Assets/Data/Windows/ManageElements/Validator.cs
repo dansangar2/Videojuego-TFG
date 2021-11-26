@@ -5,11 +5,13 @@ using UnityEngine;
 
 namespace Data.Windows.ManageElements
 {
+    /**<summary>Check that some data have the restriction correctly.</summary>*/
     public static class Validator
     {
-        
+        /**<summary>Save the restriction check result.</summary>*/
         private static bool _res;
         
+        /**<summary>Check the restriction is correctly.</summary>*/
         public static bool Validate(Element item)
         {
             _res = false;

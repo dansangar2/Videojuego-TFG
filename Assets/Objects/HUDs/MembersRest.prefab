@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 4152526164230510396}
   - component: {fileID: 4152526164230510395}
   - component: {fileID: 960309479847118209}
+  - component: {fileID: 4735206525969234039}
   m_Layer: 5
   m_Name: MembersRest
   m_TagString: Untagged
@@ -161,7 +162,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &4152526164230510395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,7 +204,33 @@ MonoBehaviour:
   buttonColor: {r: 0, g: 1, b: 0, a: 1}
   buttonImage: {fileID: 0}
   buttonChangeColor: 0
-  prefab: {fileID: 4086999918755183962, guid: b7295692de379a14abc1c25aa489c424, type: 3}
+  prefab: {fileID: 7832024056438458821, guid: 158fa9327216d8e4bbe38a44b8d68660, type: 3}
+--- !u!61 &4735206525969234039
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4152526164230510393}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 725, y: 168}
+  m_EdgeRadius: 0
 --- !u!1 &4152526164752517436
 GameObject:
   m_ObjectHideFlags: 0

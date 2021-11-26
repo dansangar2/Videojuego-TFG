@@ -16,12 +16,12 @@ namespace Data.Database
 
         
         /**<summary>Clone constructor.</summary>*/ 
-        public void Clone(Elements elements)
+        public void Clone(Elements database)
         {
-            this.elements = new Element[elements.Count];
-            for (int i = 0; i < elements.Count; i++)
+            this.elements = new Element[database.Count];
+            for (int i = 0; i < database.Count; i++)
             {
-                this.elements[i] = new Element(elements.elements[i]);
+                this.elements[i] = new Element(database.elements[i]);
             }
         }
 

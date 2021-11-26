@@ -1,15 +1,11 @@
-﻿using Core.Saves;
-using Entities;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Core.ButtonsSystem.ButtonType
 {
-    /**<summary>Base button HUD that can use for items with two icons and IDs.</summary>*/
+    /**<summary>Base button HUD that can use for items with two icons.</summary>*/
     public class BaseHUDButton : GenericButton
     {
-        /**<summary>The ID of the character.</summary>*/
-        [SerializeField] protected int id;
         /**<summary>The main icon of the HUD.</summary>*/
         public Image itemIcon;
         /**<summary>The second icon of the HUD.</summary>*/
@@ -18,12 +14,6 @@ namespace Core.ButtonsSystem.ButtonType
         public new void Awake()
         {
             base.Awake();
-        }
-
-        /**<summary>Set the ID.</summary>*/
-        protected void SetUp(int member) 
-        { 
-            id = member;
         }
 
         /**<summary>Destroy a item.</summary>*/
@@ -41,11 +31,5 @@ namespace Core.ButtonsSystem.ButtonType
             elementIcon.color = can ? Color.white : new Color(C, C, C, 1);
             itemIcon.color = can ? Color.white : new Color(C, C, C, 1);
         }
-
-        /**<summary>The id of the member that it represents.</summary>*/
-        public int MemberID => id;
-
-        /**<summary>Get the character that it represents.</summary>*/
-        public Character Character => SavesFiles.GetSave().GetCharacter(id);
     }
 }

@@ -34,6 +34,7 @@ namespace Entities
             icon = status.icon;
             effect = status.effect;
             quitWhenFinish = status.quitWhenFinish;
+            quitByHitRate = status.quitByHitRate;
             
             incrementPower = new float[status.incrementPower.Length];
             for (int i = 0; i < status.incrementPower.Length; i++)
@@ -69,7 +70,7 @@ namespace Entities
         /**<summary>It indicates if when the character end the battle the state will dead.</summary>*/ 
         public bool QuitWhenFinish { get => quitWhenFinish; set => quitWhenFinish = value; }
 
-        /**<summary>The rate with the possibility to quit when someone is beat.</summary>*/ 
+        /**<summary>The rate with the possibility to quit when someone is beat.</summary>*/
         public float QuitByHitRate { get => quitByHitRate; set => quitByHitRate = value < 0 ? 0 : value > 1 ? 1 : value; }
 
         /**<summary>Increment the stats of the character.

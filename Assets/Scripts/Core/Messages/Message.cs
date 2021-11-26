@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Core.Controls;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Core.Messages
@@ -16,6 +17,8 @@ namespace Core.Messages
         public bool up;
         /**<summary>The array with the messages.</summary>*/
         public TextData[] messages;
+        /**<summary>The scene to redirect when it finished. "" won't redirect.</summary>*/
+        public string sceneRedirect;
         
         /**<summary>The text where the message is showing.</summary>*/
         protected Text TextWindow;
@@ -96,7 +99,7 @@ namespace Core.Messages
             while (messages[Index].retard > seconds) 
             { 
                 yield return new WaitForSeconds(0.01f); 
-                if (Input.GetKeyDown(ControlsKeys.Ok)) messages[Index].retard = 0; 
+                if (Input.GetKeyDown(ControlsKeys.Ok) || Input.GetMouseButtonDown(0)) messages[Index].retard = 0; 
                 seconds += 0.01f; 
             }
             
@@ -106,6 +109,7 @@ namespace Core.Messages
                 TextWindow.text = ""; 
                 ToNext = true; 
                 StartCoroutine(Next()); 
+                ToNext = false; 
             }
             else 
             { 
@@ -121,9 +125,11 @@ namespace Core.Messages
         /**<summary>Update the message with the new one.</summary>*/
         protected void MessageUpdate() 
         { 
-            if (TextWindow.text != messages[Index].text || 
-                !Input.GetKeyDown(ControlsKeys.Ok) && !messages[Index].automated || !ToNext) return; 
-            ToNext = false; 
+            if (TextWindow.text != messages[Index].text ||
+                (!Input.GetKeyDown(ControlsKeys.Ok) && !Input.GetMouseButtonDown(0)) 
+                && !messages[Index].automated 
+                || !ToNext) return; 
+            //ToNext = false; 
             StartCoroutine(Wait()); 
         }
 
@@ -142,7 +148,8 @@ namespace Core.Messages
         protected void DestroyItem() 
         { 
             IsSomeMessageOn = false;
-            Destroy(gameObject);
+            if (!sceneRedirect.Equals("")) SceneManager.LoadScene(sceneRedirect);
+            else Destroy(gameObject);
         }
 
         #endregion

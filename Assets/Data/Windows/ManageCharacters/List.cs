@@ -6,14 +6,20 @@ using UnityEngine;
 
 namespace Data.Windows.ManageCharacters
 {
+    /**<summary>System that list the DB items.</summary>*/
     [CustomEditor(typeof(Characters))]
     public class List: Editor
     {
+        /**<summary>Item DB.</summary>*/
         private Characters _characterDB;
+        /**<summary>Item to search by ID or name.</summary>*/
         private string _searchByName = "";
+        /**<summary>Check if _searchByName isn't null or empty.</summary>*/
         private bool _canSearch;
+        /**<summary>Item to delete.</summary>*/
         private Character _deleted;
 
+        /**<summary>Initialize the DB when the file is clicked.</summary>*/
         private void OnEnable()
         {
             _characterDB = (Characters)target;
@@ -21,6 +27,7 @@ namespace Data.Windows.ManageCharacters
 
         #region INSPECTOR
 
+        /**<summary>List all items of the DB, with the filter and creator.</summary>*/
         public override void OnInspectorGUI()
         {
             if (!_characterDB) return;
@@ -78,6 +85,7 @@ namespace Data.Windows.ManageCharacters
         
         #region DISPLAY
 
+        /**<summary>Show an item, with some data and buttons to delete, show and modify.</summary>*/
         private void Display(Character character)
         {
 

@@ -3,8 +3,8 @@
     public enum ActionType
     {
         None,
-        Melee,
-        Long,
+        Atk1,
+        Atk2,
         Ability,
         Process
     }

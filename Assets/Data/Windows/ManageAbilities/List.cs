@@ -6,14 +6,20 @@ using UnityEngine;
 
 namespace Data.Windows.ManageAbilities
 {
+    /**<summary>System that list the DB items.</summary>*/
     [CustomEditor(typeof(Abilities))]
     public class List: Editor
     {
+        /**<summary>Item DB.</summary>*/
         private Abilities _abilityDB;
+        /**<summary>Item to search by ID or name.</summary>*/
         private string _searchByName = "";
+        /**<summary>Check if _searchByName isn't null or empty.</summary>*/
         private bool _canSearch;
+        /**<summary>Item to delete.</summary>*/
         private Ability _deleted;
 
+        /**<summary>Initialize the DB when the file is clicked.</summary>*/
         private void OnEnable()
         {
             _abilityDB = (Abilities)target;
@@ -21,6 +27,8 @@ namespace Data.Windows.ManageAbilities
 
         #region INSPECTOR
 
+        
+        /**<summary>List all items of the DB, with the filter and creator.</summary>*/
         public override void OnInspectorGUI()
         {
             if (!_abilityDB) return;
@@ -78,6 +86,7 @@ namespace Data.Windows.ManageAbilities
         
         #region DISPLAY
 
+        /**<summary>Show an item, with some data and buttons to delete, show and modify.</summary>*/
         private void Display(Ability ability)
         {
 

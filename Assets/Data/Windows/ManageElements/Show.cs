@@ -4,14 +4,19 @@ using UnityEngine;
 
 namespace Data.Windows.ManageElements
 {
+    /**<summary>System that generates a new window to show.</summary>*/
     public class Show : EditorWindow
     {
+        /**<summary>The new window to generate.</summary>*/
         private static EditorWindow _window;
+        /**<summary>Empty item.</summary>*/
         private static Element _element;
         
+        /**<summary>For move the list with the DB items.</summary>*/
         private Vector2 _scroll;
         
         
+        /**<summary>Create the window.</summary>*/
         public static void Window(Element element)
         {
             _window = GetWindow<Show>();
@@ -19,6 +24,7 @@ namespace Data.Windows.ManageElements
             _element = new Element(element);
         }
 
+        /**<summary>Show the window.</summary>*/
         public void OnGUI()
         {
             

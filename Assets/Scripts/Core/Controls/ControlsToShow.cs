@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 namespace Core.Controls
 {
+    /**<summary>Create a slot where explain the function of keys.</summary>*/
     public class ControlsToShow : MonoBehaviour
     {
         /**<summary>The text slots.</summary>*/
@@ -17,7 +18,7 @@ namespace Core.Controls
         {
             for (int i = 0; i < texts.Length; i++)
             {
-                texts[i].text = "\"" + ControlsKeys.GetKey(keys[i]) + "\"\n " + legend[i];
+                texts[i].text = ControlsKeys.GetKey(keys[i]) + ": " + legend[i];
             }
         }
     }

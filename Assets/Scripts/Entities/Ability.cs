@@ -33,6 +33,7 @@ namespace Entities
         
         [SerializeField] private StatusOf[] statusesToDo = {};
         
+        /**<summary>True if the ability uses the character element.</summary>*/
         private bool UseCharacterElement  => Element == null;
 
         #endregion
@@ -78,7 +79,7 @@ namespace Entities
         
         #region GETTERS & SETTERS
         
-        /**<summary>The type of the ability if it damages Karma or Blood points.</summary>*/
+        /**<summary>The type of the ability if it damages or absorb Karma or Blood points.</summary>*/
         public AttackType Type { get => type; set => type = value; }
         /**<summary>The icon of the ability.</summary>*/
         public Sprite Icon { get => icon; set => icon = value; }
@@ -190,6 +191,7 @@ namespace Entities
             Array.Resize(ref statusesToDo, statusesToDo.Length - 1);
         }
 
+        /**<summary>Update the level of the statuses to do.</summary>*/
         public void UpdateAllStatus(int level)
         {
             foreach (StatusOf status in statusesToDo)
@@ -233,7 +235,7 @@ namespace Entities
                         
                 } 
                 for (int j = 0; j < user.Special.Length; j++) 
-                { 
+                {
                     damage = damage.Replace("{" + 
                                             cTarget[i] + "." + 
                                             statsOf[j + user.Main.Length] + "}", 

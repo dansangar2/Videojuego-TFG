@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Linq;
-using Core.Saves;
+using Data;
 using Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Core.ButtonsSystem.ButtonType
 {
-    /**<summary>The HUD and data of the characters.</summary>*/
+    /**<summary>The HUD with the data of the characters.</summary>*/
     public class MemberHUDButton: BaseHUDButton
     {
         #region ATTRIBUTES
+
+        public Character character;
 
         //All attributes are the stats of the character.
         public Text bloodPoints;
@@ -29,8 +31,9 @@ namespace Core.ButtonsSystem.ButtonType
         private int _j;
         private float _seconds;
 
-        private Image _imageBarBP;
-        private Image _imageBarKP;
+        //The images of the bars
+        private Image _imageBarBp;
+        private Image _imageBarKp;
 
         #endregion
 
@@ -38,16 +41,14 @@ namespace Core.ButtonsSystem.ButtonType
 
         private new void Awake()
         {
-            _imageBarBP = bp.fillRect.GetComponent<Image>();
-            _imageBarKP = kp.fillRect.GetComponent<Image>();
+            _imageBarBp = bp.fillRect.GetComponent<Image>();
+            _imageBarKp = kp.fillRect.GetComponent<Image>();
             if (onlyHUD) return;
             base.Awake();
         }
 
         private new void Update()
         {
-            Character character = SavesFiles.GetSave().Characters[id]; 
-            
             level.text = character.Level.ToString();
             next.text = (character.NedExp - character.ActExp).ToString();
             
@@ -62,7 +63,8 @@ namespace Core.ButtonsSystem.ButtonType
             kp.maxValue = character.MaxKarmaPoints;
             kp.value = character.CurrentKarmaPoints;
             
-            Sprite[] sprites = Character.Statuses.Select(s => s.Status.Icon).ToArray();
+            //States
+            Sprite[] sprites = character.Statuses.Select(s => s.Status.Icon).ToArray();
             try
             {
                 status1.sprite = sprites[_j];
@@ -94,19 +96,20 @@ namespace Core.ButtonsSystem.ButtonType
         }
 
         #endregion
-        
+
         /**<summary>Set up the data of this Character HUD with the new ID.</summary>*/
-        public new void SetUp(int nId) 
-        { 
-            base.SetUp(nId);
-            UpdateUI();
+        public void SetUp(Character chara, bool isEnemy = false)
+        {
+            character = chara; 
+            UpdateUI(chara, isEnemy);
         }
         
         /**<summary>Update the data of the character HUD with the current data of the CharacterID.</summary>*/
-        public void UpdateUI()
+        public void UpdateUI(Character chara, bool isEnemy = false)
         {
-            Character character = SavesFiles.GetSave().Characters[id]; 
-            itemIcon.sprite = character.Face; 
+            character = chara;
+            itemIcon.sprite = isEnemy ? GameData.EnemyDB.FindByID(chara.ID).Face : 
+                GameData.CharacterDB.FindByID(chara.ID).Face;
             elementIcon.sprite = character.Element.Icon;
             bloodPoints.text = character.CurrentBloodPoints.ToString();
             level.text = character.Level.ToString();
@@ -125,11 +128,28 @@ namespace Core.ButtonsSystem.ButtonType
         }
 
         /**<summary>Get the bar image of the BP slider</summary>*/
-        public Image SliderBarBP => _imageBarBP;
+        public Image SliderBarBP => _imageBarBp;
 
         /**<summary>Get the bar image of the KP slider</summary>*/
-        public Image SliderBarKP => _imageBarKP;
-
+        public Image SliderBarKP => _imageBarKp;
+        
+        /**<summary>Set the interface if can or not press and indicates if it can press or not.</summary>*/
+        public new void CanPress(bool can)
+        {
+            base.CanPress(can);
+            itemIcon.color = can ? Color.white : new Color(C, C, C, 1);
+            elementIcon.color = can ? Color.white : new Color(C, C, C, 1);
+            bloodPoints.color = can ? Color.white : new Color(C, C, C, 1);
+            level.color = can ? Color.white : new Color(C, C, C, 1);
+            bloodMax.color = can ? Color.white : new Color(C, C, C, 1);
+            karmaPoints.color = can ? Color.white : new Color(C, C, C, 1);
+            karmaMax.color = can ? Color.white : new Color(C, C, C, 1);
+            itemName.color = can ? Color.white : new Color(C, C, C, 1);
+            next.color = can ? Color.white : new Color(C, C, C, 1);
+            
+            _imageBarBp.color = can ? Color.red : new Color(1, 0, 0, 0.5f);
+            _imageBarKp.color = can ? Color.magenta : new Color(1, 0, 1, 0.5f);
+        }
 
     }
 }

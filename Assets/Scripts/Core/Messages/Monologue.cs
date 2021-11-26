@@ -112,7 +112,7 @@ namespace Core.Messages
         {
             UpdateUI();
             if (TextWindow.text != messages[Index].text ||
-                !Input.GetKeyDown(ControlsKeys.Ok) && !messages[Index].automated || !ToNext) return;
+                (!Input.GetMouseButton(0) && !Input.GetKeyDown(ControlsKeys.Ok)) && !messages[Index].automated || !ToNext) return;
             ToNext = false;
             StartCoroutine(Wait());
         }

@@ -169,6 +169,7 @@ namespace Entities
             if (!((actExp += experience) < 999999999)) actExp = 999999999; 
             if (ActExp < NedExp ) return;
             Leveling();
+            //Check other time if has enough experience for leveling. 
             GainExperience(0);
         }
         

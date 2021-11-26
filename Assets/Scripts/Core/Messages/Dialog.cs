@@ -119,11 +119,10 @@ namespace Core.Messages
             while (messages[Index].retard > seconds)
             {
                 yield return new WaitForSeconds(0.01f);
-                if (Input.GetKeyDown(ControlsKeys.Ok)) messages[Index].retard = 0;
+                if (Input.GetMouseButtonDown(0)||Input.GetKeyDown(ControlsKeys.Ok)) messages[Index].retard = 0;
                 seconds += 0.01f;
             }
-            
-            if (Index < messages.Length - 1)
+            if (Index < messages.Length -1)
             {
                 if (messages[Index+1].characterId != messages[Index].characterId) _iteration++;
                 _iteration %= 2;
@@ -160,12 +159,13 @@ namespace Core.Messages
             ToNext = true;
         }
         
-        /**<summary>Reset the message for prepare other one.</summary>*/
+        /**<summary>Reset the message for prepare another one.</summary>*/
         private void ResetMessage(Text text1)
         {
-            
             if (text1.text != messages[Index].text ||
-                !Input.GetKeyDown(ControlsKeys.Ok) && !messages[Index].automated || !ToNext) return;
+                (!Input.GetMouseButtonDown(0) && !Input.GetKeyDown(ControlsKeys.Ok)) 
+                && !messages[Index].automated 
+                || !ToNext) return;
             ToNext = false;
             StartCoroutine(Wait());
         }

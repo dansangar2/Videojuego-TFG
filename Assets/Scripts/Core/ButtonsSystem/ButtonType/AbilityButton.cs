@@ -5,23 +5,23 @@ using UnityEngine.UI;
 
 namespace Core.ButtonsSystem.ButtonType
 {
+    /**<summary>The button of the Ability.</summary>*/
     public class AbilityButton : BaseHUDButton
     {
+        
+        /**<summary>The ID of the ability.</summary>*/
+        public int id;
+        
         /**<summary>Set the necessary KP for the ability.</summary>*/
         public Text necessaryKp;
 
         /**<summary>Set the character.</summary>*/
         private Character _character;
-        
-        public new void Update()
-        {
-            base.Update();
-        }
-        
+
         /**<summary>Set up the data of the button by abilityID, and it can set if can select or not.</summary>*/
         public void SetUp(int nId, Character character, bool can=true) 
         { 
-            base.SetUp(nId);
+            id = nId;
             _character = character;
             UpdateUI();
             CanPress(can);
@@ -41,11 +41,14 @@ namespace Core.ButtonsSystem.ButtonType
         }
 
         /**<summary>Set the interface if can or not press and indicates if it can press or not.</summary>*/
-        private new void CanPress(bool can)
+        public new void CanPress(bool can)
         {
             base.CanPress(can);
             necessaryKp.color = can ? Color.white : new Color(C, C, C, 1);
         }
-        
+
+        /**<summary>Get the ID of the ability.</summary>*/
+        public int AbilityID => id;
+
     }
 }

@@ -24,7 +24,7 @@ namespace Core.RestSystem.Actions
             
             PeopleInHospital++;
             
-            SavesFiles.GetSave().MoveCharacter(character.ID, SavesFiles.GetSave().Party.Length);
+            SavesFiles.GetSave().MoveCharacter(character.ID, SavesFiles.GetSave().Party.Length-1);
 
         }
     }

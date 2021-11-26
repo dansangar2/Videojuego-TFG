@@ -1,6 +1,5 @@
 ﻿using System;
 using Data;
-using Enums;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,7 +14,7 @@ namespace Entities
         [SerializeField] protected int level  = 1; 
         [SerializeField] protected int maxLevel = 99; 
         [SerializeField] protected int[] main = new int[9]; 
-        [SerializeField] protected float[] special = new float[5]; 
+        [SerializeField] protected float[] special = new float[4]; 
         [SerializeField] protected int[] expData = {30, 20, 30, 20}; 
         [SerializeField] protected int elementID; 
         [SerializeField] protected int actExp; 
@@ -47,7 +46,7 @@ namespace Entities
             }
             
             for (int i = 0; i < bases.special.Length; i++) 
-            { 
+            {
                 special[i] = bases.special[0];
             }
             
@@ -107,7 +106,6 @@ namespace Entities
         1 -> rek = Recovery karma effect
         <para>2 -> rxb = Regenerate blood per turn</para>
         3 -> rxk = Regenerate karma per turn
-        <para>5 -> kg = Weight</para>
         </summary>*/ 
         public float[] Special => special;
         
@@ -125,7 +123,7 @@ namespace Entities
         
         /**<summary>
         Max. Blood point
-        <para>Max of Blood points you can get.</para>
+        <para>Max Life points that you can get.</para>
         <para>Formula: (base + plus) * rate + flat</para>
         </summary>*/ 
         public int MaxBloodPoints 
@@ -136,7 +134,7 @@ namespace Entities
         
         /**<summary>
         Max. Karma point
-        <para>Max of Karma points you can get.</para>
+        <para>Max of magic points that you can get.</para>
         <para>Formula: (base + plus) * rate + flat</para>
         </summary>*/ 
         public int MaxKarmaPoints 
@@ -147,7 +145,7 @@ namespace Entities
         
         /**<summary>
         Current Blood point
-        <para>When your BP it´s 0 you are going to be unconscious, if it´s max*(-1) you are going to be die.</para>
+        <para>When your BP is 0 you are going to be unconscious.</para>
         <para>less than mhp</para>
         </summary>*/ 
         public int CurrentBloodPoints 
@@ -158,7 +156,7 @@ namespace Entities
         
         /**<summary>
         Actual Karma Points
-        <para>When your KP it´s 0 you cannot use your Karma abilities.</para>
+        <para>When your KP is less than a ability, you cannot use this ability.</para>
         <para>less than mkp</para>
         </summary>*/ 
         public int CurrentKarmaPoints 
@@ -265,18 +263,6 @@ namespace Entities
             set => Special[3] = value;
         }
         
-        
-        /**<summary>
-        Weight
-        <para>This param it´s used for weapons equip limit.</para> 
-        <para>(user.mbp + user.def - user.atk - user.agi)/(user.level*100)</para>
-        </summary>*/ 
-        public float Weight
-        {
-            get => Special[4];
-            set => Special[4] = value;
-        }
-        
         /**<summary>The element of the object.</summary>*/ 
         public Element Element => GameData.ElementDB.FindByID(elementID);
         
@@ -311,49 +297,7 @@ namespace Entities
             else return false; 
             return true;
         }
-        
-        /**<summary>
-        The blood that is reduced. If it is negative, then it recover
-        </summary>*/ 
-        public void ReduceCurrentBlood(int amount = -999999) 
-        { 
-            Main[7] -= amount; 
-            if (Main[7] > Main[0]) Main[7] = Main[0];
-            else if(Main[7] < 0) Main[7] = 0;
-        }
-        
-        /**<summary>
-        The karma that is reduced. If it is negative, then it recover
-        </summary>*/ 
-        public void ReduceCurrentKarma(int amount = -999999) 
-        { 
-            Main[8] -= amount; 
-            if (Main[8] > Main[1]) Main[8] = Main[1];
-            else if(Main[8] < 0) Main[8] = 0;
-        }
-        
-        /**<summary>
-        The karma that is reduced. If it is negative, then it recover
-        </summary>*/ 
-        public void Reduce(AttackType type, int amount = -999999) 
-        {
-            switch (type)
-            {
-                case AttackType.Blood:
-                    ReduceCurrentBlood(amount);
-                    break;
-                case AttackType.Karma:
-                    ReduceCurrentKarma(amount);
-                    break;
-                case AttackType.AbsorbBlood:
-                    ReduceCurrentBlood(amount);
-                    break;
-                case AttackType.AbsorbKarma:
-                    ReduceCurrentKarma(amount);
-                    break;
-            }
-        }
-        
+
         /**<summary>
         <para>ROUND(e[0]*(level - 1)^(0.9+(e[2]/250))*l*(level+1)/(6+l^2)/50/e[3])+(l-1)*e[1])</para>
         <para>Where "l" is the current level</para>
@@ -379,6 +323,7 @@ namespace Entities
         </summary>*/
         public bool IsKo() { return 0 >= CurrentBloodPoints; }
 
+        /**<summary>Init the charge.</summary>*/
         public void ResetCharge() { Charge = 0; }
         
         #endregion

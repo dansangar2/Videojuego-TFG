@@ -10,9 +10,15 @@ namespace Core.ButtonsSystem.ButtonData
 
         #region ATTRIBUTES
 
-        [SerializeField] protected string buttonText;
+        /**<summary>Text of the button.</summary>*/
+        [SerializeField] private string buttonText;
+        /**<summary>Scene To redirect.</summary>*/
         [SerializeField] protected string sceneRedirect;
+        /**<summary>Signal that the button will send when it's pressed.</summary>*/
+        [SerializeField] protected string message;
+        /**<summary>Transform To activate.</summary>*/
         [SerializeField] protected Transform window;
+        /**<summary>Close the game.</summary>*/
         [SerializeField] protected bool quitGame;
 
         #endregion
@@ -22,6 +28,7 @@ namespace Core.ButtonsSystem.ButtonData
         {
             sceneRedirect = data.sceneRedirect;
             buttonText = data.buttonText;
+            message = data.message;
             window = data.window;
             quitGame = data.quitGame;
         }
@@ -33,6 +40,9 @@ namespace Core.ButtonsSystem.ButtonData
         to another window. If it's empty, then the player won't move.</summary>*/
         public string SceneRedirect => sceneRedirect;
 
+        /**<summary>The message that the button send.</summary>*/
+        public string Message => message;
+        
         /**<summary>This windows will appear when the button is pressing.</summary>*/
         public Transform Window => window;
 

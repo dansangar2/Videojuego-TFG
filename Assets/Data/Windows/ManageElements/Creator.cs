@@ -5,16 +5,22 @@ using UnityEngine;
 
 namespace Data.Windows.ManageElements
 {
+    /**<summary>System that generates a new window to create.</summary>*/
     public class Creator : EditorWindow
     {
         
+        /**<summary>The new window to generate.</summary>*/
         private static EditorWindow _window;
 
+        /**<summary>Empty item.</summary>*/
         private static Element _element;
+        /**<summary>Item DB.</summary>*/
         private static Elements _elementDB;
         
+        /**<summary>For move the list with the DB items.</summary>*/
         private Vector2 _scroll;
         
+        /**<summary>Create the window.</summary>*/
         public static void Window(Elements elementDB)
         {
             _elementDB = elementDB;
@@ -25,6 +31,7 @@ namespace Data.Windows.ManageElements
             _element = new Element(_elementDB.Count);
         }
 
+        /**<summary>Show the window.</summary>*/
         public void OnGUI()
         {
             
@@ -42,6 +49,7 @@ namespace Data.Windows.ManageElements
 
         }
 
+        /**<summary>Add a item.</summary>*/
         private static void Add()
         {
             Undo.RecordObject(_elementDB, "Element Modify");

@@ -34,13 +34,9 @@ namespace Core.RestSystem.Actions
             }
             
             character.RestPoints = 0;
-            
+
             character.ReduceCurrentBlood(-Convert.ToInt32(
-                Mathf.Floor(character.MaxBloodPoints*percentage)));
-            
-            //character.ReduceCurrentKarma(-Convert.ToInt32(
-            //    Mathf.Floor(character.MaxKarmaPoints*percentage)));
-            
+                Mathf.Floor(character.MaxBloodPoints*percentage)), false);
         }
     }
 }

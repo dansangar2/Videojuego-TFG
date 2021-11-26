@@ -335,68 +335,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
         type: 3}
-      propertyPath: up
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
-        type: 3}
       propertyPath: type
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
         type: 3}
-      propertyPath: messages.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
-        type: 3}
-      propertyPath: messages.Array.data[1].text
-      value: "\xBFQUUUUUUUUUUUUUUUE?"
-      objectReference: {fileID: 0}
-    - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
-        type: 3}
-      propertyPath: messages.Array.data[2].text
-      value: Hola, que tal?Example
-      objectReference: {fileID: 0}
-    - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
-        type: 3}
-      propertyPath: messages.Array.data[1].speed
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
-        type: 3}
       propertyPath: messages.Array.data[2].speed
-      value: 0.1
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
         type: 3}
-      propertyPath: messages.Array.data[1].retard
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
-        type: 3}
-      propertyPath: messages.Array.data[2].retard
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
-        type: 3}
-      propertyPath: messages.Array.data[1].automated
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
-        type: 3}
-      propertyPath: messages.Array.data[0].characterId
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
-        type: 3}
-      propertyPath: messages.Array.data[1].characterId
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8150394147239351694, guid: 8bab214e1aab42719a09a125e83f9fbb,
-        type: 3}
-      propertyPath: messages.Array.data[2].characterId
-      value: -3
+      propertyPath: messages.Array.data[3].speed
+      value: 0.08
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bab214e1aab42719a09a125e83f9fbb, type: 3}

@@ -700,13 +700,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6615261083586504491}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6615261085351787029}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.01, y: 0}
   m_AnchorMax: {x: 0.26, y: 0.7}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -1030,13 +1030,69 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
-  up: 0
+  up: 1
   messages:
-  - text: Hola, que tal?
-    characterId: 0
-    speed: 0
+  - text: Hi! Do you hear about the new tournament?
+    characterId: -1
+    speed: 0.05
     retard: 0
     automated: 0
+  - text: No.
+    characterId: -2
+    speed: 0.3
+    retard: 0.5
+    automated: 0
+  - text: Hii, what's happend?
+    characterId: -3
+    speed: 0.05
+    retard: 0.2
+    automated: 0
+  - text: Nothing, I'll told to "Player 2" about the new tournament.
+    characterId: -1
+    speed: 0.08
+    retard: 0.2
+    automated: 0
+  - text: Oh, I heard about it... we could go there!
+    characterId: -3
+    speed: 0.08
+    retard: 0.2
+    automated: 0
+  - text: I could try...
+    characterId: -2
+    speed: 0.1
+    retard: 0.2
+    automated: 0
+  - text: Can I go t.......???
+    characterId: -4
+    speed: 0.02
+    retard: 0.5
+    automated: 1
+  - text: Can I go too?
+    characterId: -5
+    speed: 0.05
+    retard: 0.2
+    automated: 0
+  - text: Yes, why not?
+    characterId: -1
+    speed: 0.05
+    retard: 0.2
+    automated: 0
+  - text: And I....???
+    characterId: -4
+    speed: 0.005
+    retard: 0.2
+    automated: 1
+  - text: And you, "Player 4"?
+    characterId: -1
+    speed: 0.001
+    retard: 0.1
+    automated: 0
+  - text: Yes!
+    characterId: -4
+    speed: 0.001
+    retard: 0.1
+    automated: 0
+  sceneRedirect: RestSystemTest
   right: 0
 --- !u!1 &6615261085525542104
 GameObject:

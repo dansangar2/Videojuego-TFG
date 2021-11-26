@@ -15,7 +15,7 @@ namespace Entities
         [SerializeField] private int level;
         [SerializeField] private int duration;
         [SerializeField] private float possibility;
-        [SerializeField] protected float[] incrementPowerPlus = new float[14];
+        [SerializeField] protected float[] incrementPowerPlus = {1,1,1,1,1,1,1,0,0,0,0,1,1,1};
 
         #endregion
         
@@ -30,7 +30,6 @@ namespace Entities
             for (int i = 0; i < incrementStats.Length; i++)
             {
                 incrementPowerPlus[i] = incrementStats[i];
-                Debug.Log(incrementPowerPlus[i]);
             }
             this.statusID = statusID;
             this.level = level;

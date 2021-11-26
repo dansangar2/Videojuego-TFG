@@ -12,7 +12,7 @@ namespace Data.Windows.ManageStats
 
         #region TABLE
 
-        /**<summary>This method makes a Table with "content", the rows its the first value.</summary>*/
+        /**<summary>This method makes a Table with "content" data, the rows its the first value.</summary>*/
         public static void Table(string[][] content, GUILayoutOption[] options = null)
         {
             options ??= Options;

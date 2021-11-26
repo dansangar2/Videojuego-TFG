@@ -6,26 +6,36 @@ using UnityEngine;
 
 namespace Data.Windows.ManageStatuses
 {
+    /**<summary>Display for edit and/or show the data of Statuses.</summary>*/
     public static class Display
     {
+        /**<summary>Configuration for the spaces to fill.</summary>*/
         private static readonly GUILayoutOption[] Options = { GUILayout.MaxWidth(150f), GUILayout.MinWidth(20f) };
+        /**<summary>Configuration for the text area space.</summary>*/
         private static readonly GUIStyle TextAreaStyle = new GUIStyle(GUI.skin.textArea) {wordWrap = true};
+        /**<summary>For easy way to show the stats to fill interface.</summary>*/
         private static readonly string[] Stats = { "mbp", "mkp", "atk", "def", "spi", "men", "agi", "reb", "rek", "rxb", "rxk" };
+        /**<summary>Check if the status remove all other statuses.</summary>*/
         private static bool _all;
+        /**<summary>Index that save the ID of status to quit.</summary>*/
         private static int _index;
         
+        /**<summary>Generate the window with the size necessary to display the window.</summary>*/
         public static void Window(EditorWindow window)
         {
             window.maxSize = new Vector2(600, 600);
             window.minSize = new Vector2(550, 500);
         }
         
+        /**<summary>Generate the window interface, adapted to the entity.
+        With the data of item.</summary>*/
         public static void Displayed(Status item, bool readOnly = false)
         {
             if (readOnly) DisplayedReadOnly(item);
             else DisplayedReadWrite(item);
         }
         
+        /**<summary>You can edit.</summary>*/
         private static void DisplayedReadWrite(Status item)
         {
 
@@ -74,6 +84,9 @@ namespace Data.Windows.ManageStatuses
 
             #endregion
 
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
+            
             EditorGUILayout.BeginVertical();
             EditorGUILayout.BeginHorizontal();
 
@@ -180,6 +193,7 @@ namespace Data.Windows.ManageStatuses
             
         }
         
+        /**<summary>You can't edit.</summary>*/
         private static void DisplayedReadOnly(Status item) 
         {
             

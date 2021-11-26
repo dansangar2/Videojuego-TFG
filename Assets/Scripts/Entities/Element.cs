@@ -48,8 +48,6 @@ namespace Entities
         The icon of the element.
         </summary>*/ 
         public Sprite Icon { get => icon; set => icon = value; }
-             
-        //[Serializable] public class DictionaryOfElementTypeAndFloat : SerializableDictionary<ElementType, float>{}
         
         /**<summary>
         Multiplicity

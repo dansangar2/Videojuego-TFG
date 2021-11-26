@@ -1,6 +1,5 @@
 ﻿using System;
 using Core.ButtonsSystem.ButtonList;
-using UnityEngine;
 
 namespace Core.ButtonsSystem
 {
@@ -27,13 +26,13 @@ namespace Core.ButtonsSystem
         }
 
         /**<sumary>Move of page.
-        <param name="back">Button for move back page.</param>
-        <param name="next">Button for move next page.</param>
+        <param name="back">Check if move back page.</param>
+        <param name="next">Check if move next page.</param>
         </sumary>*/
-        protected void ChangePage(KeyCode back, KeyCode next)
+        protected void ChangePage(bool back, bool next)
         {
-            CurrentPage = CurrentPage + Convert.ToInt32(Input.GetKeyDown(next))
-                          - Convert.ToInt32(Input.GetKeyDown(back));
+            CurrentPage = CurrentPage + Convert.ToInt32(next)
+                          - Convert.ToInt32(back);
             if (CurrentPage < 0) CurrentPage = NumberOfPages-1;
             CurrentPage %= NumberOfPages;
         }

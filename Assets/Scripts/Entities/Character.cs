@@ -21,8 +21,7 @@ namespace Entities
         [SerializeField] private int abilityPoints;
         [SerializeField] private StatusOf[] statuses = { };
         [SerializeField] private SpecialAbility[] abilities = {};
-
-        public int RestPoints { get; set; } = 5;
+        [SerializeField] private int restPoints;
 
         #endregion
         
@@ -38,17 +37,18 @@ namespace Entities
             model = chara.model;
             meleeAttackID = chara.meleeAttackID; 
             longAttackID = chara.longAttackID;
+            restPoints = chara.restPoints;
             
             abilities = new SpecialAbility[chara.abilities.Length];
             for (int i = 0; i < chara.abilities.Length; i++)
             {
-                abilities[i] = chara.abilities[i];
+                abilities[i] = new SpecialAbility(chara.abilities[i]);
             }
             
             statuses = chara.statuses;
             for (int i = 0; i < chara.statuses.Length; i++)
             {
-                statuses[i] = chara.statuses[i];
+                statuses[i] = new StatusOf(chara.statuses[i]);
             }
         }
         
@@ -89,6 +89,8 @@ namespace Entities
         /**<summary>Ability points of the character.</summary>*/ 
         public int AbilityPoints { get => abilityPoints; set => abilityPoints = value; }
 
+        /**<summary>Points that the character can use in the rest system.</summary>*/
+        public int RestPoints { get => restPoints; set => restPoints = value; }
         //**<summary>The status that the character has.</summary>*/ 
         //public Status[] Status => status.Select(s => GameData.StatusDB.FindByID(s)).ToArray();
         
@@ -115,7 +117,7 @@ namespace Entities
         Get all secondary abilities of the character.
         <param name="all">Get all, inclusive the locked abilities. Default false.</param> 
         </summary>*/ 
-        public Ability[] Abilities(bool all = true) 
+        public Ability[] Abilities(bool all = false) 
         { 
             if (all) return abilities.Select(a => a.Ability).ToArray(); 
             return abilities.Where(a => level >= a.NeedLevel)
@@ -248,7 +250,7 @@ namespace Entities
                                               Statuses.Sum(s => s.Status.IncrementPower[7]);
         
         /**<summary>Get the Karma Recovery Plus Rate with the status increments.</summary>*/ 
-        public new float KarmaRecoveryPlus => base.KarmaRegeneration + 
+        public new float KarmaRecoveryPlus => base.KarmaRecoveryPlus + 
                                               Statuses.Sum(s => s.Status.IncrementPower[8]);
 
         /**<summary>Get the Regeneration Rate with the status increments.</summary>*/ 
@@ -359,6 +361,52 @@ namespace Entities
             ClearStatuses();
         }
 
+        /**<summary>
+        The blood that is reduced. If it is negative, then it recover
+        </summary>*/ 
+        public void ReduceCurrentBlood(int amount = -999999, bool recoverPlus = true)
+        {
+            float i = 1f;
+            if (amount < 0 && recoverPlus) i += BloodRecoveryPlus; 
+            Main[7] -= Convert.ToInt32(amount*i); 
+            if (Main[7] > Main[0]) Main[7] = Main[0];
+            else if(Main[7] < 0) Main[7] = 0;
+        }
+        
+        /**<summary>
+        The karma that is reduced. If it is negative, then it recover
+        </summary>*/ 
+        public void ReduceCurrentKarma(int amount = -999999, bool recoverPlus = true) 
+        { 
+            float i = 1f;
+            if (amount < 0 && recoverPlus) i += KarmaRecoveryPlus;
+            Main[8] -= Convert.ToInt32(amount*i); 
+            if (Main[8] > Main[1]) Main[8] = Main[1];
+            else if(Main[8] < 0) Main[8] = 0;
+        }
+        
+        /**<summary>
+        The karma that is reduced. If it is negative, then it recover
+        </summary>*/ 
+        public void Reduce(AttackType type, int amount = -999999, bool recoverPlus = true) 
+        {
+            switch (type)
+            {
+                case AttackType.Blood:
+                    ReduceCurrentBlood(amount, recoverPlus);
+                    break;
+                case AttackType.Karma:
+                    ReduceCurrentKarma(amount, recoverPlus);
+                    break;
+                case AttackType.AbsorbBlood:
+                    ReduceCurrentBlood(amount, recoverPlus);
+                    break;
+                case AttackType.AbsorbKarma:
+                    ReduceCurrentKarma(amount, recoverPlus);
+                    break;
+            }
+        }
+        
         /**<summary>Quit all statuses, and recovery BP and KP.</summary>*/
         public void RecoveryAll()
         {
@@ -368,7 +416,6 @@ namespace Entities
         }
         
         #endregion
-        
     }
 
 }

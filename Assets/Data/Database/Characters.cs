@@ -14,15 +14,15 @@ namespace Data.Database
         [SerializeField] private Character[] characters;
 
         /**<summary>Clone.</summary>*/ 
-        public void Clone(Characters characters)
+        public void Clone(Characters database)
         {
-            this.characters = new Character[characters.Count];
-            for (int i = 0; i < characters.Count; i++)
+            this.characters = new Character[database.Count];
+            for (int i = 0; i < database.Count; i++)
             {
-                this.characters[i] = new Character(characters.characters[i])
+                this.characters[i] = new Character(database.characters[i])
                 {  
                     //Clone the abilities too.
-                    SpecialAbilities = characters.characters[i].SpecialAbilities
+                    SpecialAbilities = database.characters[i].SpecialAbilities
                 };
             }
         }

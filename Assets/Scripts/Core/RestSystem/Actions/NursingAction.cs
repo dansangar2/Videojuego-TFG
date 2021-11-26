@@ -7,17 +7,18 @@ namespace Core.RestSystem.Actions
 {
     public static class NursingAction
     {
-        /**<summary>Restore KP and BP to the character.</summary>*/
+        /**<summary>Restore KP and BP of the character.</summary>*/
         public static void Nursing(Character character, UseRestPointsInterface rest)
         {
-            if (!Input.GetKeyDown(ControlsKeys.Ok)) return;
+            if (!(Input.GetKeyDown(ControlsKeys.Ok) || ClickButton.KeyUsed.Equals("Ok"))) return;
             character.RestPoints -= rest.pointsToUse;
-            character.ReduceCurrentBlood(-Formula(character, rest.pointsToUse));
+            character.ReduceCurrentBlood(-Formula(character, rest.pointsToUse), false);
+            character.ReduceCurrentKarma(-Formula(character, rest.pointsToUse), false);
             rest.transform.parent.gameObject.SetActive(false);
             character.ClearStatuses();
         }
 
-        public static int Formula(Character character, int points)
+        public static int Formula(Character character, int points, bool karma = false)
         {
             float v = points switch
             {
@@ -28,10 +29,11 @@ namespace Core.RestSystem.Actions
                 _ => 1f
             };
             return Convert.ToInt32(
-                    Mathf.Round(
-                            character.MaxBloodPoints * 0.75f * v
-                            )
-                    );
+                Mathf.Round((karma ? 
+                    character.MaxKarmaPoints : 
+                    character.MaxBloodPoints) 
+                            * 0.75f * v)
+                );
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Core.RestSystem.Actions
         /**<summary>Gain experience with the rest points.</summary>*/
         public static void Training(Character character, UseRestPointsInterface rest)
         {
-            if (!Input.GetKeyDown(ControlsKeys.Ok)) return;
+            if (!(Input.GetKeyDown(ControlsKeys.Ok)|| ClickButton.KeyUsed.Equals("Ok"))) return;
             character.RestPoints -= rest.pointsToUse;
             character.GainExperience(Formula(character, rest.pointsToUse));
             rest.transform.parent.gameObject.SetActive(false);

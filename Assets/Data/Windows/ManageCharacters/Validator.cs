@@ -4,10 +4,13 @@ using UnityEngine;
 
 namespace Data.Windows.ManageCharacters
 {
+    /**<summary>Check that some data have the restriction correctly.</summary>*/
     public static class Validator
     {
+        /**<summary>Save the restriction check result.</summary>*/
         private static bool _res;
         
+        /**<summary>Check the restriction is correctly.</summary>*/
         public static bool Validate(Character item)
         {
             _res = false;
@@ -43,7 +46,7 @@ namespace Data.Windows.ManageCharacters
 
             #endregion
 
-            foreach (Ability ability in item.Abilities())
+            foreach (Ability ability in item.Abilities(true))
             {
                 _res = _res || StatsGeneratorWindow.Validator(ability);   
             }

@@ -14,12 +14,12 @@ namespace Data.Database
         [SerializeField] private Ability[] abilities;
 
         /**<summary>Clone constructor.</summary>*/ 
-        public Abilities(Abilities abilities)
+        public Abilities(Abilities database)
         {
-            this.abilities = new Ability[abilities.Count];
-            for (int i = 0; i < abilities.Count; i++)
+            this.abilities = new Ability[database.Count];
+            for (int i = 0; i < database.Count; i++)
             {
-                this.abilities[i] = new Ability(abilities.abilities[i]);
+                this.abilities[i] = new Ability(database.abilities[i]);
             }
         }
         

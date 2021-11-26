@@ -6,14 +6,20 @@ using UnityEngine;
 
 namespace Data.Windows.ManageElements
 {
+    /**<summary>System that list the DB items.</summary>*/
     [CustomEditor(typeof(Elements))]
     public class List: Editor
     {
+        /**<summary>Item DB.</summary>*/
         private Elements _elementDB;
+        /**<summary>Item to search by ID or name.</summary>*/
         private string _searchByName = "";
+        /**<summary>Check if _searchByName isn't null or empty.</summary>*/
         private bool _canSearch;
+        /**<summary>Item to delete.</summary>*/
         private Element _deleted;
 
+        /**<summary>Initialize the DB when the file is clicked.</summary>*/
         private void OnEnable()
         {
             _elementDB = (Elements)target;
@@ -21,6 +27,7 @@ namespace Data.Windows.ManageElements
 
         #region INSPECTOR
 
+        /**<summary>List all items of the DB, with the filter and creator.</summary>*/
         public override void OnInspectorGUI()
         {
             if (!_elementDB) return;
@@ -78,6 +85,7 @@ namespace Data.Windows.ManageElements
         
         #region DISPLAY
 
+        /**<summary>Show an item, with some data and buttons to delete, show and modify.</summary>*/
         private void Display(Element element)
         {
 

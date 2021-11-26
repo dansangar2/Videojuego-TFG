@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Core.Messages
 {
+    /**<summary>The data of the message to make.</summary>*/
     [Serializable]
     public class TextData
     {

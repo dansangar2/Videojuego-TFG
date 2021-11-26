@@ -5,15 +5,22 @@ using UnityEngine;
 
 namespace Data.Windows.ManageAbilities
 {
+    /**<summary>System that generates a new window to modify.</summary>*/
     public class Modifier : EditorWindow
     {
+        /**<summary>The new window to generate.</summary>*/
         private static EditorWindow _window;
+        
+        /**<summary>Empty item.</summary>*/
         private static Ability _ability;
+        /**<summary>Item DB.</summary>*/
         private static Abilities _abilityDB;
         
+        /**<summary>For move the list with the DB items.</summary>*/
         private Vector2 _scroll;
 
         
+        /**<summary>Create the window.</summary>*/
         public static void Window(Abilities elementDB, Ability element)
         {
             _abilityDB = elementDB;
@@ -24,6 +31,7 @@ namespace Data.Windows.ManageAbilities
             
         }
         
+        /**<summary>Show the window.</summary>*/
         public void OnGUI()
         {
             
@@ -40,6 +48,7 @@ namespace Data.Windows.ManageAbilities
 
         }
 
+        /**<summary>Modify a item.</summary>*/
         private static void Modify()
         {
             Undo.RecordObject(_abilityDB, "Ability Modify");

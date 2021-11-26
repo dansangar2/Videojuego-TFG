@@ -13,12 +13,12 @@ namespace Data.Database
         [SerializeField] private Profile[] profiles;
 
         /**<summary>Clone.</summary>*/ 
-        public void Clone(Profiles profiles)
+        public void Clone(Profiles database)
         {
-            this.profiles = new Profile[profiles.Count];
-            for (int i = 0; i < profiles.Count; i++)
+            this.profiles = new Profile[database.Count];
+            for (int i = 0; i < database.Count; i++)
             {
-                this.profiles[i] = new Profile(profiles.profiles[i]);
+                this.profiles[i] = new Profile(database.profiles[i]);
             }
         }
 

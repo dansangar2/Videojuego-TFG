@@ -7,29 +7,44 @@ using UnityEngine;
 
 namespace Data.Windows.ManageAbilities
 {
+    /**<summary>Display for edit and/or show the data of Abilities.</summary>*/
     public static class Display
     {
+        /**<summary>Configuration for the spaces to fill.</summary>*/
         private static readonly GUILayoutOption[] Options = { GUILayout.MaxWidth(150f), GUILayout.MinWidth(20f) };
+        /**<summary>Configuration for the text area space.</summary>*/
         private static readonly GUIStyle TextAreaStyle = new GUIStyle(GUI.skin.textArea) {wordWrap = true};
-        private static readonly string[] Elements = GameData.ElementDB.Names;
+        /**<summary>For easy way to show the stats to fill interface.</summary>*/
         private static readonly string[] Stats = { "mbp", "mkp", "atk", "def", "spi", "men", "agi", "reb", "rek", "rxb", "rxk","d", "tlv(unused)", "pos" };
+        /**<summary>Check if the ability uses a specific element or the element of the character.</summary>*/
         private static bool _haveElement;
+        /**<summary>Check if the ability has a element for set _haveElement to true or false.</summary>*/
+        private static bool _checked;
+        /**<summary>Index, the ID of the element that the ability will get, if it hasn't one, then the value will -1.</summary>*/
         private static int _index;
-        private static int _key;
+        /**<summary>Index, the ID of the status to do.</summary>*/
         private static int _status;
+        /**<summary>The possibility of the status to do.</summary>*/
         private static float _possibility;
+        /**<summary>Example level for check th stats of the status to do.</summary>*/
         private static int _level = 1;
+        /**<summary>Example max level for check th stats of the status to do.</summary>*/
         private static int _max = 100;
+        /**<summary>The duration of the status to do.</summary>*/
         private static int _duration = 10;
 
         public static void Window(EditorWindow window)
         {
             window.maxSize = new Vector2(450, 700);
             window.minSize = new Vector2(450, 600);
+            _checked = false;
         }
         
         public static void Displayed(Ability item, bool readOnly = false)
         {
+            if(!_checked) _haveElement = item.Element != null;
+            _checked = true;
+            
             if (readOnly) DisplayedReadOnly(item);
             else DisplayedReadWrite(item);
         }
@@ -176,15 +191,15 @@ namespace Data.Windows.ManageAbilities
             _haveElement = EditorGUILayout.Toggle(_haveElement, Options);
             if (_haveElement)
             {
-                if (item.Element == null) _index = 0; 
-                _index = EditorGUILayout.Popup(_index, Elements, Options);
+                _index = item.Element?.ID ?? 0;
+                _index = EditorGUILayout.Popup(_index, GameData.ElementDB.Names, Options);
             }
             else
             {
                 _index = -1;
                 GUILayout.Label("NULL", Options);
             }
-            _haveElement = item.Element != null;
+            //_haveElement = item.Element != null;
             item.ElementID = _index;
             EditorGUILayout.EndHorizontal();
 

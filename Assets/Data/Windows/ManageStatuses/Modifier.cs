@@ -5,15 +5,22 @@ using UnityEngine;
 
 namespace Data.Windows.ManageStatuses
 {
+    /**<summary>System that generates a new window to modify.</summary>*/
     public class Modifier : EditorWindow
     {
+        /**<summary>The new window to generate.</summary>*/
         private static EditorWindow _window;
+        
+        /**<summary>Empty item.</summary>*/
         private static Status _status;
+        /**<summary>Item DB.</summary>*/
         private static Statuses _statusDB;
         
+        /**<summary>For move the list with the DB items.</summary>*/
         private Vector2 _scroll;
 
         
+        /**<summary>Create the window.</summary>*/
         public static void Window(Statuses statusDB, Status status)
         {
             _statusDB = statusDB;
@@ -24,6 +31,7 @@ namespace Data.Windows.ManageStatuses
             
         }
         
+        /**<summary>Show the window.</summary>*/
         public void OnGUI()
         {
             
@@ -40,6 +48,7 @@ namespace Data.Windows.ManageStatuses
 
         }
 
+        /**<summary>Modify a item.</summary>*/
         private static void Modify()
         {
             Undo.RecordObject(_statusDB, "Status Modify");

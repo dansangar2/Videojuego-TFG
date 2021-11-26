@@ -5,30 +5,44 @@ using UnityEngine;
 
 namespace Data.Windows.ManageCharacters
 {
+    /**<summary>Display for edit and/or show the data of Characters.</summary>*/
     public static class Display
     {
+        /**<summary>Configuration for the spaces to fill.</summary>*/
         private static readonly GUILayoutOption[] Options = { GUILayout.MaxWidth(150f), GUILayout.MinWidth(20f) };
+        /**<summary>Configuration for the text area space.</summary>*/
         private static readonly GUIStyle TextAreaStyle = new GUIStyle(GUI.skin.textArea) {wordWrap = true};
+        /**<summary>Index with the ID of the element to set.</summary>*/
         private static int _index;
+        /**<summary>Index with the ID of the first generic attack.</summary>*/
         private static int _melee;
+        /**<summary>Index with the ID of the second generic attack.</summary>*/
         private static int _long;
+        /**<summary>Index with the ID of the ability to add.</summary>*/
         private static int _ability;
+        /**<summary>The need level to the character can use the ability.</summary>*/
         private static int _need;
+        /**<summary>The initial level of the ability.</summary>*/
         private static int _level;
+        /**<summary>The max level of the ability.</summary>*/
         private static int _maxLevel;
         
+        /**<summary>Generate the window with the size necessary to display the window.</summary>*/
         public static void Window(EditorWindow window)
         {
             window.maxSize = new Vector2(1000, 600);
             window.minSize = new Vector2(900, 600);
         }
         
+        /**<summary>Generate the window interface, adapted to the entity.
+        With the data of item.</summary>*/
         public static void Displayed(Character item, bool readOnly = false)
         {
             if (readOnly) DisplayedReadOnly(item);
             else DisplayedReadWrite(item);
         }
         
+        /**<summary>You can edit.</summary>*/
         private static void DisplayedReadWrite(Character item)
         {
 
@@ -248,6 +262,7 @@ namespace Data.Windows.ManageCharacters
             
         }
         
+        /**<summary>You can't edit.</summary>*/
         private static void DisplayedReadOnly(Character item)
         {
             

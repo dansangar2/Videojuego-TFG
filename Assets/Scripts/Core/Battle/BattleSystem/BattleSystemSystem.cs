@@ -202,6 +202,7 @@ namespace Core.Battle.BattleSystem
             if(_abilityInUse.Type == AttackType.AbsorbBlood || _abilityInUse.Type == AttackType.AbsorbKarma) 
                 DamageAnimation(attacker,Convert.ToInt32(-recovery*0.4f));
             _actionType = ActionType.None;
+            _abilityInUse = null;
             UpdateBattlefield();
             _secondsToWait = 0;
             GenericButton.Message = "";

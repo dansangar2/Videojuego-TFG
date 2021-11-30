@@ -5,7 +5,7 @@ using Core.Saves;
 namespace Core.RestSystem
 {
     /**<summary>Make a dialogue depends of level.</summary>*/
-    public class Dialogues
+    public static class Dialogues
     {
         /**<summary>Check if there are some new message.</summary>*/
         public static bool Added;
@@ -38,7 +38,6 @@ namespace Core.RestSystem
                     textToDo[5].characterId = -1;
                     textToDo[6] = new TextData("\"Save\". Save the current data in a file.");
                     textToDo[6].characterId = -1;
-                    textToDo = textToDo.Select(t => { t.speed = 0.005f; return t; }).ToArray();
                     break;
                 case 3:
                     textToDo = new TextData[3];
@@ -85,15 +84,15 @@ namespace Core.RestSystem
                     break;
                 case 30:
                     textToDo = new TextData[3];
-                    textToDo[0] = new TextData("It's too nice that you are in the level 30.");
+                    textToDo[0] = new TextData("It's too nice that you are at the level 30.");
                     textToDo[0].characterId = 0;
                     textToDo[1] = new TextData("CONGRATULATION!");
                     textToDo[1].characterId = 0;
-                    textToDo[2] = new TextData("Thanks!.");
+                    textToDo[2] = new TextData("Thanks!");
                     textToDo[2].characterId = -1;
                     break;
             }
-
+            textToDo = textToDo.Select(t => { t.speed = 0.008f; return t; }).ToArray();
             Added = textToDo.Length>0;
             return textToDo;
         }

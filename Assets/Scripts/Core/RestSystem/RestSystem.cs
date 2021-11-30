@@ -21,7 +21,7 @@ namespace Core.RestSystem
         #region ATTRIBUTES
 
         //Lists for take decision.
-        public SaveButtonList saveList;
+        public SaveButtonsList saveList;
         private RestButtonsList _restOptionList;
         private CharacterButtonsList _characterList;
         private AbilityButtonsList _abilityButtonsList;

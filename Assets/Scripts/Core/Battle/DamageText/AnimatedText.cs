@@ -100,13 +100,13 @@ namespace Core.Battle.DamageText
             if(type == AttackType.Blood || type == AttackType.AbsorbBlood) 
             {
                 if (fall) force = GetThrow(fighter.character.MaxKarmaPoints,  damage);
-                else force = 1;
+                else force = 1.25f;
                 color = damage < 0 ? Color.green : Color.red;
             }
             else
             {
                 if (fall) force = GetThrow(fighter.character.MaxKarmaPoints,  damage);
-                else force = 1;
+                else force = 1.25f;
                 color = damage < 0 ? Color.magenta : Color.yellow;
             }
             //direction = fighter.isEnemy ? 1 : -1;

@@ -31,6 +31,7 @@ namespace Core.ButtonsSystem.ButtonList
         private void Awake()
         {
             if (SavesFiles.GetSave().Party.Length == 0) TestInit1();
+            message.messages = new TextData[]{ };
             message.type = TextBoxType.Dialog;
             message.sceneRedirect = "";
             if (!SavesFiles.IsLoaded) message.messages = Dialogues.ExecuteDialogue();
@@ -176,7 +177,6 @@ namespace Core.ButtonsSystem.ButtonList
                     position = AllActivated.Length - 1;
                 }
             }
-
             Move(_buttons);
         }
 

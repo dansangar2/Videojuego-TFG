@@ -8,7 +8,7 @@ namespace Core.MenuSystem
     public class Menu : MonoBehaviour
     {
         /**<summary>Saves files list prefab.</summary>*/
-        public SaveButtonList saves;
+        public SaveButtonsList saves;
         /**<summary>Generic buttons got of the menu.</summary>*/
         private GenericButtonsList _list;
 

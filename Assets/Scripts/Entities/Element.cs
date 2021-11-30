@@ -64,9 +64,10 @@ namespace Entities
         <para>Get a multiplicity (Damage index) of ElementType that you are passing by parameter.</para>
         <param name="element">The Element type that you like to get its index</param>
         </summary>*/ 
-        public float GetMultiplicityOf(ElementType element) 
-        { 
-            return Multiplicity[element];
+        public float GetMultiplicityOf(ElementType element)
+        {
+            if (Multiplicity.ContainsKey(element)) return Multiplicity[element];
+            return 1;
         }
         
         /**<summary>

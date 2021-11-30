@@ -42,7 +42,7 @@ namespace Core.Battle.BattleSystem
         /**<summary>Current Character turn.</summary>*/
         private int _currentTurn;
         /**<summary>Next 5 turns.</summary>*/
-        private int[] _nextTurns = new int[5];
+        private int[] _nextTurns = {};
         
         /**<summary>The current state of the battle.</summary>*/
         private BattleState _state;

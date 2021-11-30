@@ -4,7 +4,7 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: -360123686633694459
-    second: chars_5
+    second: chars_0
   - first:
       213: -1086991788418008460
     second: chars_1
@@ -18,14 +18,14 @@ TextureImporter:
       213: 6922444738761065857
     second: chars_4
   - first:
+      213: 3844603948434292935
+    second: chars_5
+  - first:
       213: 5825963690735045102
     second: chars_6
   - first:
       213: -3653575613068106515
     second: chars_7
-  - first:
-      213: -9012815563710357976
-    second: chars_8
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -139,11 +139,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: chars_5
+      name: chars_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 144
         width: 144
         height: 144
       alignment: 0
@@ -163,10 +163,10 @@ TextureImporter:
       name: chars_1
       rect:
         serializedVersion: 2
-        x: 0
+        x: 144
         y: 144
         width: 144
-        height: 143
+        height: 144
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,7 +184,7 @@ TextureImporter:
       name: chars_2
       rect:
         serializedVersion: 2
-        x: 144
+        x: 288
         y: 144
         width: 144
         height: 144
@@ -205,7 +205,7 @@ TextureImporter:
       name: chars_3
       rect:
         serializedVersion: 2
-        x: 288
+        x: 432
         y: 144
         width: 144
         height: 144
@@ -226,8 +226,8 @@ TextureImporter:
       name: chars_4
       rect:
         serializedVersion: 2
-        x: 432
-        y: 144
+        x: 0
+        y: 0
         width: 144
         height: 144
       alignment: 0
@@ -244,10 +244,31 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: chars_6
+      name: chars_5
       rect:
         serializedVersion: 2
         x: 144
+        y: 0
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c08d78ebe6ca5530800000000000000
+      internalID: 3844603948434292935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chars_6
+      rect:
+        serializedVersion: 2
+        x: 288
         y: 0
         width: 144
         height: 144
@@ -268,7 +289,7 @@ TextureImporter:
       name: chars_7
       rect:
         serializedVersion: 2
-        x: 287
+        x: 432
         y: 0
         width: 144
         height: 144
@@ -285,31 +306,10 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: chars_8
-      rect:
-        serializedVersion: 2
-        x: 432
-        y: 0
-        width: 144
-        height: 144
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 82e9eea2ffb0ce280800000000000000
-      internalID: -9012815563710357976
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 6f7e67ce67dfcaf44838018bb2ae0310
     internalID: 0
     vertices: []
     indices: 

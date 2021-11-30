@@ -274,11 +274,13 @@ namespace Entities
         <param name="destiny">Character that received the damage.</param></summary>*/ 
         public int Damage(Character user, Character destiny)
         {
+            ElementType e;
+            e = UseCharacterElement ? user.Element.Type : Element.Type;
             int damage = Convert.ToInt32(BaseDamage(user, destiny)
                                          *Random.Range(
                                              DownInterval, 
                                              UpperInterval)*
-                                         PowerIncrement);
+                                         PowerIncrement*destiny.Element.GetMultiplicityOf(e));
             damage = damage < 999999999 ? damage > -999999999 ? damage : -999999999 : 999999999;
             ToDoADamage(damage, destiny, user);
             return damage;

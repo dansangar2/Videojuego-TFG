@@ -101,12 +101,10 @@ namespace Core.ButtonsSystem.ButtonType
             {
                 // ignored
             }
-
-            currentCollider = transform.GetComponent<BoxCollider2D>();
             
+            currentCollider = transform.GetComponent<BoxCollider2D>();
             GridLayoutGroup lg = transform.parent.GetComponent<GridLayoutGroup>();
             if (lg) currentCollider.size = lg.cellSize;
-            
         }
 
         protected void Awake()
@@ -148,6 +146,8 @@ namespace Core.ButtonsSystem.ButtonType
             
             if (currentCollider == hit.collider && !IsSelect)
             {
+                _list.gameObject.SetActive(false);
+                _list.gameObject.SetActive(true);
                 _list.SelectNone(_list.baseButtons);
                 _list.position = Array.IndexOf(_list.baseButtons, 
                     _list.baseButtons.First(s => s.transform.Equals(transform)));
@@ -170,11 +170,11 @@ namespace Core.ButtonsSystem.ButtonType
                 SceneManager.LoadScene(sceneRedirect.Trim(), LoadSceneMode.Single);
             }
             //Appear a window if "window" != ""
-            if(!window.Equals(null))
+            /*if(!window.Equals(null))
             {
                 transform.root.gameObject.SetActive(false);
                 window.gameObject.SetActive(true);
-            }
+            }*/
             if (quitGame)
             {
                 Application.Quit();
